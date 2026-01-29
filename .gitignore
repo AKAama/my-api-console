@@ -1,3 +1,39 @@
-node_modules
-/dist
-.idea
+# Node / JS
+node_modules/
+npm-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build output
+dist/
+dist-ssr/
+build/
+
+# Umi / @umijs/max 临时文件
+src/.umi*/
+.umi*/
+.umi-production*/
+.umi-test*/
+
+# Editor & IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Mac / OS
+.DS_Store
+
+# Env & local config
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Coverage
+coverage/
+
+.claude
+
