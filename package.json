@@ -1,0 +1,27 @@
+{
+  "name": "my-api-front",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "umi dev",
+    "build": "umi build",
+    "preview": "umi preview",
+    "lint": "eslint src --ext .ts,.tsx"
+  },
+  "dependencies": {
+    "@ant-design/icons": "^5.0.0",
+    "antd": "^5.0.0",
+    "axios": "^1.7.0",
+    "father": "^4.6.13",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "umi": "^4.6.25"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.3"
+  }
+}
