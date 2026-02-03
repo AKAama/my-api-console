@@ -16,6 +16,8 @@ import {
   Tooltip,
   Empty,
   Tabs,
+  Table,
+  Select,
 } from 'antd';
 import {
   PlusOutlined,
@@ -39,11 +41,21 @@ interface ModelItem {
   dimensions?: number;
 }
 
+interface SiteItem {
+  site_id: number;
+  site_name?: string;
+}
+
 interface ModelListResponse {
   list: ModelItem[];
   total: number;
   page: number;
   page_size: number;
+}
+
+interface SiteListResponse {
+  list: SiteItem[];
+  total: number;
 }
 
 const IndexPage: React.FC = () => {
@@ -58,6 +70,74 @@ const IndexPage: React.FC = () => {
   const [formVisible, setFormVisible] = useState(false);
   const [form] = Form.useForm();
   const [chatForm] = Form.useForm();
+
+  // 站点相关状态
+  const [sites, setSites] = useState<SiteItem[]>([]);
+  const [siteLoading, setSiteLoading] = useState(false);
+  const [editingSite, setEditingSite] = useState<SiteItem | null>(null);
+  const [siteFormVisible, setSiteFormVisible] = useState(false);
+  const [siteForm] = Form.useForm();
+
+  const fetchSites = async () => {
+    setSiteLoading(true);
+    try {
+      const res = await axios.get('/api/v1/sites/get');
+      const data = res.data?.data as SiteListResponse;
+      setSites(data?.list || []);
+    } catch (e: any) {
+      message.error(e?.response?.data?.msg || '获取站点列表失败');
+    } finally {
+      setSiteLoading(false);
+    }
+  };
+
+  const openCreateSite = () => {
+    setEditingSite(null);
+    siteForm.resetFields();
+    setSiteFormVisible(true);
+  };
+
+  const openEditSite = (site: SiteItem) => {
+    setEditingSite(site);
+    siteForm.setFieldsValue({
+      site_name: site.site_name,
+    });
+    setSiteFormVisible(true);
+  };
+
+  const handleSaveSite = async () => {
+    try {
+      const values = await siteForm.validateFields();
+      if (editingSite) {
+        await axios.put(`/api/v1/sites/${editingSite.site_id}`, values);
+        message.success('已更新站点');
+      } else {
+        await axios.post('/api/v1/sites/create', values);
+        message.success('已创建站点');
+      }
+      setSiteFormVisible(false);
+      await fetchSites();
+    } catch {
+      // ignore
+    }
+  };
+
+  const handleDeleteSite = (site: SiteItem) => {
+    Modal.confirm({
+      title: '删除站点',
+      content: `确认删除站点「${site.site_name || site.site_id}」？`,
+      okButtonProps: { danger: true },
+      onOk: async () => {
+        try {
+          await axios.delete(`/api/v1/sites/${site.site_id}`);
+          message.success('删除成功');
+          await fetchSites();
+        } catch (e: any) {
+          message.error(e?.response?.data?.msg || '删除失败');
+        }
+      },
+    });
+  };
 
   const fetchModels = async () => {
     setLoading(true);
@@ -80,6 +160,7 @@ const IndexPage: React.FC = () => {
 
   useEffect(() => {
     fetchModels();
+    fetchSites();
   }, []);
 
   const stats = useMemo(() => {
@@ -96,9 +177,12 @@ const IndexPage: React.FC = () => {
 
   const openEdit = (m: ModelItem) => {
     setEditingModel(m);
+    const protocol = m.endpoint?.match(/^https?:\/\//)?.[0] || 'https://';
+    const displayEndpoint = m.endpoint?.replace(/^https?:\/\//, '') || '';
     form.setFieldsValue({
       name: m.name,
-      endpoint: m.endpoint,
+      protocol,
+      endpoint: displayEndpoint,
       api_key: m.api_key,
       timeout: m.timeout,
       type: m.type,
@@ -110,11 +194,17 @@ const IndexPage: React.FC = () => {
   const handleSaveModel = async () => {
     try {
       const values = await form.validateFields();
+      // 组合 protocol 和 endpoint
+      const { protocol, ...rest } = values;
+      const finalValues = {
+        ...rest,
+        endpoint: `${protocol || 'https://'}${rest.endpoint || ''}`,
+      };
       if (editingModel) {
-        await axios.put(`/api/v1/models/${editingModel.model_id}`, values);
+        await axios.put(`/api/v1/models/${editingModel.model_id}`, finalValues);
         message.success('已更新模型');
       } else {
-        await axios.post('/api/v1/models/create', values);
+        await axios.post('/api/v1/models/create', finalValues);
         message.success('已创建模型');
       }
       setFormVisible(false);
@@ -233,9 +323,6 @@ const IndexPage: React.FC = () => {
         </Space>
         <Space size={24}>
           <Text style={{ color: '#6e6e73' }}>个人主页</Text>
-          <Button type="primary" shape="round" icon={<PlusOutlined />} onClick={openCreate}>
-            新建模型
-          </Button>
         </Space>
       </Header>
 
@@ -383,7 +470,7 @@ const IndexPage: React.FC = () => {
               },
               {
                 key: 'models',
-                label: '模型管理（实验模块）',
+                label: '模型管理',
                 children: (
                   <Row gutter={24} align="stretch">
                     <Col xs={24} style={{ marginBottom: 24 }}>
@@ -407,9 +494,19 @@ const IndexPage: React.FC = () => {
                           </Space>
                         }
                         extra={
-                          <Button type="link" onClick={fetchModels} style={{ paddingRight: 0 }}>
-                            刷新
-                          </Button>
+                          <Space>
+                            <Button type="link" onClick={fetchModels} style={{ paddingRight: 0 }}>
+                              刷新
+                            </Button>
+                            <Button
+                              type="primary"
+                              shape="round"
+                              icon={<PlusOutlined />}
+                              onClick={openCreate}
+                            >
+                              新建模型
+                            </Button>
+                          </Space>
                         }
                       >
                         {models.length === 0 ? (
@@ -435,13 +532,16 @@ const IndexPage: React.FC = () => {
                                     bordered={false}
                                     style={{
                                       borderRadius: 22,
-                                      background: isActive ? '#111' : 'rgba(255,255,255,0.9)',
-                                      color: isActive ? '#f5f5f7' : '#111',
+                                      background: isActive
+                                        ? 'linear-gradient(135deg, #e6f4ff 0%, #bae0ff 100%)'
+                                        : 'rgba(255,255,255,0.9)',
+                                      color: isActive ? '#003eb3' : '#111',
                                       boxShadow: isActive
-                                        ? '0 18px 40px rgba(0,0,0,0.35)'
+                                        ? '0 18px 40px rgba(0,102,255,0.25)'
                                         : '0 10px 30px rgba(0,0,0,0.06)',
                                       transform: isActive ? 'translateY(-2px)' : 'translateY(0)',
                                       transition: 'all 0.25s ease',
+                                      border: isActive ? '2px solid #69a6ff' : '2px solid transparent',
                                     }}
                                     bodyStyle={{ padding: 18 }}
                                   >
@@ -456,7 +556,7 @@ const IndexPage: React.FC = () => {
                                             height: 28,
                                             borderRadius: '50%',
                                             background: isActive
-                                              ? 'linear-gradient(135deg, #0ff, #0af)'
+                                              ? '#1890ff'
                                               : '#f5f5f7',
                                             display: 'flex',
                                             alignItems: 'center',
@@ -466,7 +566,7 @@ const IndexPage: React.FC = () => {
                                           <RobotOutlined
                                             style={{
                                               fontSize: 16,
-                                              color: isActive ? '#000' : '#111',
+                                              color: isActive ? '#fff' : '#111',
                                             }}
                                           />
                                         </div>
@@ -475,7 +575,7 @@ const IndexPage: React.FC = () => {
                                             style={{
                                               fontWeight: 600,
                                               fontSize: 16,
-                                              color: isActive ? '#f5f5f7' : '#111',
+                                              color: isActive ? '#003eb3' : '#111',
                                             }}
                                           >
                                             {m.name}
@@ -483,12 +583,10 @@ const IndexPage: React.FC = () => {
                                           <div style={{ marginTop: 6 }}>
                                             {m.type ? (
                                               <Tag
-                                                color={isActive ? 'default' : 'blue'}
+                                                color={isActive ? 'processing' : 'blue'}
                                                 style={{
                                                   borderRadius: 999,
                                                   border: 'none',
-                                                  background: isActive ? '#2c2c2e' : undefined,
-                                                  color: isActive ? '#f5f5f7' : undefined,
                                                 }}
                                               >
                                                 {m.type}
@@ -498,7 +596,7 @@ const IndexPage: React.FC = () => {
                                                 style={{
                                                   borderRadius: 999,
                                                   border: 'none',
-                                                  background: isActive ? '#2c2c2e' : '#f5f5f7',
+                                                  background: '#f0f0f0',
                                                 }}
                                               >
                                                 未设置类型
@@ -552,17 +650,17 @@ const IndexPage: React.FC = () => {
                                         marginTop: 12,
                                         marginBottom: 8,
                                         fontSize: 12,
-                                        color: isActive ? '#d2d2d7' : '#6e6e73',
+                                        color: isActive ? '#595959' : '#6e6e73',
                                       }}
                                       ellipsis={{ rows: 2 }}
                                     >
                                       {m.endpoint}
                                     </Paragraph>
                                     <Space size={16} style={{ fontSize: 11 }}>
-                                      <span style={{ color: isActive ? '#a1a1a6' : '#6e6e73' }}>
+                                      <span style={{ color: isActive ? '#595959' : '#6e6e73' }}>
                                         维度 {m.dimensions ?? '-'}
                                       </span>
-                                      <span style={{ color: isActive ? '#a1a1a6' : '#6e6e73' }}>
+                                      <span style={{ color: isActive ? '#595959' : '#6e6e73' }}>
                                         超时 {m.timeout ?? '-'}s
                                       </span>
                                     </Space>
@@ -571,6 +669,111 @@ const IndexPage: React.FC = () => {
                               );
                             })}
                           </Row>
+                        )}
+                      </Card>
+                    </Col>
+                  </Row>
+                ),
+              },
+              {
+                key: 'sites',
+                label: '站点管理',
+                children: (
+                  <Row gutter={24} align="stretch">
+                    <Col xs={24} style={{ marginBottom: 24 }}>
+                      <Card
+                        bordered={false}
+                        bodyStyle={{ padding: 24 }}
+                        style={{
+                          borderRadius: 28,
+                          background:
+                            'linear-gradient(135deg, rgba(250,250,252,0.9), rgba(245,245,247,0.9))',
+                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',
+                        }}
+                        title={
+                          <Space direction="vertical" size={4}>
+                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>
+                              站点列表
+                            </Text>
+                            <Text style={{ fontSize: 13, color: '#6e6e73' }}>
+                              管理你的个人站点关联信息。
+                            </Text>
+                          </Space>
+                        }
+                        extra={
+                          <Space>
+                            <Button type="link" onClick={fetchSites} style={{ paddingRight: 0 }}>
+                              刷新
+                            </Button>
+                            <Button
+                              type="primary"
+                              shape="round"
+                              icon={<PlusOutlined />}
+                              onClick={openCreateSite}
+                            >
+                              新建站点
+                            </Button>
+                          </Space>
+                        }
+                      >
+                        {sites.length === 0 ? (
+                          <div style={{ padding: '40px 0' }}>
+                            <Empty
+                              image={Empty.PRESENTED_IMAGE_SIMPLE}
+                              description={
+                                <span style={{ color: '#6e6e73' }}>
+                                  还没有站点。点击右上角「新建站点」开始添加。
+                                </span>
+                              }
+                            />
+                          </div>
+                        ) : (
+                          <Table
+                            rowKey="site_id"
+                            loading={siteLoading}
+                            dataSource={sites}
+                            pagination={false}
+                            columns={[
+                              {
+                                title: '站点ID',
+                                dataIndex: 'site_id',
+                                key: 'site_id',
+                                width: 100,
+                              },
+                              {
+                                title: '站点名称',
+                                dataIndex: 'site_name',
+                                key: 'site_name',
+                                render: (name: string) => name || '-',
+                              },
+                              {
+                                title: '操作',
+                                key: 'action',
+                                width: 150,
+                                render: (_: any, record: SiteItem) => (
+                                  <Space size="small">
+                                    <Button
+                                      size="small"
+                                      type="text"
+                                      icon={<EditOutlined />}
+                                      onClick={() => openEditSite(record)}
+                                    >
+                                      编辑
+                                    </Button>
+                                    <Button
+                                      size="small"
+                                      type="text"
+                                      danger
+                                      icon={<DeleteOutlined />}
+                                      onClick={() => handleDeleteSite(record)}
+                                    >
+                                      删除
+                                    </Button>
+                                  </Space>
+                                ),
+                              },
+                            ]}
+                          />
                         )}
                       </Card>
                     </Col>
@@ -711,12 +914,27 @@ const IndexPage: React.FC = () => {
           >
             <Input placeholder="例如：gpt-4o-2024" />
           </Form.Item>
-          <Form.Item
-            label="Endpoint"
-            name="endpoint"
-            rules={[{ required: true, message: '请输入 Endpoint' }]}
-          >
-            <Input placeholder="例如：https://api.openai.com/v1/chat/completions" />
+          <Form.Item noStyle shouldUpdate>
+            {() => (
+              <Form.Item
+                label="Endpoint"
+                name="endpoint"
+                rules={[{ required: true, message: '请输入 Endpoint' }]}
+              >
+                <Space.Compact style={{ width: '100%' }}>
+                  <Form.Item name="protocol" noStyle initialValue="https://">
+                    <Select
+                      style={{ width: 120 }}
+                      options={[
+                        { value: 'http://', label: 'http://' },
+                        { value: 'https://', label: 'https://' },
+                      ]}
+                    />
+                  </Form.Item>
+                  <Input placeholder="api.openai.com/v1/chat/completions" />
+                </Space.Compact>
+              </Form.Item>
+            )}
           </Form.Item>
           <Form.Item
             label="API Key"
@@ -733,6 +951,25 @@ const IndexPage: React.FC = () => {
           </Form.Item>
           <Form.Item label="超时(秒)" name="timeout">
             <InputNumber style={{ width: '100%' }} placeholder="请求超时时间，默认可填 30" />
+          </Form.Item>
+        </Form>
+      </Modal>
+
+      <Modal
+        title={editingSite ? '编辑站点' : '新建站点'}
+        open={siteFormVisible}
+        onCancel={() => setSiteFormVisible(false)}
+        onOk={handleSaveSite}
+        okText="保存"
+        width={400}
+      >
+        <Form form={siteForm} layout="vertical">
+          <Form.Item
+            label="站点名称"
+            name="site_name"
+            rules={[{ required: true, message: '请输入站点名称' }]}
+          >
+            <Input placeholder="例如：我的博客" />
           </Form.Item>
         </Form>
       </Modal>

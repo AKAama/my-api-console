@@ -3,7 +3,7 @@
 // DO NOT CHANGE IT MANUALLY!
 import React, { useEffect, useState } from 'react';
 import { ApplyPluginsType } from 'umi';
-import { renderClient, RenderClientOpts } from '/Volumes/Storage/MyAPI/my-api-front/node_modules/@umijs/renderer-react';
+import { renderClient, RenderClientOpts } from '/Users/alex_yehui/project/MyAPI/my-api-console/node_modules/@umijs/renderer-react';
 import { createHistory } from './core/history';
 import { createPluginManager } from './core/plugin';
 import { getRoutes } from './core/route';

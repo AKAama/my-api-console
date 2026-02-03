@@ -3,7 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "umi dev",
+    "dev": "umi dev",
+    "start": "npm run dev",
     "build": "umi build",
     "preview": "umi preview",
     "lint": "eslint src --ext .ts,.tsx"
