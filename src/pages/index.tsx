@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import {
   Layout,
   Button,
@@ -27,6 +27,10 @@ import {
   RobotOutlined,
 } from '@ant-design/icons';
 import axios from 'axios';
+import ReactMarkdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';
 
 const { Header, Content } = Layout;
 const { Text, Title, Paragraph } = Typography;
@@ -39,6 +43,7 @@ interface ModelItem {
   timeout?: number;
   type?: string;
   dimensions?: number;
+  enable?: number;
 }
 
 interface SiteItem {
@@ -58,18 +63,27 @@ interface SiteListResponse {
   total: number;
 }
 
+interface ChatMessage {
+  id: string;
+  role: 'user' | 'assistant';
+  content: string;
+}
+
 const IndexPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [models, setModels] = useState<ModelItem[]>([]);
   const [activeModel, setActiveModel] = useState<ModelItem | null>(null);
   const [chatVisible, setChatVisible] = useState(false);
   const [chatLoading, setChatLoading] = useState(false);
-  const [chatAnswer, setChatAnswer] = useState('');
+  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatStreaming, setChatStreaming] = useState(false);
+  const [chatAbortController, setChatAbortController] = useState<AbortController | null>(null);
+  const [lastUserPrompt, setLastUserPrompt] = useState('');
   const [editingModel, setEditingModel] = useState<ModelItem | null>(null);
   const [formVisible, setFormVisible] = useState(false);
   const [form] = Form.useForm();
   const [chatForm] = Form.useForm();
+  const chatListRef = useRef<HTMLDivElement | null>(null);
 
   // 站点相关状态
   const [sites, setSites] = useState<SiteItem[]>([]);
@@ -163,9 +177,18 @@ const IndexPage: React.FC = () => {
     fetchSites();
   }, []);
 
+  useEffect(() => {
+    if (!chatVisible) return;
+    if (chatListRef.current) {
+      chatListRef.current.scrollTop = chatListRef.current.scrollHeight;
+    }
+  }, [chatMessages, chatStreaming, chatVisible]);
+
   const stats = useMemo(() => {
     const total = models.length;
-    const ready = models.filter((m) => m.endpoint && m.api_key).length;
+    const ready = models.filter(
+      (m) => m.endpoint && m.api_key && (m.enable ?? 1) === 1,
+    ).length;
     return { total, ready };
   }, [models]);
 
@@ -225,7 +248,7 @@ const IndexPage: React.FC = () => {
           message.success('删除成功');
           if (activeModel?.model_id === m.model_id) {
             setActiveModel(null);
-            setChatAnswer('');
+            setChatMessages([]);
             chatForm.resetFields();
           }
           await fetchModels();
@@ -239,20 +262,87 @@ const IndexPage: React.FC = () => {
   const openChatWithModel = (m: ModelItem) => {
     setActiveModel(m);
     setChatVisible(true);
-    setChatAnswer('');
+    setChatMessages([]);
+    setChatStreaming(false);
+    setLastUserPrompt('');
     chatForm.resetFields();
   };
+
+  const closeChat = () => {
+    if (chatAbortController) {
+      chatAbortController.abort();
+    }
+    setChatVisible(false);
+    setChatStreaming(false);
+    setChatLoading(false);
+  };
+
+  const stopStreaming = () => {
+    if (chatAbortController) {
+      chatAbortController.abort();
+    }
+    setChatStreaming(false);
+    setChatLoading(false);
+  };
+
+  const appendAssistantText = (messageId: string, text: string) => {
+    if (!text) return;
+    setChatMessages((prev) =>
+      prev.map((m) =>
+        m.id === messageId ? { ...m, content: `${m.content}${text}` } : m,
+      ),
+    );
+  };
+
+  const setAssistantText = (messageId: string, text: string) => {
+    setChatMessages((prev) =>
+      prev.map((m) => (m.id === messageId ? { ...m, content: text } : m)),
+    );
+  };
+
+  const buildMessagesPayload = (messages: ChatMessage[]) =>
+    messages
+      .filter((m) => m.content.trim())
+      .map((m) => ({
+        role: m.role,
+        content: m.content,
+      }));
 
   const handleChat = async () => {
     if (!activeModel) {
       message.warning('请先选择一个模型');
       return;
     }
+    if ((activeModel.enable ?? 1) === 0) {
+      message.warning('当前模型已禁用，无法对话');
+      return;
+    }
     try {
       const values = await chatForm.validateFields();
+      const prompt = (values.prompt || '').trim();
+      if (!prompt) return;
+      if (chatAbortController) {
+        chatAbortController.abort();
+      }
+      const abortController = new AbortController();
+      setChatAbortController(abortController);
+      const userMessage: ChatMessage = {
+        id: `${Date.now()}-user`,
+        role: 'user',
+        content: prompt,
+      };
+      const assistantMessage: ChatMessage = {
+        id: `${Date.now()}-assistant`,
+        role: 'assistant',
+        content: '',
+      };
+      const nextMessages = [...chatMessages, userMessage];
+      const payloadMessages = buildMessagesPayload(nextMessages);
+      setChatMessages((prev) => [...prev, userMessage, assistantMessage]);
+      chatForm.resetFields();
+      setLastUserPrompt(prompt);
       setChatLoading(true);
       setChatStreaming(true);
-      setChatAnswer('');
 
       const resp = await fetch(
         `/api/v1/models/chat/${activeModel.model_id}?stream=1`,
@@ -261,7 +351,8 @@ const IndexPage: React.FC = () => {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ prompt: values.prompt }),
+          body: JSON.stringify({ messages: payloadMessages }),
+          signal: abortController.signal,
         },
       );
 
@@ -273,26 +364,185 @@ const IndexPage: React.FC = () => {
       const reader = resp.body?.getReader();
       if (!reader) {
         const text = await resp.text();
-        setChatAnswer(text);
+        setAssistantText(assistantMessage.id, text);
         setChatStreaming(false);
         return;
       }
 
       const decoder = new TextDecoder('utf-8');
-      // 逐字流式展示
-      // eslint-disable-next-line no-constant-condition
+      let buffer = '';
+      let rawText = '';
+      let receivedTokens = false;
+      let doneFromServer = false;
       while (true) {
         const { done, value } = await reader.read();
         if (done) break;
         const chunk = decoder.decode(value, { stream: true });
-        setChatAnswer((prev) => prev + chunk);
+        rawText += chunk;
+        buffer += chunk;
+        let lineBreakIndex = buffer.indexOf('\n');
+        while (lineBreakIndex >= 0) {
+          const line = buffer.slice(0, lineBreakIndex).trimEnd();
+          buffer = buffer.slice(lineBreakIndex + 1);
+          if (line.startsWith('data:')) {
+            const data = line.replace(/^data:\s*/, '').trim();
+            if (data === '[DONE]') {
+              doneFromServer = true;
+              break;
+            }
+            try {
+              const parsed = JSON.parse(data);
+              const delta =
+                parsed?.choices?.[0]?.delta?.content ??
+                parsed?.choices?.[0]?.message?.content ??
+                parsed?.text ??
+                parsed?.content ??
+                '';
+              if (delta) {
+                receivedTokens = true;
+                appendAssistantText(assistantMessage.id, delta);
+              }
+            } catch {
+              // ignore parse errors for non-JSON stream chunks
+            }
+          }
+          lineBreakIndex = buffer.indexOf('\n');
+        }
+        if (doneFromServer) break;
+      }
+      if (!receivedTokens && rawText) {
+        try {
+          const parsed = JSON.parse(rawText);
+          const content =
+            parsed?.choices?.[0]?.message?.content ??
+            parsed?.choices?.[0]?.text ??
+            parsed?.content ??
+            rawText;
+          setAssistantText(assistantMessage.id, content);
+        } catch {
+          setAssistantText(assistantMessage.id, rawText);
+        }
       }
       setChatStreaming(false);
     } catch (e: any) {
       message.error(e?.message || '对话失败');
       setChatStreaming(false);
+      if (e?.name === 'AbortError') return;
     } finally {
       setChatLoading(false);
+      setChatAbortController(null);
+    }
+  };
+
+  const handleRegenerate = async () => {
+    if (!activeModel || !lastUserPrompt) {
+      message.warning('没有可重新生成的内容');
+      return;
+    }
+    if (chatStreaming) {
+      stopStreaming();
+      return;
+    }
+    const trimmedMessages = [...chatMessages];
+    if (trimmedMessages.length > 0 && trimmedMessages[trimmedMessages.length - 1].role === 'assistant') {
+      trimmedMessages.pop();
+    }
+    const payloadMessages = buildMessagesPayload(trimmedMessages);
+    const assistantMessage: ChatMessage = {
+      id: `${Date.now()}-assistant`,
+      role: 'assistant',
+      content: '',
+    };
+    setChatMessages((prev) => [...trimmedMessages, assistantMessage]);
+    setChatStreaming(true);
+    setChatLoading(true);
+    const abortController = new AbortController();
+    setChatAbortController(abortController);
+    try {
+      const resp = await fetch(
+        `/api/v1/models/chat/${activeModel.model_id}?stream=1`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ messages: payloadMessages }),
+          signal: abortController.signal,
+        },
+      );
+      if (!resp.ok) {
+        const text = await resp.text();
+        throw new Error(text || '对话失败');
+      }
+      const reader = resp.body?.getReader();
+      if (!reader) {
+        const text = await resp.text();
+        setAssistantText(assistantMessage.id, text);
+        setChatStreaming(false);
+        return;
+      }
+      const decoder = new TextDecoder('utf-8');
+      let buffer = '';
+      let rawText = '';
+      let receivedTokens = false;
+      let doneFromServer = false;
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const chunk = decoder.decode(value, { stream: true });
+        rawText += chunk;
+        buffer += chunk;
+        let lineBreakIndex = buffer.indexOf('\n');
+        while (lineBreakIndex >= 0) {
+          const line = buffer.slice(0, lineBreakIndex).trimEnd();
+          buffer = buffer.slice(lineBreakIndex + 1);
+          if (line.startsWith('data:')) {
+            const data = line.replace(/^data:\s*/, '').trim();
+            if (data === '[DONE]') {
+              doneFromServer = true;
+              break;
+            }
+            try {
+              const parsed = JSON.parse(data);
+              const delta =
+                parsed?.choices?.[0]?.delta?.content ??
+                parsed?.choices?.[0]?.message?.content ??
+                parsed?.text ??
+                parsed?.content ??
+                '';
+              if (delta) {
+                receivedTokens = true;
+                appendAssistantText(assistantMessage.id, delta);
+              }
+            } catch {
+              // ignore parse errors for non-JSON stream chunks
+            }
+          }
+          lineBreakIndex = buffer.indexOf('\n');
+        }
+        if (doneFromServer) break;
+      }
+      if (!receivedTokens && rawText) {
+        try {
+          const parsed = JSON.parse(rawText);
+          const content =
+            parsed?.choices?.[0]?.message?.content ??
+            parsed?.choices?.[0]?.text ??
+            parsed?.content ??
+            rawText;
+          setAssistantText(assistantMessage.id, content);
+        } catch {
+          setAssistantText(assistantMessage.id, rawText);
+        }
+      }
+      setChatStreaming(false);
+    } catch (e: any) {
+      message.error(e?.message || '对话失败');
+      setChatStreaming(false);
+      if (e?.name === 'AbortError') return;
+    } finally {
+      setChatLoading(false);
+      setChatAbortController(null);
     }
   };
 
@@ -366,9 +616,6 @@ const IndexPage: React.FC = () => {
               onClick={() => window.open('https://hexo.ismyh.cn/', '_blank')}
             >
               打开我的博客
-            </Button>
-            <Button shape="round" onClick={openCreate}>
-              添加一个模型小工具
             </Button>
             <Text style={{ color: '#6e6e73' }}>
               当前为主页挂载了 <strong>{stats.total}</strong> 个模型工具，其中{' '}
@@ -524,6 +771,7 @@ const IndexPage: React.FC = () => {
                           <Row gutter={[16, 16]}>
                             {models.map((m) => {
                               const isActive = activeModel?.model_id === m.model_id;
+                              const isEnabled = (m.enable ?? 1) === 1;
                               return (
                                 <Col xs={24} md={12} key={m.model_id}>
                                   <Card
@@ -542,6 +790,7 @@ const IndexPage: React.FC = () => {
                                       transform: isActive ? 'translateY(-2px)' : 'translateY(0)',
                                       transition: 'all 0.25s ease',
                                       border: isActive ? '2px solid #69a6ff' : '2px solid transparent',
+                                      opacity: isEnabled ? 1 : 0.6,
                                     }}
                                     bodyStyle={{ padding: 18 }}
                                   >
@@ -602,18 +851,32 @@ const IndexPage: React.FC = () => {
                                                 未设置类型
                                               </Tag>
                                             )}
+                                            {!isEnabled && (
+                                              <Tag
+                                                color="default"
+                                                style={{
+                                                  borderRadius: 999,
+                                                  border: 'none',
+                                                }}
+                                              >
+                                                已禁用
+                                              </Tag>
+                                            )}
                                           </div>
                                         </div>
                                       </Space>
                                       <Space size={8}>
-                                        <Tooltip title="对话">
+                                        <Tooltip title={isEnabled ? '对话' : '模型已禁用'}>
                                           <Button
                                             size="small"
                                             type={isActive ? 'primary' : 'default'}
                                             shape="round"
+                                            disabled={!isEnabled}
                                             onClick={(e) => {
                                               e.stopPropagation();
-                                              openChatWithModel(m);
+                                              if (isEnabled) {
+                                                openChatWithModel(m);
+                                              }
                                             }}
                                           >
                                             对话
@@ -788,7 +1051,7 @@ const IndexPage: React.FC = () => {
       {/* 对话弹窗：点击某个模型的“对话”按钮后才出现 */}
       <Modal
         open={chatVisible}
-        onCancel={() => setChatVisible(false)}
+        onCancel={closeChat}
         footer={null}
         width="100%"
         style={{ top: 0, padding: 0, maxWidth: '100%' }}
@@ -797,98 +1060,235 @@ const IndexPage: React.FC = () => {
         <div
           style={{
             minHeight: '100vh',
-            background:
-              'radial-gradient(circle at top left, #f5f5f7 0, #ffffff 45%, #f5f5f7 100%)',
+            background: '#f7f7f8',
             display: 'flex',
             justifyContent: 'center',
-            padding: '40px 16px',
+            padding: '24px 16px 40px',
           }}
         >
           <div
             style={{
               width: '100%',
-              maxWidth: 840,
-              background: 'rgba(255,255,255,0.96)',
-              borderRadius: 28,
-              boxShadow: '0 24px 60px rgba(0,0,0,0.15)',
-              padding: 24,
+              maxWidth: 920,
               display: 'flex',
               flexDirection: 'column',
-              maxHeight: '80vh',
+              gap: 16,
+              height: 'calc(100vh - 80px)',
             }}
           >
-            <div style={{ marginBottom: 16 }}>
-              <Space direction="vertical" size={4}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between',
+                padding: '8px 8px 0',
+              }}
+            >
+              <Space direction="vertical" size={2}>
                 <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>
-                  LLM 对话
+                  对话
                 </Text>
-                <Text style={{ fontSize: 13, color: '#6e6e73' }}>
-                  与当前选中的模型发起一次对话请求，响应以流式方式逐字展示。
+                <Text style={{ fontSize: 12, color: '#6e6e73' }}>
+                  当前模型：{activeModel?.name || '未选择'}
                 </Text>
+              </Space>
+              <Space>
+                <Button
+                  onClick={() => {
+                    setChatMessages([]);
+                    chatForm.resetFields();
+                    setLastUserPrompt('');
+                    stopStreaming();
+                  }}
+                >
+                  清空
+                </Button>
+                <Button onClick={closeChat}>关闭</Button>
               </Space>
             </div>
 
-            <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
-              <div
-                style={{
-                  flex: 1,
-                  borderRadius: 18,
-                  background: '#f5f5f7',
-                  border: '1px solid #e5e5ea',
-                  padding: 16,
-                  marginBottom: 16,
-                  fontFamily:
-                    'SF Mono, Menlo, Monaco, Consolas, "Courier New", monospace',
-                  fontSize: 11,
-                  overflow: 'auto',
-                }}
-              >
-                {chatAnswer ? (
-                  <pre
-                    style={{
-                      margin: 0,
-                      whiteSpace: 'pre-wrap',
-                      wordBreak: 'break-all',
-                      color: '#1d1d1f',
-                    }}
-                  >
-                    {chatAnswer}
-                  </pre>
-                ) : (
-                  <Text style={{ color: '#6e6e73' }}>
-                    模型响应会以原始 JSON 的形式展示在这里，便于调试和保存。
+            <div
+              ref={chatListRef}
+              style={{
+                flex: 1,
+                overflow: 'auto',
+                padding: '8px 8px 16px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: 16,
+              }}
+            >
+              {chatMessages.length === 0 ? (
+                <div
+                  style={{
+                    flex: 1,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#9b9ba1',
+                  }}
+                >
+                  <Text style={{ color: '#9b9ba1' }}>
+                    试着问一个问题，或者让模型帮你改写一段话。
                   </Text>
-                )}
-                {chatStreaming && (
-                  <div style={{ marginTop: 8 }}>
-                    <Text style={{ fontSize: 11, color: '#a1a1a6' }}>
-                      正在流式生成响应…
-                    </Text>
-                  </div>
-                )}
-              </div>
+                </div>
+              ) : (
+                chatMessages.map((msg) => {
+                  const isUser = msg.role === 'user';
+                  return (
+                    <div
+                      key={msg.id}
+                      style={{
+                        display: 'flex',
+                        justifyContent: isUser ? 'flex-end' : 'flex-start',
+                      }}
+                    >
+                      <div
+                        style={{
+                          display: 'flex',
+                          flexDirection: isUser ? 'row-reverse' : 'row',
+                          gap: 12,
+                          maxWidth: '75%',
+                          alignItems: 'flex-start',
+                        }}
+                      >
+                        <div
+                          style={{
+                            width: 32,
+                            height: 32,
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            background: isUser ? '#111' : '#e6e6eb',
+                            color: isUser ? '#fff' : '#111',
+                            fontSize: 12,
+                            fontWeight: 600,
+                          }}
+                        >
+                          {isUser ? '你' : <RobotOutlined />}
+                        </div>
+                        <div
+                          style={{
+                            padding: '12px 14px',
+                            borderRadius: 16,
+                            background: isUser ? '#111' : '#fff',
+                            color: isUser ? '#fff' : '#111',
+                            boxShadow: isUser
+                              ? '0 8px 18px rgba(0,0,0,0.18)'
+                              : '0 10px 24px rgba(0,0,0,0.08)',
+                            border: isUser ? '1px solid #111' : '1px solid #e5e5ea',
+                            whiteSpace: 'pre-wrap',
+                            wordBreak: 'break-word',
+                            fontSize: 14,
+                            lineHeight: 1.6,
+                          }}
+                        >
+                          {isUser ? (
+                            msg.content
+                          ) : msg.content ? (
+                            <ReactMarkdown
+                              remarkPlugins={[remarkGfm]}
+                              components={{
+                                code({ inline, className, children, ...props }) {
+                                  const match = /language-(\w+)/.exec(className || '');
+                                  if (inline) {
+                                    return (
+                                      <code
+                                        style={{
+                                          background: '#f5f5f7',
+                                          padding: '2px 6px',
+                                          borderRadius: 6,
+                                          fontSize: 12,
+                                        }}
+                                        {...props}
+                                      >
+                                        {children}
+                                      </code>
+                                    );
+                                  }
+                                  return (
+                                    <SyntaxHighlighter
+                                      {...props}
+                                      style={oneLight}
+                                      language={match?.[1] || 'text'}
+                                      PreTag="div"
+                                      customStyle={{
+                                        margin: '12px 0',
+                                        borderRadius: 12,
+                                        padding: 12,
+                                      }}
+                                    >
+                                      {String(children).replace(/\n$/, '')}
+                                    </SyntaxHighlighter>
+                                  );
+                                },
+                              }}
+                            >
+                              {msg.content}
+                            </ReactMarkdown>
+                          ) : chatStreaming ? (
+                            '正在思考…'
+                          ) : (
+                            ''
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })
+              )}
+            </div>
 
+            <div
+              style={{
+                borderRadius: 20,
+                background: '#fff',
+                boxShadow: '0 10px 24px rgba(0,0,0,0.08)',
+                padding: '12px 12px 16px',
+              }}
+            >
               <Form form={chatForm} layout="vertical">
                 <Form.Item
-                  label={<Text style={{ color: '#111', fontSize: 13 }}>提问内容</Text>}
                   name="prompt"
                   rules={[{ required: true, message: '请输入提问内容' }]}
+                  style={{ marginBottom: 12 }}
                 >
                   <Input.TextArea
-                    rows={3}
-                    placeholder="描述你想要模型做什么，例如：给我一个关于 Go 泛型的入门示例。"
+                    autoSize={{ minRows: 2, maxRows: 6 }}
+                    placeholder="输入你的问题，Shift + Enter 换行"
+                    disabled={chatStreaming}
+                    onPressEnter={(e) => {
+                      if (!e.shiftKey) {
+                        e.preventDefault();
+                        handleChat();
+                      }
+                    }}
                   />
                 </Form.Item>
                 <Space style={{ justifyContent: 'flex-end', width: '100%' }}>
+                  <Text style={{ fontSize: 12, color: '#a1a1a6' }}>
+                    发送后会立即开始流式生成
+                  </Text>
                   <Button
-                    onClick={() => {
-                      chatForm.resetFields();
-                      setChatAnswer('');
-                    }}
+                    onClick={handleRegenerate}
+                    disabled={!lastUserPrompt || chatStreaming}
                   >
-                    清空
+                    重新生成
                   </Button>
-                  <Button type="primary" loading={chatLoading} onClick={handleChat}>
+                  <Button
+                    onClick={stopStreaming}
+                    disabled={!chatStreaming}
+                  >
+                    停止
+                  </Button>
+                  <Button
+                    type="primary"
+                    shape="round"
+                    loading={chatLoading}
+                    onClick={handleChat}
+                    disabled={chatStreaming}
+                  >
                     发送
                   </Button>
                 </Space>
@@ -978,4 +1378,3 @@ const IndexPage: React.FC = () => {
 };
 
 export default IndexPage;
-
