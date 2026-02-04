@@ -84,6 +84,9 @@ const IndexPage: React.FC = () => {
   const [form] = Form.useForm();
   const [chatForm] = Form.useForm();
   const chatListRef = useRef<HTMLDivElement | null>(null);
+  const typewriterTimerRef = useRef<number | null>(null);
+  const typewriterQueueRef = useRef<string>('');
+  const currentTypewriterMessageIdRef = useRef<string>('');
 
   // 站点相关状态
   const [sites, setSites] = useState<SiteItem[]>([]);
@@ -272,6 +275,10 @@ const IndexPage: React.FC = () => {
     if (chatAbortController) {
       chatAbortController.abort();
     }
+    if (typewriterTimerRef.current) {
+      window.clearInterval(typewriterTimerRef.current);
+      typewriterTimerRef.current = null;
+    }
     setChatVisible(false);
     setChatStreaming(false);
     setChatLoading(false);
@@ -281,23 +288,82 @@ const IndexPage: React.FC = () => {
     if (chatAbortController) {
       chatAbortController.abort();
     }
+    if (typewriterTimerRef.current) {
+      window.clearInterval(typewriterTimerRef.current);
+      typewriterTimerRef.current = null;
+    }
+    typewriterQueueRef.current = '';
+    currentTypewriterMessageIdRef.current = '';
     setChatStreaming(false);
     setChatLoading(false);
   };
 
   const appendAssistantText = (messageId: string, text: string) => {
     if (!text) return;
-    setChatMessages((prev) =>
-      prev.map((m) =>
-        m.id === messageId ? { ...m, content: `${m.content}${text}` } : m,
-      ),
-    );
+    // 如果是新的消息，开始新的打字机序列
+    if (messageId !== currentTypewriterMessageIdRef.current) {
+      typewriterQueueRef.current = '';
+      currentTypewriterMessageIdRef.current = messageId;
+    }
+    // 将新文本加入队列
+    typewriterQueueRef.current += text;
+    // 启动定时器逐字显示（如果还没启动）
+    if (!typewriterTimerRef.current) {
+      typewriterTimerRef.current = window.setInterval(() => {
+        if (!typewriterQueueRef.current) {
+          if (typewriterTimerRef.current) {
+            window.clearInterval(typewriterTimerRef.current);
+            typewriterTimerRef.current = null;
+          }
+          return;
+        }
+        // 每次只取一个字符，避免竞态
+        const char = typewriterQueueRef.current[0];
+        typewriterQueueRef.current = typewriterQueueRef.current.slice(1);
+        setChatMessages((prev) =>
+          prev.map((m) =>
+            m.id === currentTypewriterMessageIdRef.current
+              ? { ...m, content: `${m.content}${char}` }
+              : m,
+          ),
+        );
+      }, 15);
+    }
   };
 
   const setAssistantText = (messageId: string, text: string) => {
     setChatMessages((prev) =>
       prev.map((m) => (m.id === messageId ? { ...m, content: text } : m)),
     );
+  };
+
+  const startTypewriter = (messageId: string, text: string) => {
+    if (typewriterTimerRef.current) {
+      window.clearInterval(typewriterTimerRef.current);
+      typewriterTimerRef.current = null;
+    }
+    // 使用队列系统实现打字机效果
+    currentTypewriterMessageIdRef.current = messageId;
+    typewriterQueueRef.current = text;
+    typewriterTimerRef.current = window.setInterval(() => {
+      if (!typewriterQueueRef.current) {
+        if (typewriterTimerRef.current) {
+          window.clearInterval(typewriterTimerRef.current);
+          typewriterTimerRef.current = null;
+        }
+        return;
+      }
+      // 每次只取一个字符，避免竞态
+      const char = typewriterQueueRef.current[0];
+      typewriterQueueRef.current = typewriterQueueRef.current.slice(1);
+      setChatMessages((prev) =>
+        prev.map((m) =>
+          m.id === messageId
+            ? { ...m, content: `${m.content}${char}` }
+            : m,
+        ),
+      );
+    }, 15);
   };
 
   const buildMessagesPayload = (messages: ChatMessage[]) =>
@@ -403,7 +469,10 @@ const IndexPage: React.FC = () => {
                 appendAssistantText(assistantMessage.id, delta);
               }
             } catch {
-              // ignore parse errors for non-JSON stream chunks
+              if (data) {
+                receivedTokens = true;
+                appendAssistantText(assistantMessage.id, data);
+              }
             }
           }
           lineBreakIndex = buffer.indexOf('\n');
@@ -418,9 +487,9 @@ const IndexPage: React.FC = () => {
             parsed?.choices?.[0]?.text ??
             parsed?.content ??
             rawText;
-          setAssistantText(assistantMessage.id, content);
+          startTypewriter(assistantMessage.id, content);
         } catch {
-          setAssistantText(assistantMessage.id, rawText);
+          startTypewriter(assistantMessage.id, rawText);
         }
       }
       setChatStreaming(false);
@@ -515,7 +584,10 @@ const IndexPage: React.FC = () => {
                 appendAssistantText(assistantMessage.id, delta);
               }
             } catch {
-              // ignore parse errors for non-JSON stream chunks
+              if (data) {
+                receivedTokens = true;
+                appendAssistantText(assistantMessage.id, data);
+              }
             }
           }
           lineBreakIndex = buffer.indexOf('\n');
@@ -530,9 +602,9 @@ const IndexPage: React.FC = () => {
             parsed?.choices?.[0]?.text ??
             parsed?.content ??
             rawText;
-          setAssistantText(assistantMessage.id, content);
+          startTypewriter(assistantMessage.id, content);
         } catch {
-          setAssistantText(assistantMessage.id, rawText);
+          startTypewriter(assistantMessage.id, rawText);
         }
       }
       setChatStreaming(false);
@@ -1048,14 +1120,25 @@ const IndexPage: React.FC = () => {
         </div>
       </Content>
 
-      {/* 对话弹窗：点击某个模型的“对话”按钮后才出现 */}
+      {/* 全局样式覆盖 */}
+      <style>{`
+        .ant-modal-content {
+          overflow: hidden !important;
+          border-radius: 0 !important;
+        }
+        .ant-modal-wrap {
+          overflow: hidden !important;
+        }
+      `}</style>
+
+      {/* 对话弹窗：点击某个模型的"对话"按钮后才出现 */}
       <Modal
         open={chatVisible}
         onCancel={closeChat}
         footer={null}
         width="100%"
         style={{ top: 0, padding: 0, maxWidth: '100%' }}
-        bodyStyle={{ padding: 0 }}
+        bodyStyle={{ padding: 0, height: '100vh', overflow: 'hidden' }}
       >
         <div
           style={{
