@@ -42,7 +42,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -55,7 +55,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 2
+        "register": 3
       },
       "enableBy": "register"
     },
@@ -69,10 +69,10 @@
       "time": {
         "hooks": {
           "onStart": [
-            1
+            5
           ]
         },
-        "register": 2
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -89,7 +89,7 @@
             1
           ]
         },
-        "register": 1
+        "register": 3
       },
       "enableBy": "register"
     },
@@ -103,26 +103,10 @@
       "time": {
         "hooks": {
           "modifyRoutes": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0
           ]
         },
-        "register": 1
+        "register": 0
       },
       "enableBy": "register"
     },
@@ -136,28 +120,13 @@
       "time": {
         "hooks": {
           "onDevCompileDone": [
-            6,
+            7,
             1,
             1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            1,
-            0,
-            1,
-            1
+            2
           ]
         },
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -171,29 +140,13 @@
       "time": {
         "hooks": {
           "modifyAppData": [
-            3
+            4
           ],
           "onGenerateFiles": [
-            1,
-            9,
-            8,
-            9,
-            8,
-            10,
-            8,
-            6,
-            8,
-            6,
-            11,
-            7,
-            8,
-            7,
-            10,
-            6,
-            9
+            1
           ]
         },
-        "register": 13
+        "register": 21
       },
       "enableBy": "register"
     },
@@ -207,22 +160,6 @@
       "time": {
         "hooks": {
           "addEntryCode": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0
           ]
         },
@@ -248,40 +185,9 @@
           "onPrepareBuildSuccess": [
             0,
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0
           ],
           "onCheckCode": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0,
             0,
             0,
@@ -314,7 +220,7 @@
             0
           ]
         },
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -327,7 +233,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 1
+        "register": 0
       },
       "enableBy": "config"
     },
@@ -344,7 +250,7 @@
             0
           ]
         },
-        "register": 4
+        "register": 6
       },
       "enableBy": "register"
     },
@@ -1196,7 +1102,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 0
+        "register": 1
       },
       "enableBy": "config"
     },
@@ -1210,10 +1116,10 @@
       "time": {
         "hooks": {
           "onStart": [
-            0
+            2
           ]
         },
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -1230,7 +1136,7 @@
             4
           ]
         },
-        "register": 1
+        "register": 0
       },
       "enableBy": "register"
     },
@@ -1243,7 +1149,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 43
+        "register": 86
       },
       "enableBy": "register"
     },
@@ -1256,7 +1162,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 20
+        "register": 36
       },
       "enableBy": "config"
     },
@@ -1269,7 +1175,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 10
+        "register": 19
       },
       "enableBy": "config"
     },
@@ -1286,11 +1192,9 @@
             0
           ],
           "addBeforeMiddlewares": [
-            1
+            0
           ],
           "modifyHTMLFavicon": [
-            0,
-            0,
             0,
             0,
             0,
@@ -1298,7 +1202,7 @@
             0
           ]
         },
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -1312,41 +1216,9 @@
       "time": {
         "hooks": {
           "onGenerateFiles": [
-            1,
-            0,
-            0,
-            1,
-            1,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            1,
-            0,
-            0,
             1
           ],
           "addRuntimePlugin": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0
           ]
         },
@@ -1363,7 +1235,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 1
+        "register": 2
       },
       "enableBy": "config"
     },
@@ -1377,13 +1249,13 @@
       "time": {
         "hooks": {
           "onStart": [
-            1
+            0
           ],
           "addBeforeMiddlewares": [
-            0
+            1
           ]
         },
-        "register": 19
+        "register": 30
       }
     },
     "./node_modules/@umijs/preset-umi/dist/features/mpa/mpa": {
@@ -1421,62 +1293,14 @@
       "time": {
         "hooks": {
           "onGenerateFiles": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0
           ],
           "addEntryImports": [
             0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0
           ]
         },
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -1489,7 +1313,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 1
+        "register": 0
       },
       "enableBy": "config"
     },
@@ -1503,65 +1327,17 @@
       "time": {
         "hooks": {
           "modifyConfig": [
-            0
+            1
           ],
           "onGenerateFiles": [
-            42,
-            16,
-            15,
-            15,
-            17,
-            23,
-            15,
-            16,
-            18,
-            15,
-            14,
-            14,
-            16,
-            13,
-            15,
-            14,
-            15
+            34
           ],
           "addPolyfillImports": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0,
             0
           ]
         },
-        "register": 0
+        "register": 1
       }
     },
     "./node_modules/@umijs/preset-umi/dist/features/polyfill/publicPathPolyfill": {
@@ -1574,38 +1350,6 @@
       "time": {
         "hooks": {
           "addPolyfillImports": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0,
             0
           ]
@@ -1624,26 +1368,10 @@
       "time": {
         "hooks": {
           "onGenerateFiles": [
-            57,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
+            41
           ]
         },
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -1656,7 +1384,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 0
+        "register": 1
       },
       "enableBy": "config"
     },
@@ -1669,7 +1397,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 1
+        "register": 0
       },
       "enableBy": "config"
     },
@@ -1683,29 +1411,13 @@
       "time": {
         "hooks": {
           "onGenerateFiles": [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,
             0
           ],
           "addBeforeMiddlewares": [
             0
           ]
         },
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -1719,43 +1431,11 @@
       "time": {
         "hooks": {
           "onGenerateFiles": [
-            6,
-            3,
-            7,
-            1,
-            4,
-            1,
             5,
-            2,
-            5,
-            1,
-            6,
-            1,
-            5,
-            1,
-            2,
-            1,
-            4,
-            1,
-            3,
-            1,
-            5,
-            1,
-            4,
-            2,
-            3,
-            1,
-            2,
-            1,
-            5,
-            1,
-            3,
-            1,
-            4,
-            1
+            3
           ]
         },
-        "register": 3
+        "register": 2
       },
       "enableBy": "register"
     },
@@ -1768,7 +1448,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 0
+        "register": 2
       },
       "enableBy": "config"
     },
@@ -1781,7 +1461,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 1
+        "register": 0
       }
     },
     "./node_modules/@umijs/preset-umi/dist/features/ssr/ssr": {
@@ -1793,7 +1473,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 0
+        "register": 1
       },
       "enableBy": "config"
     },
@@ -1807,26 +1487,10 @@
       "time": {
         "hooks": {
           "onGenerateFiles": [
-            198,
-            10,
-            6,
-            6,
-            6,
-            5,
-            7,
-            7,
-            7,
-            7,
-            6,
-            6,
-            8,
-            3,
-            5,
-            9,
-            6
+            256
           ]
         },
-        "register": 1
+        "register": 2
       },
       "enableBy": "register"
     },
@@ -1840,10 +1504,10 @@
       "time": {
         "hooks": {
           "addBeforeBabelPresets": [
-            0
+            1
           ]
         },
-        "register": 1
+        "register": 3
       },
       "enableBy": "register"
     },
@@ -1856,7 +1520,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 2
+        "register": 4
       },
       "enableBy": "config"
     },
@@ -1882,7 +1546,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 2
+        "register": 8
       }
     },
     "./node_modules/@umijs/preset-umi/dist/features/monorepo/redirect": {
@@ -1894,7 +1558,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 12
+        "register": 17
       },
       "enableBy": "config"
     },
@@ -1908,23 +1572,7 @@
       "time": {
         "hooks": {
           "onGenerateFiles": [
-            1,
-            0,
-            1,
-            0,
-            1,
-            1,
-            1,
-            0,
-            1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            1,
-            1,
-            0
+            1
           ]
         },
         "register": 1
@@ -1965,7 +1613,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 1
+        "register": 0
       },
       "enableBy": "config"
     },
@@ -2007,7 +1655,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 1
+        "register": 2
       }
     },
     "./node_modules/@umijs/preset-umi/dist/features/mako/mako": {
@@ -2044,7 +1692,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 1
+        "register": 3
       }
     },
     "./node_modules/@umijs/preset-umi/dist/features/routePreloadOnLoad/routePreloadOnLoad": {
@@ -2057,16 +1705,14 @@
       "time": {
         "hooks": {
           "addHTMLHeadScripts": [
+            5,
+            0,
             1,
-            0,
-            0,
-            0,
-            0,
-            0,
-            0
+            1,
+            1
           ]
         },
-        "register": 16
+        "register": 23
       }
     },
     "./node_modules/@umijs/preset-umi/dist/features/forget/forget": {
@@ -2092,7 +1738,7 @@
       "time": {
         "hooks": {
           "modifyUniBundler": [
-            287
+            365
           ]
         },
         "register": 1
@@ -2108,7 +1754,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 3
+        "register": 2
       },
       "enableBy": "register"
     },
@@ -2121,7 +1767,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 22
+        "register": 16
       },
       "enableBy": "register"
     },
@@ -2135,10 +1781,10 @@
       "time": {
         "hooks": {
           "modifyAppData": [
-            8
+            12
           ]
         },
-        "register": 19
+        "register": 21
       }
     },
     "./node_modules/@umijs/preset-umi/dist/commands/help": {
@@ -2150,7 +1796,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -2202,7 +1848,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -2215,7 +1861,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 1
+        "register": 2
       },
       "enableBy": "register"
     },
@@ -2241,7 +1887,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -2254,7 +1900,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 1
+        "register": 0
       },
       "enableBy": "register"
     },
@@ -2280,7 +1926,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -2306,7 +1952,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -2332,7 +1978,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -2345,7 +1991,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 1
+        "register": 0
       },
       "enableBy": "register"
     },
@@ -2371,7 +2017,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -2384,7 +2030,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 14
+        "register": 17
       },
       "enableBy": "register"
     },
@@ -2397,7 +2043,7 @@
       "config": {},
       "time": {
         "hooks": {},
-        "register": 0
+        "register": 1
       },
       "enableBy": "register"
     },
@@ -2499,7 +2145,7 @@
       "file": "@/pages/index.tsx",
       "id": "1",
       "absPath": "/",
-      "__content": "import React, { useEffect, useMemo, useRef, useState } from 'react';\nimport {\n  Layout,\n  Button,\n  Space,\n  Form,\n  Input,\n  InputNumber,\n  message,\n  Tag,\n  Card,\n  Typography,\n  Modal,\n  Row,\n  Col,\n  Tooltip,\n  Empty,\n  Tabs,\n  Table,\n  Select,\n} from 'antd';\nimport {\n  PlusOutlined,\n  ArrowRightOutlined,\n  EditOutlined,\n  DeleteOutlined,\n  RobotOutlined,\n} from '@ant-design/icons';\nimport axios from 'axios';\nimport ReactMarkdown from 'react-markdown';\nimport remarkGfm from 'remark-gfm';\nimport { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';\nimport { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';\n\nconst { Header, Content } = Layout;\nconst { Text, Title, Paragraph } = Typography;\n\ninterface ModelItem {\n  model_id: string;\n  name: string;\n  endpoint: string;\n  api_key: string;\n  timeout?: number;\n  type?: string;\n  dimensions?: number;\n  enable?: number;\n}\n\ninterface SiteItem {\n  site_id: number;\n  site_name?: string;\n}\n\ninterface ModelListResponse {\n  list: ModelItem[];\n  total: number;\n  page: number;\n  page_size: number;\n}\n\ninterface SiteListResponse {\n  list: SiteItem[];\n  total: number;\n}\n\ninterface ChatMessage {\n  id: string;\n  role: 'user' | 'assistant';\n  content: string;\n}\n\nconst IndexPage: React.FC = () => {\n  const [loading, setLoading] = useState(false);\n  const [models, setModels] = useState<ModelItem[]>([]);\n  const [activeModel, setActiveModel] = useState<ModelItem | null>(null);\n  const [chatVisible, setChatVisible] = useState(false);\n  const [chatLoading, setChatLoading] = useState(false);\n  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);\n  const [chatStreaming, setChatStreaming] = useState(false);\n  const [chatAbortController, setChatAbortController] = useState<AbortController | null>(null);\n  const [lastUserPrompt, setLastUserPrompt] = useState('');\n  const [editingModel, setEditingModel] = useState<ModelItem | null>(null);\n  const [formVisible, setFormVisible] = useState(false);\n  const [form] = Form.useForm();\n  const [chatForm] = Form.useForm();\n  const chatListRef = useRef<HTMLDivElement | null>(null);\n  const typewriterTimerRef = useRef<number | null>(null);\n  const typewriterQueueRef = useRef<string>('');\n  const currentTypewriterMessageIdRef = useRef<string>('');\n\n  // 站点相关状态\n  const [sites, setSites] = useState<SiteItem[]>([]);\n  const [siteLoading, setSiteLoading] = useState(false);\n  const [editingSite, setEditingSite] = useState<SiteItem | null>(null);\n  const [siteFormVisible, setSiteFormVisible] = useState(false);\n  const [siteForm] = Form.useForm();\n\n  const fetchSites = async () => {\n    setSiteLoading(true);\n    try {\n      const res = await axios.get('/api/v1/sites/get');\n      const data = res.data?.data as SiteListResponse;\n      setSites(data?.list || []);\n    } catch (e: any) {\n      message.error(e?.response?.data?.msg || '获取站点列表失败');\n    } finally {\n      setSiteLoading(false);\n    }\n  };\n\n  const openCreateSite = () => {\n    setEditingSite(null);\n    siteForm.resetFields();\n    setSiteFormVisible(true);\n  };\n\n  const openEditSite = (site: SiteItem) => {\n    setEditingSite(site);\n    siteForm.setFieldsValue({\n      site_name: site.site_name,\n    });\n    setSiteFormVisible(true);\n  };\n\n  const handleSaveSite = async () => {\n    try {\n      const values = await siteForm.validateFields();\n      if (editingSite) {\n        await axios.put(`/api/v1/sites/${editingSite.site_id}`, values);\n        message.success('已更新站点');\n      } else {\n        await axios.post('/api/v1/sites/create', values);\n        message.success('已创建站点');\n      }\n      setSiteFormVisible(false);\n      await fetchSites();\n    } catch {\n      // ignore\n    }\n  };\n\n  const handleDeleteSite = (site: SiteItem) => {\n    Modal.confirm({\n      title: '删除站点',\n      content: `确认删除站点「${site.site_name || site.site_id}」？`,\n      okButtonProps: { danger: true },\n      onOk: async () => {\n        try {\n          await axios.delete(`/api/v1/sites/${site.site_id}`);\n          message.success('删除成功');\n          await fetchSites();\n        } catch (e: any) {\n          message.error(e?.response?.data?.msg || '删除失败');\n        }\n      },\n    });\n  };\n\n  const fetchModels = async () => {\n    setLoading(true);\n    try {\n      const res = await axios.get('/api/v1/models/get', {\n        params: { page: 1, page_size: 100 },\n      });\n      const data = res.data?.data as ModelListResponse;\n      const list = data.list || [];\n      setModels(list);\n      if (!activeModel && list.length > 0) {\n        setActiveModel(list[0]);\n      }\n    } catch (e: any) {\n      message.error(e?.response?.data?.msg || '获取模型列表失败');\n    } finally {\n      setLoading(false);\n    }\n  };\n\n  useEffect(() => {\n    fetchModels();\n    fetchSites();\n  }, []);\n\n  useEffect(() => {\n    if (!chatVisible) return;\n    if (chatListRef.current) {\n      chatListRef.current.scrollTop = chatListRef.current.scrollHeight;\n    }\n  }, [chatMessages, chatStreaming, chatVisible]);\n\n  const stats = useMemo(() => {\n    const total = models.length;\n    const ready = models.filter(\n      (m) => m.endpoint && m.api_key && (m.enable ?? 1) === 1,\n    ).length;\n    return { total, ready };\n  }, [models]);\n\n  const openCreate = () => {\n    setEditingModel(null);\n    form.resetFields();\n    setFormVisible(true);\n  };\n\n  const openEdit = (m: ModelItem) => {\n    setEditingModel(m);\n    const protocol = m.endpoint?.match(/^https?:\\/\\//)?.[0] || 'https://';\n    const displayEndpoint = m.endpoint?.replace(/^https?:\\/\\//, '') || '';\n    form.setFieldsValue({\n      name: m.name,\n      protocol,\n      endpoint: displayEndpoint,\n      api_key: m.api_key,\n      timeout: m.timeout,\n      type: m.type,\n      dimensions: m.dimensions,\n    });\n    setFormVisible(true);\n  };\n\n  const handleSaveModel = async () => {\n    try {\n      const values = await form.validateFields();\n      // 组合 protocol 和 endpoint\n      const { protocol, ...rest } = values;\n      const finalValues = {\n        ...rest,\n        endpoint: `${protocol || 'https://'}${rest.endpoint || ''}`,\n      };\n      if (editingModel) {\n        await axios.put(`/api/v1/models/${editingModel.model_id}`, finalValues);\n        message.success('已更新模型');\n      } else {\n        await axios.post('/api/v1/models/create', finalValues);\n        message.success('已创建模型');\n      }\n      setFormVisible(false);\n      await fetchModels();\n    } catch {\n      // ignore\n    }\n  };\n\n  const handleDelete = (m: ModelItem) => {\n    Modal.confirm({\n      title: '删除模型',\n      content: `确认删除模型「${m.name}」？`,\n      okButtonProps: { danger: true },\n      onOk: async () => {\n        try {\n          await axios.delete(`/api/v1/models/${m.model_id}`);\n          message.success('删除成功');\n          if (activeModel?.model_id === m.model_id) {\n            setActiveModel(null);\n            setChatMessages([]);\n            chatForm.resetFields();\n          }\n          await fetchModels();\n        } catch (e: any) {\n          message.error(e?.response?.data?.msg || '删除失败');\n        }\n      },\n    });\n  };\n\n  const openChatWithModel = (m: ModelItem) => {\n    setActiveModel(m);\n    setChatVisible(true);\n    setChatMessages([]);\n    setChatStreaming(false);\n    setLastUserPrompt('');\n    chatForm.resetFields();\n  };\n\n  const closeChat = () => {\n    if (chatAbortController) {\n      chatAbortController.abort();\n    }\n    if (typewriterTimerRef.current) {\n      window.clearInterval(typewriterTimerRef.current);\n      typewriterTimerRef.current = null;\n    }\n    setChatVisible(false);\n    setChatStreaming(false);\n    setChatLoading(false);\n  };\n\n  const stopStreaming = () => {\n    if (chatAbortController) {\n      chatAbortController.abort();\n    }\n    if (typewriterTimerRef.current) {\n      window.clearInterval(typewriterTimerRef.current);\n      typewriterTimerRef.current = null;\n    }\n    typewriterQueueRef.current = '';\n    currentTypewriterMessageIdRef.current = '';\n    setChatStreaming(false);\n    setChatLoading(false);\n  };\n\n  const appendAssistantText = (messageId: string, text: string) => {\n    if (!text) return;\n    // 如果是新的消息，开始新的打字机序列\n    if (messageId !== currentTypewriterMessageIdRef.current) {\n      typewriterQueueRef.current = '';\n      currentTypewriterMessageIdRef.current = messageId;\n    }\n    // 将新文本加入队列\n    typewriterQueueRef.current += text;\n    // 启动定时器逐字显示（如果还没启动）\n    if (!typewriterTimerRef.current) {\n      typewriterTimerRef.current = window.setInterval(() => {\n        if (!typewriterQueueRef.current) {\n          if (typewriterTimerRef.current) {\n            window.clearInterval(typewriterTimerRef.current);\n            typewriterTimerRef.current = null;\n          }\n          return;\n        }\n        // 每次只取一个字符，避免竞态\n        const char = typewriterQueueRef.current[0];\n        typewriterQueueRef.current = typewriterQueueRef.current.slice(1);\n        setChatMessages((prev) =>\n          prev.map((m) =>\n            m.id === currentTypewriterMessageIdRef.current\n              ? { ...m, content: `${m.content}${char}` }\n              : m,\n          ),\n        );\n      }, 15);\n    }\n  };\n\n  const setAssistantText = (messageId: string, text: string) => {\n    setChatMessages((prev) =>\n      prev.map((m) => (m.id === messageId ? { ...m, content: text } : m)),\n    );\n  };\n\n  const startTypewriter = (messageId: string, text: string) => {\n    if (typewriterTimerRef.current) {\n      window.clearInterval(typewriterTimerRef.current);\n      typewriterTimerRef.current = null;\n    }\n    // 使用队列系统实现打字机效果\n    currentTypewriterMessageIdRef.current = messageId;\n    typewriterQueueRef.current = text;\n    typewriterTimerRef.current = window.setInterval(() => {\n      if (!typewriterQueueRef.current) {\n        if (typewriterTimerRef.current) {\n          window.clearInterval(typewriterTimerRef.current);\n          typewriterTimerRef.current = null;\n        }\n        return;\n      }\n      // 每次只取一个字符，避免竞态\n      const char = typewriterQueueRef.current[0];\n      typewriterQueueRef.current = typewriterQueueRef.current.slice(1);\n      setChatMessages((prev) =>\n        prev.map((m) =>\n          m.id === messageId\n            ? { ...m, content: `${m.content}${char}` }\n            : m,\n        ),\n      );\n    }, 15);\n  };\n\n  const buildMessagesPayload = (messages: ChatMessage[]) =>\n    messages\n      .filter((m) => m.content.trim())\n      .map((m) => ({\n        role: m.role,\n        content: m.content,\n      }));\n\n  const handleChat = async () => {\n    if (!activeModel) {\n      message.warning('请先选择一个模型');\n      return;\n    }\n    if ((activeModel.enable ?? 1) === 0) {\n      message.warning('当前模型已禁用，无法对话');\n      return;\n    }\n    try {\n      const values = await chatForm.validateFields();\n      const prompt = (values.prompt || '').trim();\n      if (!prompt) return;\n      if (chatAbortController) {\n        chatAbortController.abort();\n      }\n      const abortController = new AbortController();\n      setChatAbortController(abortController);\n      const userMessage: ChatMessage = {\n        id: `${Date.now()}-user`,\n        role: 'user',\n        content: prompt,\n      };\n      const assistantMessage: ChatMessage = {\n        id: `${Date.now()}-assistant`,\n        role: 'assistant',\n        content: '',\n      };\n      const nextMessages = [...chatMessages, userMessage];\n      const payloadMessages = buildMessagesPayload(nextMessages);\n      setChatMessages((prev) => [...prev, userMessage, assistantMessage]);\n      chatForm.resetFields();\n      setLastUserPrompt(prompt);\n      setChatLoading(true);\n      setChatStreaming(true);\n\n      const resp = await fetch(\n        `/api/v1/models/chat/${activeModel.model_id}?stream=1`,\n        {\n          method: 'POST',\n          headers: {\n            'Content-Type': 'application/json',\n          },\n          body: JSON.stringify({ messages: payloadMessages }),\n          signal: abortController.signal,\n        },\n      );\n\n      if (!resp.ok) {\n        const text = await resp.text();\n        throw new Error(text || '对话失败');\n      }\n\n      const reader = resp.body?.getReader();\n      if (!reader) {\n        const text = await resp.text();\n        setAssistantText(assistantMessage.id, text);\n        setChatStreaming(false);\n        return;\n      }\n\n      const decoder = new TextDecoder('utf-8');\n      let buffer = '';\n      let rawText = '';\n      let receivedTokens = false;\n      let doneFromServer = false;\n      while (true) {\n        const { done, value } = await reader.read();\n        if (done) break;\n        const chunk = decoder.decode(value, { stream: true });\n        rawText += chunk;\n        buffer += chunk;\n        let lineBreakIndex = buffer.indexOf('\\n');\n        while (lineBreakIndex >= 0) {\n          const line = buffer.slice(0, lineBreakIndex).trimEnd();\n          buffer = buffer.slice(lineBreakIndex + 1);\n          if (line.startsWith('data:')) {\n            const data = line.replace(/^data:\\s*/, '').trim();\n            if (data === '[DONE]') {\n              doneFromServer = true;\n              break;\n            }\n            try {\n              const parsed = JSON.parse(data);\n              const delta =\n                parsed?.choices?.[0]?.delta?.content ??\n                parsed?.choices?.[0]?.message?.content ??\n                parsed?.text ??\n                parsed?.content ??\n                '';\n              if (delta) {\n                receivedTokens = true;\n                appendAssistantText(assistantMessage.id, delta);\n              }\n            } catch {\n              if (data) {\n                receivedTokens = true;\n                appendAssistantText(assistantMessage.id, data);\n              }\n            }\n          }\n          lineBreakIndex = buffer.indexOf('\\n');\n        }\n        if (doneFromServer) break;\n      }\n      if (!receivedTokens && rawText) {\n        try {\n          const parsed = JSON.parse(rawText);\n          const content =\n            parsed?.choices?.[0]?.message?.content ??\n            parsed?.choices?.[0]?.text ??\n            parsed?.content ??\n            rawText;\n          startTypewriter(assistantMessage.id, content);\n        } catch {\n          startTypewriter(assistantMessage.id, rawText);\n        }\n      }\n      setChatStreaming(false);\n    } catch (e: any) {\n      message.error(e?.message || '对话失败');\n      setChatStreaming(false);\n      if (e?.name === 'AbortError') return;\n    } finally {\n      setChatLoading(false);\n      setChatAbortController(null);\n    }\n  };\n\n  const handleRegenerate = async () => {\n    if (!activeModel || !lastUserPrompt) {\n      message.warning('没有可重新生成的内容');\n      return;\n    }\n    if (chatStreaming) {\n      stopStreaming();\n      return;\n    }\n    const trimmedMessages = [...chatMessages];\n    if (trimmedMessages.length > 0 && trimmedMessages[trimmedMessages.length - 1].role === 'assistant') {\n      trimmedMessages.pop();\n    }\n    const payloadMessages = buildMessagesPayload(trimmedMessages);\n    const assistantMessage: ChatMessage = {\n      id: `${Date.now()}-assistant`,\n      role: 'assistant',\n      content: '',\n    };\n    setChatMessages((prev) => [...trimmedMessages, assistantMessage]);\n    setChatStreaming(true);\n    setChatLoading(true);\n    const abortController = new AbortController();\n    setChatAbortController(abortController);\n    try {\n      const resp = await fetch(\n        `/api/v1/models/chat/${activeModel.model_id}?stream=1`,\n        {\n          method: 'POST',\n          headers: {\n            'Content-Type': 'application/json',\n          },\n          body: JSON.stringify({ messages: payloadMessages }),\n          signal: abortController.signal,\n        },\n      );\n      if (!resp.ok) {\n        const text = await resp.text();\n        throw new Error(text || '对话失败');\n      }\n      const reader = resp.body?.getReader();\n      if (!reader) {\n        const text = await resp.text();\n        setAssistantText(assistantMessage.id, text);\n        setChatStreaming(false);\n        return;\n      }\n      const decoder = new TextDecoder('utf-8');\n      let buffer = '';\n      let rawText = '';\n      let receivedTokens = false;\n      let doneFromServer = false;\n      while (true) {\n        const { done, value } = await reader.read();\n        if (done) break;\n        const chunk = decoder.decode(value, { stream: true });\n        rawText += chunk;\n        buffer += chunk;\n        let lineBreakIndex = buffer.indexOf('\\n');\n        while (lineBreakIndex >= 0) {\n          const line = buffer.slice(0, lineBreakIndex).trimEnd();\n          buffer = buffer.slice(lineBreakIndex + 1);\n          if (line.startsWith('data:')) {\n            const data = line.replace(/^data:\\s*/, '').trim();\n            if (data === '[DONE]') {\n              doneFromServer = true;\n              break;\n            }\n            try {\n              const parsed = JSON.parse(data);\n              const delta =\n                parsed?.choices?.[0]?.delta?.content ??\n                parsed?.choices?.[0]?.message?.content ??\n                parsed?.text ??\n                parsed?.content ??\n                '';\n              if (delta) {\n                receivedTokens = true;\n                appendAssistantText(assistantMessage.id, delta);\n              }\n            } catch {\n              if (data) {\n                receivedTokens = true;\n                appendAssistantText(assistantMessage.id, data);\n              }\n            }\n          }\n          lineBreakIndex = buffer.indexOf('\\n');\n        }\n        if (doneFromServer) break;\n      }\n      if (!receivedTokens && rawText) {\n        try {\n          const parsed = JSON.parse(rawText);\n          const content =\n            parsed?.choices?.[0]?.message?.content ??\n            parsed?.choices?.[0]?.text ??\n            parsed?.content ??\n            rawText;\n          startTypewriter(assistantMessage.id, content);\n        } catch {\n          startTypewriter(assistantMessage.id, rawText);\n        }\n      }\n      setChatStreaming(false);\n    } catch (e: any) {\n      message.error(e?.message || '对话失败');\n      setChatStreaming(false);\n      if (e?.name === 'AbortError') return;\n    } finally {\n      setChatLoading(false);\n      setChatAbortController(null);\n    }\n  };\n\n  return (\n    <Layout\n      style={{\n        minHeight: '100vh',\n        background:\n          'radial-gradient(circle at top left, #f5f5f7 0, #ffffff 45%, #f5f5f7 100%)',\n      }}\n    >\n      <Header\n        style={{\n          height: 64,\n          lineHeight: '64px',\n          padding: '0 56px',\n          background: 'transparent',\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          backdropFilter: 'saturate(180%) blur(20px)',\n          WebkitBackdropFilter: 'saturate(180%) blur(20px)',\n        }}\n      >\n        <Space size={16}>\n          <RobotOutlined style={{ fontSize: 22, color: '#111' }} />\n          <Text style={{ fontSize: 18, fontWeight: 600 }}>Alex_yehui</Text>\n        </Space>\n        <Space size={24}>\n          <Text style={{ color: '#6e6e73' }}>个人主页</Text>\n        </Space>\n      </Header>\n\n      <Content style={{ padding: '24px 56px 56px' }}>\n        {/* Hero section */}\n        <div\n          style={{\n            maxWidth: 1180,\n            margin: '0 auto 40px',\n            textAlign: 'center',\n          }}\n        >\n          <Title\n            level={1}\n            style={{\n              marginBottom: 16,\n              fontSize: 44,\n              letterSpacing: 0.4,\n              fontWeight: 600,\n              color: '#111',\n            }}\n          >\n            欢迎管理 Alex_yehui 的主页。\n          </Title>\n          <Title\n            level={4}\n            style={{\n              marginBottom: 32,\n              fontWeight: 400,\n              color: '#6e6e73',\n            }}\n          >\n            这里是我的个人空间，用来集中展示我的工作、项目和正在折腾的各种 AI / 工具实验。\n          </Title>\n          <Space size={16} style={{ justifyContent: 'center' }}>\n            <Button\n              type=\"primary\"\n              size=\"large\"\n              shape=\"round\"\n              icon={<ArrowRightOutlined />}\n              onClick={() => window.open('https://hexo.ismyh.cn/', '_blank')}\n            >\n              打开我的博客\n            </Button>\n            <Text style={{ color: '#6e6e73' }}>\n              当前为主页挂载了 <strong>{stats.total}</strong> 个模型工具，其中{' '}\n              <strong>{stats.ready}</strong> 个可直接对话。\n            </Text>\n          </Space>\n        </div>\n\n        {/* Main content with tabs (欢迎 / 模型管理) */}\n        <div\n          style={{\n            maxWidth: 1180,\n            margin: '0 auto',\n          }}\n        >\n          <Tabs\n            defaultActiveKey=\"welcome\"\n            items={[\n              {\n                key: 'welcome',\n                label: '欢迎',\n                children: (\n                  <Row gutter={24}>\n                    <Col xs={24} md={12} style={{ marginBottom: 24 }}>\n                      <Card\n                        bordered={false}\n                        style={{\n                          borderRadius: 24,\n                          background: 'rgba(255,255,255,0.9)',\n                          boxShadow: '0 10px 30px rgba(0,0,0,0.06)',\n                        }}\n                      >\n                        <Title level={4} style={{ marginBottom: 12 }}>\n                          关于我\n                        </Title>\n                        <Paragraph style={{ color: '#6e6e73' }}>\n                          这里是 Alex_yehui 的个人主页，记录一些正在做的事情、想法，以及和 AI\n                          相关的尝试。\n                        </Paragraph>\n                      </Card>\n                    </Col>\n                    <Col xs={24} md={12} style={{ marginBottom: 24 }}>\n                      <Card\n                        bordered={false}\n                        style={{\n                          borderRadius: 24,\n                          background: 'rgba(255,255,255,0.9)',\n                          boxShadow: '0 10px 30px rgba(0,0,0,0.06)',\n                        }}\n                      >\n                        <Title level={4} style={{ marginBottom: 12 }}>\n                          工作与项目\n                        </Title>\n                        <Paragraph style={{ color: '#6e6e73' }}>\n                          主要关注后端 / 基础设施与 AI 应用落地，页面后续可以放一些代表性的项目链接和截图。\n                        </Paragraph>\n                      </Card>\n                    </Col>\n                    <Col xs={24} md={12} style={{ marginBottom: 24 }}>\n                      <Card\n                        bordered={false}\n                        style={{\n                          borderRadius: 24,\n                          background: 'rgba(255,255,255,0.9)',\n                          boxShadow: '0 10px 30px rgba(0,0,0,0.06)',\n                        }}\n                      >\n                        <Title level={4} style={{ marginBottom: 12 }}>\n                          随笔与笔记\n                        </Title>\n                        <Paragraph style={{ color: '#6e6e73' }}>\n                          我的主要博客位于{' '}\n                          <a href=\"https://hexo.ismyh.cn/\" target=\"_blank\" rel=\"noreferrer\">\n                            https://hexo.ismyh.cn/\n                          </a>\n                          ，后续也会在这里挂一些精选文章和长文链接。\n                        </Paragraph>\n                      </Card>\n                    </Col>\n                    <Col xs={24} md={12} style={{ marginBottom: 24 }}>\n                      <Card\n                        bordered={false}\n                        style={{\n                          borderRadius: 24,\n                          background: 'rgba(255,255,255,0.9)',\n                          boxShadow: '0 10px 30px rgba(0,0,0,0.06)',\n                        }}\n                      >\n                        <Title level={4} style={{ marginBottom: 12 }}>\n                          工具与实验室\n                        </Title>\n                        <Paragraph style={{ color: '#6e6e73' }}>\n                          模型管理只是其中一个小模块，后续可以继续放更多实验性的工具，比如自动化脚本面板、数据看板等。\n                        </Paragraph>\n                      </Card>\n                    </Col>\n                  </Row>\n                ),\n              },\n              {\n                key: 'models',\n                label: '模型管理',\n                children: (\n                  <Row gutter={24} align=\"stretch\">\n                    <Col xs={24} style={{ marginBottom: 24 }}>\n                      <Card\n                        bordered={false}\n                        bodyStyle={{ padding: 24 }}\n                        style={{\n                          borderRadius: 28,\n                          background:\n                            'linear-gradient(135deg, rgba(250,250,252,0.9), rgba(245,245,247,0.9))',\n                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',\n                        }}\n                        title={\n                          <Space direction=\"vertical\" size={4}>\n                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>\n                              模型一览\n                            </Text>\n                            <Text style={{ fontSize: 13, color: '#6e6e73' }}>\n                              以卡片的形式浏览和管理你接入的每一个模型。\n                            </Text>\n                          </Space>\n                        }\n                        extra={\n                          <Space>\n                            <Button type=\"link\" onClick={fetchModels} style={{ paddingRight: 0 }}>\n                              刷新\n                            </Button>\n                            <Button\n                              type=\"primary\"\n                              shape=\"round\"\n                              icon={<PlusOutlined />}\n                              onClick={openCreate}\n                            >\n                              新建模型\n                            </Button>\n                          </Space>\n                        }\n                      >\n                        {models.length === 0 ? (\n                          <div style={{ padding: '40px 0' }}>\n                            <Empty\n                              image={Empty.PRESENTED_IMAGE_SIMPLE}\n                              description={\n                                <span style={{ color: '#6e6e73' }}>\n                                  还没有模型。点击右上角「新建模型」开始接入。\n                                </span>\n                              }\n                            />\n                          </div>\n                        ) : (\n                          <Row gutter={[16, 16]}>\n                            {models.map((m) => {\n                              const isActive = activeModel?.model_id === m.model_id;\n                              const isEnabled = (m.enable ?? 1) === 1;\n                              return (\n                                <Col xs={24} md={12} key={m.model_id}>\n                                  <Card\n                                    hoverable\n                                    onClick={() => setActiveModel(m)}\n                                    bordered={false}\n                                    style={{\n                                      borderRadius: 22,\n                                      background: isActive\n                                        ? 'linear-gradient(135deg, #e6f4ff 0%, #bae0ff 100%)'\n                                        : 'rgba(255,255,255,0.9)',\n                                      color: isActive ? '#003eb3' : '#111',\n                                      boxShadow: isActive\n                                        ? '0 18px 40px rgba(0,102,255,0.25)'\n                                        : '0 10px 30px rgba(0,0,0,0.06)',\n                                      transform: isActive ? 'translateY(-2px)' : 'translateY(0)',\n                                      transition: 'all 0.25s ease',\n                                      border: isActive ? '2px solid #69a6ff' : '2px solid transparent',\n                                      opacity: isEnabled ? 1 : 0.6,\n                                    }}\n                                    bodyStyle={{ padding: 18 }}\n                                  >\n                                    <Space\n                                      align=\"start\"\n                                      style={{ width: '100%', justifyContent: 'space-between' }}\n                                    >\n                                      <Space align=\"start\">\n                                        <div\n                                          style={{\n                                            width: 28,\n                                            height: 28,\n                                            borderRadius: '50%',\n                                            background: isActive\n                                              ? '#1890ff'\n                                              : '#f5f5f7',\n                                            display: 'flex',\n                                            alignItems: 'center',\n                                            justifyContent: 'center',\n                                          }}\n                                        >\n                                          <RobotOutlined\n                                            style={{\n                                              fontSize: 16,\n                                              color: isActive ? '#fff' : '#111',\n                                            }}\n                                          />\n                                        </div>\n                                        <div>\n                                          <Text\n                                            style={{\n                                              fontWeight: 600,\n                                              fontSize: 16,\n                                              color: isActive ? '#003eb3' : '#111',\n                                            }}\n                                          >\n                                            {m.name}\n                                          </Text>\n                                          <div style={{ marginTop: 6 }}>\n                                            {m.type ? (\n                                              <Tag\n                                                color={isActive ? 'processing' : 'blue'}\n                                                style={{\n                                                  borderRadius: 999,\n                                                  border: 'none',\n                                                }}\n                                              >\n                                                {m.type}\n                                              </Tag>\n                                            ) : (\n                                              <Tag\n                                                style={{\n                                                  borderRadius: 999,\n                                                  border: 'none',\n                                                  background: '#f0f0f0',\n                                                }}\n                                              >\n                                                未设置类型\n                                              </Tag>\n                                            )}\n                                            {!isEnabled && (\n                                              <Tag\n                                                color=\"default\"\n                                                style={{\n                                                  borderRadius: 999,\n                                                  border: 'none',\n                                                }}\n                                              >\n                                                已禁用\n                                              </Tag>\n                                            )}\n                                          </div>\n                                        </div>\n                                      </Space>\n                                      <Space size={8}>\n                                        <Tooltip title={isEnabled ? '对话' : '模型已禁用'}>\n                                          <Button\n                                            size=\"small\"\n                                            type={isActive ? 'primary' : 'default'}\n                                            shape=\"round\"\n                                            disabled={!isEnabled}\n                                            onClick={(e) => {\n                                              e.stopPropagation();\n                                              if (isEnabled) {\n                                                openChatWithModel(m);\n                                              }\n                                            }}\n                                          >\n                                            对话\n                                          </Button>\n                                        </Tooltip>\n                                        <Tooltip title=\"编辑\">\n                                          <Button\n                                            size=\"small\"\n                                            type={isActive ? 'default' : 'text'}\n                                            icon={<EditOutlined />}\n                                            onClick={(e) => {\n                                              e.stopPropagation();\n                                              openEdit(m);\n                                            }}\n                                          />\n                                        </Tooltip>\n                                        <Tooltip title=\"删除\">\n                                          <Button\n                                            size=\"small\"\n                                            type=\"text\"\n                                            danger\n                                            icon={<DeleteOutlined />}\n                                            onClick={(e) => {\n                                              e.stopPropagation();\n                                              handleDelete(m);\n                                            }}\n                                          />\n                                        </Tooltip>\n                                      </Space>\n                                    </Space>\n\n                                    <Paragraph\n                                      style={{\n                                        marginTop: 12,\n                                        marginBottom: 8,\n                                        fontSize: 12,\n                                        color: isActive ? '#595959' : '#6e6e73',\n                                      }}\n                                      ellipsis={{ rows: 2 }}\n                                    >\n                                      {m.endpoint}\n                                    </Paragraph>\n                                    <Space size={16} style={{ fontSize: 11 }}>\n                                      <span style={{ color: isActive ? '#595959' : '#6e6e73' }}>\n                                        维度 {m.dimensions ?? '-'}\n                                      </span>\n                                      <span style={{ color: isActive ? '#595959' : '#6e6e73' }}>\n                                        超时 {m.timeout ?? '-'}s\n                                      </span>\n                                    </Space>\n                                  </Card>\n                                </Col>\n                              );\n                            })}\n                          </Row>\n                        )}\n                      </Card>\n                    </Col>\n                  </Row>\n                ),\n              },\n              {\n                key: 'sites',\n                label: '站点管理',\n                children: (\n                  <Row gutter={24} align=\"stretch\">\n                    <Col xs={24} style={{ marginBottom: 24 }}>\n                      <Card\n                        bordered={false}\n                        bodyStyle={{ padding: 24 }}\n                        style={{\n                          borderRadius: 28,\n                          background:\n                            'linear-gradient(135deg, rgba(250,250,252,0.9), rgba(245,245,247,0.9))',\n                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',\n                        }}\n                        title={\n                          <Space direction=\"vertical\" size={4}>\n                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>\n                              站点列表\n                            </Text>\n                            <Text style={{ fontSize: 13, color: '#6e6e73' }}>\n                              管理你的个人站点关联信息。\n                            </Text>\n                          </Space>\n                        }\n                        extra={\n                          <Space>\n                            <Button type=\"link\" onClick={fetchSites} style={{ paddingRight: 0 }}>\n                              刷新\n                            </Button>\n                            <Button\n                              type=\"primary\"\n                              shape=\"round\"\n                              icon={<PlusOutlined />}\n                              onClick={openCreateSite}\n                            >\n                              新建站点\n                            </Button>\n                          </Space>\n                        }\n                      >\n                        {sites.length === 0 ? (\n                          <div style={{ padding: '40px 0' }}>\n                            <Empty\n                              image={Empty.PRESENTED_IMAGE_SIMPLE}\n                              description={\n                                <span style={{ color: '#6e6e73' }}>\n                                  还没有站点。点击右上角「新建站点」开始添加。\n                                </span>\n                              }\n                            />\n                          </div>\n                        ) : (\n                          <Table\n                            rowKey=\"site_id\"\n                            loading={siteLoading}\n                            dataSource={sites}\n                            pagination={false}\n                            columns={[\n                              {\n                                title: '站点ID',\n                                dataIndex: 'site_id',\n                                key: 'site_id',\n                                width: 100,\n                              },\n                              {\n                                title: '站点名称',\n                                dataIndex: 'site_name',\n                                key: 'site_name',\n                                render: (name: string) => name || '-',\n                              },\n                              {\n                                title: '操作',\n                                key: 'action',\n                                width: 150,\n                                render: (_: any, record: SiteItem) => (\n                                  <Space size=\"small\">\n                                    <Button\n                                      size=\"small\"\n                                      type=\"text\"\n                                      icon={<EditOutlined />}\n                                      onClick={() => openEditSite(record)}\n                                    >\n                                      编辑\n                                    </Button>\n                                    <Button\n                                      size=\"small\"\n                                      type=\"text\"\n                                      danger\n                                      icon={<DeleteOutlined />}\n                                      onClick={() => handleDeleteSite(record)}\n                                    >\n                                      删除\n                                    </Button>\n                                  </Space>\n                                ),\n                              },\n                            ]}\n                          />\n                        )}\n                      </Card>\n                    </Col>\n                  </Row>\n                ),\n              },\n            ]}\n          />\n        </div>\n      </Content>\n\n      {/* 对话弹窗：点击某个模型的\"对话\"按钮后才出现 */}\n      <Modal\n        open={chatVisible}\n        onCancel={closeChat}\n        footer={null}\n        width=\"100%\"\n        style={{ top: 0, padding: 0, maxWidth: '100%' }}\n        bodyStyle={{ padding: 0, overflow: 'hidden' }}\n        styles={{ content: { overflow: 'hidden' } }}\n        className=\"chat-modal\"\n      >\n        <div\n          style={{\n            minHeight: '100vh',\n            background: '#f7f7f8',\n            display: 'flex',\n            justifyContent: 'center',\n            padding: '24px 16px 40px',\n          }}\n        >\n          <div\n            style={{\n              width: '100%',\n              maxWidth: 920,\n              display: 'flex',\n              flexDirection: 'column',\n              gap: 16,\n              height: 'calc(100vh - 80px)',\n            }}\n          >\n            <div\n              style={{\n                display: 'flex',\n                alignItems: 'center',\n                justifyContent: 'space-between',\n                padding: '8px 8px 0',\n              }}\n            >\n              <Space direction=\"vertical\" size={2}>\n                <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>\n                  对话\n                </Text>\n                <Text style={{ fontSize: 12, color: '#6e6e73' }}>\n                  当前模型：{activeModel?.name || '未选择'}\n                </Text>\n              </Space>\n              <Space>\n                <Button\n                  onClick={() => {\n                    setChatMessages([]);\n                    chatForm.resetFields();\n                    setLastUserPrompt('');\n                    stopStreaming();\n                  }}\n                >\n                  清空\n                </Button>\n                <Button onClick={closeChat}>关闭</Button>\n              </Space>\n            </div>\n\n            <div\n              ref={chatListRef}\n              style={{\n                flex: 1,\n                overflow: 'auto',\n                padding: '8px 8px 16px',\n                display: 'flex',\n                flexDirection: 'column',\n                gap: 16,\n              }}\n            >\n              {chatMessages.length === 0 ? (\n                <div\n                  style={{\n                    flex: 1,\n                    display: 'flex',\n                    alignItems: 'center',\n                    justifyContent: 'center',\n                    color: '#9b9ba1',\n                  }}\n                >\n                  <Text style={{ color: '#9b9ba1' }}>\n                    试着问一个问题，或者让模型帮你改写一段话。\n                  </Text>\n                </div>\n              ) : (\n                chatMessages.map((msg) => {\n                  const isUser = msg.role === 'user';\n                  return (\n                    <div\n                      key={msg.id}\n                      style={{\n                        display: 'flex',\n                        justifyContent: isUser ? 'flex-end' : 'flex-start',\n                      }}\n                    >\n                      <div\n                        style={{\n                          display: 'flex',\n                          flexDirection: isUser ? 'row-reverse' : 'row',\n                          gap: 12,\n                          maxWidth: '75%',\n                          alignItems: 'flex-start',\n                        }}\n                      >\n                        <div\n                          style={{\n                            width: 32,\n                            height: 32,\n                            borderRadius: '50%',\n                            display: 'flex',\n                            alignItems: 'center',\n                            justifyContent: 'center',\n                            background: isUser ? '#111' : '#e6e6eb',\n                            color: isUser ? '#fff' : '#111',\n                            fontSize: 12,\n                            fontWeight: 600,\n                          }}\n                        >\n                          {isUser ? '你' : <RobotOutlined />}\n                        </div>\n                        <div\n                          style={{\n                            padding: '12px 14px',\n                            borderRadius: 16,\n                            background: isUser ? '#111' : '#fff',\n                            color: isUser ? '#fff' : '#111',\n                            boxShadow: isUser\n                              ? '0 8px 18px rgba(0,0,0,0.18)'\n                              : '0 10px 24px rgba(0,0,0,0.08)',\n                            border: isUser ? '1px solid #111' : '1px solid #e5e5ea',\n                            whiteSpace: 'pre-wrap',\n                            wordBreak: 'break-word',\n                            fontSize: 14,\n                            lineHeight: 1.6,\n                          }}\n                        >\n                          {isUser ? (\n                            msg.content\n                          ) : msg.content ? (\n                            <ReactMarkdown\n                              remarkPlugins={[remarkGfm]}\n                              components={{\n                                code({ inline, className, children, ...props }) {\n                                  const match = /language-(\\w+)/.exec(className || '');\n                                  if (inline) {\n                                    return (\n                                      <code\n                                        style={{\n                                          background: '#f5f5f7',\n                                          padding: '2px 6px',\n                                          borderRadius: 6,\n                                          fontSize: 12,\n                                        }}\n                                        {...props}\n                                      >\n                                        {children}\n                                      </code>\n                                    );\n                                  }\n                                  return (\n                                    <SyntaxHighlighter\n                                      {...props}\n                                      style={oneLight}\n                                      language={match?.[1] || 'text'}\n                                      PreTag=\"div\"\n                                      customStyle={{\n                                        margin: '12px 0',\n                                        borderRadius: 12,\n                                        padding: 12,\n                                      }}\n                                    >\n                                      {String(children).replace(/\\n$/, '')}\n                                    </SyntaxHighlighter>\n                                  );\n                                },\n                              }}\n                            >\n                              {msg.content}\n                            </ReactMarkdown>\n                          ) : chatStreaming ? (\n                            '正在思考…'\n                          ) : (\n                            ''\n                          )}\n                        </div>\n                      </div>\n                    </div>\n                  );\n                })\n              )}\n            </div>\n\n            <div\n              style={{\n                borderRadius: 20,\n                background: '#fff',\n                boxShadow: '0 10px 24px rgba(0,0,0,0.08)',\n                padding: '12px 12px 16px',\n              }}\n            >\n              <Form form={chatForm} layout=\"vertical\">\n                <Form.Item\n                  name=\"prompt\"\n                  rules={[{ required: true, message: '请输入提问内容' }]}\n                  style={{ marginBottom: 12 }}\n                >\n                  <Input.TextArea\n                    autoSize={{ minRows: 2, maxRows: 6 }}\n                    placeholder=\"输入你的问题，Shift + Enter 换行\"\n                    disabled={chatStreaming}\n                    onPressEnter={(e) => {\n                      if (!e.shiftKey) {\n                        e.preventDefault();\n                        handleChat();\n                      }\n                    }}\n                  />\n                </Form.Item>\n                <Space style={{ justifyContent: 'flex-end', width: '100%' }}>\n                  <Text style={{ fontSize: 12, color: '#a1a1a6' }}>\n                    发送后会立即开始流式生成\n                  </Text>\n                  <Button\n                    onClick={handleRegenerate}\n                    disabled={!lastUserPrompt || chatStreaming}\n                  >\n                    重新生成\n                  </Button>\n                  <Button\n                    onClick={stopStreaming}\n                    disabled={!chatStreaming}\n                  >\n                    停止\n                  </Button>\n                  <Button\n                    type=\"primary\"\n                    shape=\"round\"\n                    loading={chatLoading}\n                    onClick={handleChat}\n                    disabled={chatStreaming}\n                  >\n                    发送\n                  </Button>\n                </Space>\n              </Form>\n            </div>\n          </div>\n        </div>\n      </Modal>\n\n      <Modal\n        title={editingModel ? '编辑模型' : '新建模型'}\n        open={formVisible}\n        onCancel={() => setFormVisible(false)}\n        onOk={handleSaveModel}\n        okText=\"保存\"\n        width={520}\n      >\n        <Form form={form} layout=\"vertical\">\n          <Form.Item\n            label=\"名称\"\n            name=\"name\"\n            rules={[{ required: true, message: '请输入名称' }]}\n          >\n            <Input placeholder=\"例如：gpt-4o-2024\" />\n          </Form.Item>\n          <Form.Item noStyle shouldUpdate>\n            {() => (\n              <Form.Item\n                label=\"Endpoint\"\n                name=\"endpoint\"\n                rules={[{ required: true, message: '请输入 Endpoint' }]}\n              >\n                <Space.Compact style={{ width: '100%' }}>\n                  <Form.Item name=\"protocol\" noStyle initialValue=\"https://\">\n                    <Select\n                      style={{ width: 120 }}\n                      options={[\n                        { value: 'http://', label: 'http://' },\n                        { value: 'https://', label: 'https://' },\n                      ]}\n                    />\n                  </Form.Item>\n                  <Input placeholder=\"api.openai.com/v1/chat/completions\" />\n                </Space.Compact>\n              </Form.Item>\n            )}\n          </Form.Item>\n          <Form.Item\n            label=\"API Key\"\n            name=\"api_key\"\n            rules={[{ required: true, message: '请输入 API Key' }]}\n          >\n            <Input.Password placeholder=\"用于访问下游大模型的密钥\" />\n          </Form.Item>\n          <Form.Item label=\"类型\" name=\"type\">\n            <Input placeholder=\"例如：gpt-4o / glm-4 / qwen-max\" />\n          </Form.Item>\n          <Form.Item label=\"维度\" name=\"dimensions\">\n            <InputNumber style={{ width: '100%' }} placeholder=\"向量模型时可填，例如 1536\" />\n          </Form.Item>\n          <Form.Item label=\"超时(秒)\" name=\"timeout\">\n            <InputNumber style={{ width: '100%' }} placeholder=\"请求超时时间，默认可填 30\" />\n          </Form.Item>\n        </Form>\n      </Modal>\n\n      <Modal\n        title={editingSite ? '编辑站点' : '新建站点'}\n        open={siteFormVisible}\n        onCancel={() => setSiteFormVisible(false)}\n        onOk={handleSaveSite}\n        okText=\"保存\"\n        width={400}\n      >\n        <Form form={siteForm} layout=\"vertical\">\n          <Form.Item\n            label=\"站点名称\"\n            name=\"site_name\"\n            rules={[{ required: true, message: '请输入站点名称' }]}\n          >\n            <Input placeholder=\"例如：我的博客\" />\n          </Form.Item>\n        </Form>\n      </Modal>\n    </Layout>\n  );\n};\n\nexport default IndexPage;\n",
+      "__content": "import React, { useEffect, useMemo, useRef, useState } from 'react';\nimport {\n  Layout,\n  Button,\n  Space,\n  Form,\n  Input,\n  InputNumber,\n  message,\n  Tag,\n  Card,\n  Typography,\n  Modal,\n  Row,\n  Col,\n  Tooltip,\n  Empty,\n  Tabs,\n  Table,\n  Select,\n} from 'antd';\nimport {\n  PlusOutlined,\n  ArrowRightOutlined,\n  EditOutlined,\n  DeleteOutlined,\n  RobotOutlined,\n} from '@ant-design/icons';\nimport axios from 'axios';\nimport ReactMarkdown from 'react-markdown';\nimport remarkGfm from 'remark-gfm';\nimport { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';\nimport { oneLight } from 'react-syntax-highlighter/dist/esm/styles/prism';\n\nconst { Header, Content } = Layout;\nconst { Text, Title, Paragraph } = Typography;\n\ninterface ModelItem {\n  model_id: string;\n  name: string;\n  endpoint: string;\n  api_key: string;\n  timeout?: number;\n  type?: string;\n  dimensions?: number;\n  enable?: number;\n}\n\ninterface SiteItem {\n  site_id: number;\n  site_name?: string;\n}\n\ninterface ModelListResponse {\n  list: ModelItem[];\n  total: number;\n  page: number;\n  page_size: number;\n}\n\ninterface SiteListResponse {\n  list: SiteItem[];\n  total: number;\n}\n\ninterface ChatMessage {\n  id: string;\n  role: 'user' | 'assistant';\n  content: string;\n}\n\nconst IndexPage: React.FC = () => {\n  const [loading, setLoading] = useState(false);\n  const [models, setModels] = useState<ModelItem[]>([]);\n  const [activeModel, setActiveModel] = useState<ModelItem | null>(null);\n  const [chatVisible, setChatVisible] = useState(false);\n  const [chatLoading, setChatLoading] = useState(false);\n  const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);\n  const [chatStreaming, setChatStreaming] = useState(false);\n  const [chatAbortController, setChatAbortController] = useState<AbortController | null>(null);\n  const [lastUserPrompt, setLastUserPrompt] = useState('');\n  const [editingModel, setEditingModel] = useState<ModelItem | null>(null);\n  const [formVisible, setFormVisible] = useState(false);\n  const [form] = Form.useForm();\n  const [chatForm] = Form.useForm();\n  const chatListRef = useRef<HTMLDivElement | null>(null);\n  const typewriterTimerRef = useRef<number | null>(null);\n  const typewriterQueueRef = useRef<string>('');\n  const currentTypewriterMessageIdRef = useRef<string>('');\n\n  // 站点相关状态\n  const [sites, setSites] = useState<SiteItem[]>([]);\n  const [siteLoading, setSiteLoading] = useState(false);\n  const [editingSite, setEditingSite] = useState<SiteItem | null>(null);\n  const [siteFormVisible, setSiteFormVisible] = useState(false);\n  const [siteForm] = Form.useForm();\n\n  const fetchSites = async () => {\n    setSiteLoading(true);\n    try {\n      const res = await axios.get('/api/v1/sites/get');\n      const data = res.data?.data as SiteListResponse;\n      setSites(data?.list || []);\n    } catch (e: any) {\n      message.error(e?.response?.data?.msg || '获取站点列表失败');\n    } finally {\n      setSiteLoading(false);\n    }\n  };\n\n  const openCreateSite = () => {\n    setEditingSite(null);\n    siteForm.resetFields();\n    setSiteFormVisible(true);\n  };\n\n  const openEditSite = (site: SiteItem) => {\n    setEditingSite(site);\n    siteForm.setFieldsValue({\n      site_name: site.site_name,\n    });\n    setSiteFormVisible(true);\n  };\n\n  const handleSaveSite = async () => {\n    try {\n      const values = await siteForm.validateFields();\n      if (editingSite) {\n        await axios.put(`/api/v1/sites/${editingSite.site_id}`, values);\n        message.success('已更新站点');\n      } else {\n        await axios.post('/api/v1/sites/create', values);\n        message.success('已创建站点');\n      }\n      setSiteFormVisible(false);\n      await fetchSites();\n    } catch {\n      // ignore\n    }\n  };\n\n  const handleDeleteSite = (site: SiteItem) => {\n    Modal.confirm({\n      title: '删除站点',\n      content: `确认删除站点「${site.site_name || site.site_id}」？`,\n      okButtonProps: { danger: true },\n      onOk: async () => {\n        try {\n          await axios.delete(`/api/v1/sites/${site.site_id}`);\n          message.success('删除成功');\n          await fetchSites();\n        } catch (e: any) {\n          message.error(e?.response?.data?.msg || '删除失败');\n        }\n      },\n    });\n  };\n\n  const fetchModels = async () => {\n    setLoading(true);\n    try {\n      const res = await axios.get('/api/v1/models/get', {\n        params: { page: 1, page_size: 100 },\n      });\n      const data = res.data?.data as ModelListResponse;\n      const list = data.list || [];\n      setModels(list);\n      if (!activeModel && list.length > 0) {\n        setActiveModel(list[0]);\n      }\n    } catch (e: any) {\n      message.error(e?.response?.data?.msg || '获取模型列表失败');\n    } finally {\n      setLoading(false);\n    }\n  };\n\n  useEffect(() => {\n    fetchModels();\n    fetchSites();\n  }, []);\n\n  useEffect(() => {\n    if (!chatVisible) return;\n    if (chatListRef.current) {\n      chatListRef.current.scrollTop = chatListRef.current.scrollHeight;\n    }\n  }, [chatMessages, chatStreaming, chatVisible]);\n\n  const stats = useMemo(() => {\n    const total = models.length;\n    const ready = models.filter(\n      (m) => m.endpoint && m.api_key && (m.enable ?? 1) === 1,\n    ).length;\n    return { total, ready };\n  }, [models]);\n\n  const openCreate = () => {\n    setEditingModel(null);\n    form.resetFields();\n    setFormVisible(true);\n  };\n\n  const openEdit = (m: ModelItem) => {\n    setEditingModel(m);\n    const protocol = m.endpoint?.match(/^https?:\\/\\//)?.[0] || 'https://';\n    const displayEndpoint = m.endpoint?.replace(/^https?:\\/\\//, '') || '';\n    form.setFieldsValue({\n      name: m.name,\n      protocol,\n      endpoint: displayEndpoint,\n      api_key: m.api_key,\n      timeout: m.timeout,\n      type: m.type,\n      dimensions: m.dimensions,\n    });\n    setFormVisible(true);\n  };\n\n  const handleSaveModel = async () => {\n    try {\n      const values = await form.validateFields();\n      // 组合 protocol 和 endpoint\n      const { protocol, ...rest } = values;\n      const finalValues = {\n        ...rest,\n        endpoint: `${protocol || 'https://'}${rest.endpoint || ''}`,\n      };\n      if (editingModel) {\n        await axios.put(`/api/v1/models/${editingModel.model_id}`, finalValues);\n        message.success('已更新模型');\n      } else {\n        await axios.post('/api/v1/models/create', finalValues);\n        message.success('已创建模型');\n      }\n      setFormVisible(false);\n      await fetchModels();\n    } catch {\n      // ignore\n    }\n  };\n\n  const handleDelete = (m: ModelItem) => {\n    Modal.confirm({\n      title: '删除模型',\n      content: `确认删除模型「${m.name}」？`,\n      okButtonProps: { danger: true },\n      onOk: async () => {\n        try {\n          await axios.delete(`/api/v1/models/${m.model_id}`);\n          message.success('删除成功');\n          if (activeModel?.model_id === m.model_id) {\n            setActiveModel(null);\n            setChatMessages([]);\n            chatForm.resetFields();\n          }\n          await fetchModels();\n        } catch (e: any) {\n          message.error(e?.response?.data?.msg || '删除失败');\n        }\n      },\n    });\n  };\n\n  const openChatWithModel = (m: ModelItem) => {\n    setActiveModel(m);\n    setChatVisible(true);\n    setChatMessages([]);\n    setChatStreaming(false);\n    setLastUserPrompt('');\n    chatForm.resetFields();\n  };\n\n  const closeChat = () => {\n    if (chatAbortController) {\n      chatAbortController.abort();\n    }\n    if (typewriterTimerRef.current) {\n      window.clearInterval(typewriterTimerRef.current);\n      typewriterTimerRef.current = null;\n    }\n    setChatVisible(false);\n    setChatStreaming(false);\n    setChatLoading(false);\n  };\n\n  const stopStreaming = () => {\n    if (chatAbortController) {\n      chatAbortController.abort();\n    }\n    if (typewriterTimerRef.current) {\n      window.clearInterval(typewriterTimerRef.current);\n      typewriterTimerRef.current = null;\n    }\n    typewriterQueueRef.current = '';\n    currentTypewriterMessageIdRef.current = '';\n    setChatStreaming(false);\n    setChatLoading(false);\n  };\n\n  const appendAssistantText = (messageId: string, text: string) => {\n    if (!text) return;\n    // 如果是新的消息，开始新的打字机序列\n    if (messageId !== currentTypewriterMessageIdRef.current) {\n      typewriterQueueRef.current = '';\n      currentTypewriterMessageIdRef.current = messageId;\n    }\n    // 将新文本加入队列\n    typewriterQueueRef.current += text;\n    // 启动定时器逐字显示（如果还没启动）\n    if (!typewriterTimerRef.current) {\n      typewriterTimerRef.current = window.setInterval(() => {\n        if (!typewriterQueueRef.current) {\n          if (typewriterTimerRef.current) {\n            window.clearInterval(typewriterTimerRef.current);\n            typewriterTimerRef.current = null;\n          }\n          return;\n        }\n        // 每次只取一个字符，避免竞态\n        const char = typewriterQueueRef.current[0];\n        typewriterQueueRef.current = typewriterQueueRef.current.slice(1);\n        setChatMessages((prev) =>\n          prev.map((m) =>\n            m.id === currentTypewriterMessageIdRef.current\n              ? { ...m, content: `${m.content}${char}` }\n              : m,\n          ),\n        );\n      }, 15);\n    }\n  };\n\n  const setAssistantText = (messageId: string, text: string) => {\n    setChatMessages((prev) =>\n      prev.map((m) => (m.id === messageId ? { ...m, content: text } : m)),\n    );\n  };\n\n  const startTypewriter = (messageId: string, text: string) => {\n    if (typewriterTimerRef.current) {\n      window.clearInterval(typewriterTimerRef.current);\n      typewriterTimerRef.current = null;\n    }\n    // 使用队列系统实现打字机效果\n    currentTypewriterMessageIdRef.current = messageId;\n    typewriterQueueRef.current = text;\n    typewriterTimerRef.current = window.setInterval(() => {\n      if (!typewriterQueueRef.current) {\n        if (typewriterTimerRef.current) {\n          window.clearInterval(typewriterTimerRef.current);\n          typewriterTimerRef.current = null;\n        }\n        return;\n      }\n      // 每次只取一个字符，避免竞态\n      const char = typewriterQueueRef.current[0];\n      typewriterQueueRef.current = typewriterQueueRef.current.slice(1);\n      setChatMessages((prev) =>\n        prev.map((m) =>\n          m.id === messageId\n            ? { ...m, content: `${m.content}${char}` }\n            : m,\n        ),\n      );\n    }, 15);\n  };\n\n  const buildMessagesPayload = (messages: ChatMessage[]) =>\n    messages\n      .filter((m) => m.content.trim())\n      .map((m) => ({\n        role: m.role,\n        content: m.content,\n      }));\n\n  const handleChat = async () => {\n    if (!activeModel) {\n      message.warning('请先选择一个模型');\n      return;\n    }\n    if ((activeModel.enable ?? 1) === 0) {\n      message.warning('当前模型已禁用，无法对话');\n      return;\n    }\n    try {\n      const values = await chatForm.validateFields();\n      const prompt = (values.prompt || '').trim();\n      if (!prompt) return;\n      if (chatAbortController) {\n        chatAbortController.abort();\n      }\n      const abortController = new AbortController();\n      setChatAbortController(abortController);\n      const userMessage: ChatMessage = {\n        id: `${Date.now()}-user`,\n        role: 'user',\n        content: prompt,\n      };\n      const assistantMessage: ChatMessage = {\n        id: `${Date.now()}-assistant`,\n        role: 'assistant',\n        content: '',\n      };\n      const nextMessages = [...chatMessages, userMessage];\n      const payloadMessages = buildMessagesPayload(nextMessages);\n      setChatMessages((prev) => [...prev, userMessage, assistantMessage]);\n      chatForm.resetFields();\n      setLastUserPrompt(prompt);\n      setChatLoading(true);\n      setChatStreaming(true);\n\n      const resp = await fetch(\n        `/api/v1/models/chat/${activeModel.model_id}?stream=1`,\n        {\n          method: 'POST',\n          headers: {\n            'Content-Type': 'application/json',\n          },\n          body: JSON.stringify({ messages: payloadMessages }),\n          signal: abortController.signal,\n        },\n      );\n\n      if (!resp.ok) {\n        const text = await resp.text();\n        throw new Error(text || '对话失败');\n      }\n\n      const reader = resp.body?.getReader();\n      if (!reader) {\n        const text = await resp.text();\n        setAssistantText(assistantMessage.id, text);\n        setChatStreaming(false);\n        return;\n      }\n\n      const decoder = new TextDecoder('utf-8');\n      let buffer = '';\n      let rawText = '';\n      let receivedTokens = false;\n      let doneFromServer = false;\n      while (true) {\n        const { done, value } = await reader.read();\n        if (done) break;\n        const chunk = decoder.decode(value, { stream: true });\n        rawText += chunk;\n        buffer += chunk;\n        let lineBreakIndex = buffer.indexOf('\\n');\n        while (lineBreakIndex >= 0) {\n          const line = buffer.slice(0, lineBreakIndex).trimEnd();\n          buffer = buffer.slice(lineBreakIndex + 1);\n          if (line.startsWith('data:')) {\n            const data = line.replace(/^data:\\s*/, '').trim();\n            if (data === '[DONE]') {\n              doneFromServer = true;\n              break;\n            }\n            try {\n              const parsed = JSON.parse(data);\n              const delta =\n                parsed?.choices?.[0]?.delta?.content ??\n                parsed?.choices?.[0]?.message?.content ??\n                parsed?.text ??\n                parsed?.content ??\n                '';\n              if (delta) {\n                receivedTokens = true;\n                appendAssistantText(assistantMessage.id, delta);\n              }\n            } catch {\n              if (data) {\n                receivedTokens = true;\n                appendAssistantText(assistantMessage.id, data);\n              }\n            }\n          }\n          lineBreakIndex = buffer.indexOf('\\n');\n        }\n        if (doneFromServer) break;\n      }\n      if (!receivedTokens && rawText) {\n        try {\n          const parsed = JSON.parse(rawText);\n          const content =\n            parsed?.choices?.[0]?.message?.content ??\n            parsed?.choices?.[0]?.text ??\n            parsed?.content ??\n            rawText;\n          startTypewriter(assistantMessage.id, content);\n        } catch {\n          startTypewriter(assistantMessage.id, rawText);\n        }\n      }\n      setChatStreaming(false);\n    } catch (e: any) {\n      message.error(e?.message || '对话失败');\n      setChatStreaming(false);\n      if (e?.name === 'AbortError') return;\n    } finally {\n      setChatLoading(false);\n      setChatAbortController(null);\n    }\n  };\n\n  const handleRegenerate = async () => {\n    if (!activeModel || !lastUserPrompt) {\n      message.warning('没有可重新生成的内容');\n      return;\n    }\n    if (chatStreaming) {\n      stopStreaming();\n      return;\n    }\n    const trimmedMessages = [...chatMessages];\n    if (trimmedMessages.length > 0 && trimmedMessages[trimmedMessages.length - 1].role === 'assistant') {\n      trimmedMessages.pop();\n    }\n    const payloadMessages = buildMessagesPayload(trimmedMessages);\n    const assistantMessage: ChatMessage = {\n      id: `${Date.now()}-assistant`,\n      role: 'assistant',\n      content: '',\n    };\n    setChatMessages((prev) => [...trimmedMessages, assistantMessage]);\n    setChatStreaming(true);\n    setChatLoading(true);\n    const abortController = new AbortController();\n    setChatAbortController(abortController);\n    try {\n      const resp = await fetch(\n        `/api/v1/models/chat/${activeModel.model_id}?stream=1`,\n        {\n          method: 'POST',\n          headers: {\n            'Content-Type': 'application/json',\n          },\n          body: JSON.stringify({ messages: payloadMessages }),\n          signal: abortController.signal,\n        },\n      );\n      if (!resp.ok) {\n        const text = await resp.text();\n        throw new Error(text || '对话失败');\n      }\n      const reader = resp.body?.getReader();\n      if (!reader) {\n        const text = await resp.text();\n        setAssistantText(assistantMessage.id, text);\n        setChatStreaming(false);\n        return;\n      }\n      const decoder = new TextDecoder('utf-8');\n      let buffer = '';\n      let rawText = '';\n      let receivedTokens = false;\n      let doneFromServer = false;\n      while (true) {\n        const { done, value } = await reader.read();\n        if (done) break;\n        const chunk = decoder.decode(value, { stream: true });\n        rawText += chunk;\n        buffer += chunk;\n        let lineBreakIndex = buffer.indexOf('\\n');\n        while (lineBreakIndex >= 0) {\n          const line = buffer.slice(0, lineBreakIndex).trimEnd();\n          buffer = buffer.slice(lineBreakIndex + 1);\n          if (line.startsWith('data:')) {\n            const data = line.replace(/^data:\\s*/, '').trim();\n            if (data === '[DONE]') {\n              doneFromServer = true;\n              break;\n            }\n            try {\n              const parsed = JSON.parse(data);\n              const delta =\n                parsed?.choices?.[0]?.delta?.content ??\n                parsed?.choices?.[0]?.message?.content ??\n                parsed?.text ??\n                parsed?.content ??\n                '';\n              if (delta) {\n                receivedTokens = true;\n                appendAssistantText(assistantMessage.id, delta);\n              }\n            } catch {\n              if (data) {\n                receivedTokens = true;\n                appendAssistantText(assistantMessage.id, data);\n              }\n            }\n          }\n          lineBreakIndex = buffer.indexOf('\\n');\n        }\n        if (doneFromServer) break;\n      }\n      if (!receivedTokens && rawText) {\n        try {\n          const parsed = JSON.parse(rawText);\n          const content =\n            parsed?.choices?.[0]?.message?.content ??\n            parsed?.choices?.[0]?.text ??\n            parsed?.content ??\n            rawText;\n          startTypewriter(assistantMessage.id, content);\n        } catch {\n          startTypewriter(assistantMessage.id, rawText);\n        }\n      }\n      setChatStreaming(false);\n    } catch (e: any) {\n      message.error(e?.message || '对话失败');\n      setChatStreaming(false);\n      if (e?.name === 'AbortError') return;\n    } finally {\n      setChatLoading(false);\n      setChatAbortController(null);\n    }\n  };\n\n  return (\n    <Layout\n      style={{\n        minHeight: '100vh',\n        background:\n          'radial-gradient(circle at top left, #f5f5f7 0, #ffffff 45%, #f5f5f7 100%)',\n      }}\n    >\n      <Header\n        style={{\n          height: 64,\n          lineHeight: '64px',\n          padding: '0 56px',\n          background: 'transparent',\n          display: 'flex',\n          alignItems: 'center',\n          justifyContent: 'space-between',\n          backdropFilter: 'saturate(180%) blur(20px)',\n          WebkitBackdropFilter: 'saturate(180%) blur(20px)',\n        }}\n      >\n        <Space size={16}>\n          <RobotOutlined style={{ fontSize: 22, color: '#111' }} />\n          <Text style={{ fontSize: 18, fontWeight: 600 }}>Alex_yehui</Text>\n        </Space>\n        <Space size={24}>\n          <Text style={{ color: '#6e6e73' }}>个人主页</Text>\n        </Space>\n      </Header>\n\n      <Content style={{ padding: '24px 56px 56px' }}>\n        {/* Hero section */}\n        <div\n          style={{\n            maxWidth: 1180,\n            margin: '0 auto 40px',\n            textAlign: 'center',\n          }}\n        >\n          <Title\n            level={1}\n            style={{\n              marginBottom: 16,\n              fontSize: 44,\n              letterSpacing: 0.4,\n              fontWeight: 600,\n              color: '#111',\n            }}\n          >\n            欢迎管理 Alex_yehui 的主页。\n          </Title>\n          <Title\n            level={4}\n            style={{\n              marginBottom: 32,\n              fontWeight: 400,\n              color: '#6e6e73',\n            }}\n          >\n            这里是我的个人空间，用来集中展示我的工作、项目和正在折腾的各种 AI / 工具实验。\n          </Title>\n          <Space size={16} style={{ justifyContent: 'center' }}>\n            <Button\n              type=\"primary\"\n              size=\"large\"\n              shape=\"round\"\n              icon={<ArrowRightOutlined />}\n              onClick={() => window.open('https://hexo.ismyh.cn/', '_blank')}\n            >\n              打开我的博客\n            </Button>\n            <Text style={{ color: '#6e6e73' }}>\n              当前为主页挂载了 <strong>{stats.total}</strong> 个模型工具，其中{' '}\n              <strong>{stats.ready}</strong> 个可直接对话。\n            </Text>\n          </Space>\n        </div>\n\n        {/* Main content with tabs (欢迎 / 模型管理) */}\n        <div\n          style={{\n            maxWidth: 1180,\n            margin: '0 auto',\n          }}\n        >\n          <Tabs\n            defaultActiveKey=\"welcome\"\n            items={[\n              {\n                key: 'welcome',\n                label: '欢迎',\n                children: (\n                  <Row gutter={24}>\n                    <Col xs={24} md={12} style={{ marginBottom: 24 }}>\n                      <Card\n                        bordered={false}\n                        style={{\n                          borderRadius: 24,\n                          background: 'rgba(255,255,255,0.9)',\n                          boxShadow: '0 10px 30px rgba(0,0,0,0.06)',\n                        }}\n                      >\n                        <Title level={4} style={{ marginBottom: 12 }}>\n                          关于我\n                        </Title>\n                        <Paragraph style={{ color: '#6e6e73' }}>\n                          这里是 Alex_yehui 的个人主页，记录一些正在做的事情、想法，以及和 AI\n                          相关的尝试。\n                        </Paragraph>\n                      </Card>\n                    </Col>\n                    <Col xs={24} md={12} style={{ marginBottom: 24 }}>\n                      <Card\n                        bordered={false}\n                        style={{\n                          borderRadius: 24,\n                          background: 'rgba(255,255,255,0.9)',\n                          boxShadow: '0 10px 30px rgba(0,0,0,0.06)',\n                        }}\n                      >\n                        <Title level={4} style={{ marginBottom: 12 }}>\n                          工作与项目\n                        </Title>\n                        <Paragraph style={{ color: '#6e6e73' }}>\n                          主要关注后端 / 基础设施与 AI 应用落地，页面后续可以放一些代表性的项目链接和截图。\n                        </Paragraph>\n                      </Card>\n                    </Col>\n                    <Col xs={24} md={12} style={{ marginBottom: 24 }}>\n                      <Card\n                        bordered={false}\n                        style={{\n                          borderRadius: 24,\n                          background: 'rgba(255,255,255,0.9)',\n                          boxShadow: '0 10px 30px rgba(0,0,0,0.06)',\n                        }}\n                      >\n                        <Title level={4} style={{ marginBottom: 12 }}>\n                          随笔与笔记\n                        </Title>\n                        <Paragraph style={{ color: '#6e6e73' }}>\n                          我的主要博客位于{' '}\n                          <a href=\"https://hexo.ismyh.cn/\" target=\"_blank\" rel=\"noreferrer\">\n                            https://hexo.ismyh.cn/\n                          </a>\n                          ，后续也会在这里挂一些精选文章和长文链接。\n                        </Paragraph>\n                      </Card>\n                    </Col>\n                    <Col xs={24} md={12} style={{ marginBottom: 24 }}>\n                      <Card\n                        bordered={false}\n                        style={{\n                          borderRadius: 24,\n                          background: 'rgba(255,255,255,0.9)',\n                          boxShadow: '0 10px 30px rgba(0,0,0,0.06)',\n                        }}\n                      >\n                        <Title level={4} style={{ marginBottom: 12 }}>\n                          工具与实验室\n                        </Title>\n                        <Paragraph style={{ color: '#6e6e73' }}>\n                          模型管理只是其中一个小模块，后续可以继续放更多实验性的工具，比如自动化脚本面板、数据看板等。\n                        </Paragraph>\n                      </Card>\n                    </Col>\n                  </Row>\n                ),\n              },\n              {\n                key: 'models',\n                label: '模型管理',\n                children: (\n                  <Row gutter={24} align=\"stretch\">\n                    <Col xs={24} style={{ marginBottom: 24 }}>\n                      <Card\n                        bordered={false}\n                        bodyStyle={{ padding: 24 }}\n                        style={{\n                          borderRadius: 28,\n                          background:\n                            'linear-gradient(135deg, rgba(250,250,252,0.9), rgba(245,245,247,0.9))',\n                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',\n                        }}\n                        title={\n                          <Space direction=\"vertical\" size={4}>\n                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>\n                              模型一览\n                            </Text>\n                            <Text style={{ fontSize: 13, color: '#6e6e73' }}>\n                              以卡片的形式浏览和管理你接入的每一个模型。\n                            </Text>\n                          </Space>\n                        }\n                        extra={\n                          <Space>\n                            <Button type=\"link\" onClick={fetchModels} style={{ paddingRight: 0 }}>\n                              刷新\n                            </Button>\n                            <Button\n                              type=\"primary\"\n                              shape=\"round\"\n                              icon={<PlusOutlined />}\n                              onClick={openCreate}\n                            >\n                              新建模型\n                            </Button>\n                          </Space>\n                        }\n                      >\n                        {models.length === 0 ? (\n                          <div style={{ padding: '40px 0' }}>\n                            <Empty\n                              image={Empty.PRESENTED_IMAGE_SIMPLE}\n                              description={\n                                <span style={{ color: '#6e6e73' }}>\n                                  还没有模型。点击右上角「新建模型」开始接入。\n                                </span>\n                              }\n                            />\n                          </div>\n                        ) : (\n                          <Row gutter={[16, 16]}>\n                            {models.map((m) => {\n                              const isActive = activeModel?.model_id === m.model_id;\n                              const isEnabled = (m.enable ?? 1) === 1;\n                              return (\n                                <Col xs={24} md={12} key={m.model_id}>\n                                  <Card\n                                    hoverable\n                                    onClick={() => setActiveModel(m)}\n                                    bordered={false}\n                                    style={{\n                                      borderRadius: 22,\n                                      background: isActive\n                                        ? 'linear-gradient(135deg, #e6f4ff 0%, #bae0ff 100%)'\n                                        : 'rgba(255,255,255,0.9)',\n                                      color: isActive ? '#003eb3' : '#111',\n                                      boxShadow: isActive\n                                        ? '0 18px 40px rgba(0,102,255,0.25)'\n                                        : '0 10px 30px rgba(0,0,0,0.06)',\n                                      transform: isActive ? 'translateY(-2px)' : 'translateY(0)',\n                                      transition: 'all 0.25s ease',\n                                      border: isActive ? '2px solid #69a6ff' : '2px solid transparent',\n                                      opacity: isEnabled ? 1 : 0.6,\n                                    }}\n                                    bodyStyle={{ padding: 18 }}\n                                  >\n                                    <Space\n                                      align=\"start\"\n                                      style={{ width: '100%', justifyContent: 'space-between' }}\n                                    >\n                                      <Space align=\"start\">\n                                        <div\n                                          style={{\n                                            width: 28,\n                                            height: 28,\n                                            borderRadius: '50%',\n                                            background: isActive\n                                              ? '#1890ff'\n                                              : '#f5f5f7',\n                                            display: 'flex',\n                                            alignItems: 'center',\n                                            justifyContent: 'center',\n                                          }}\n                                        >\n                                          <RobotOutlined\n                                            style={{\n                                              fontSize: 16,\n                                              color: isActive ? '#fff' : '#111',\n                                            }}\n                                          />\n                                        </div>\n                                        <div>\n                                          <Text\n                                            style={{\n                                              fontWeight: 600,\n                                              fontSize: 16,\n                                              color: isActive ? '#003eb3' : '#111',\n                                            }}\n                                          >\n                                            {m.name}\n                                          </Text>\n                                          <div style={{ marginTop: 6 }}>\n                                            {m.type ? (\n                                              <Tag\n                                                color={isActive ? 'processing' : 'blue'}\n                                                style={{\n                                                  borderRadius: 999,\n                                                  border: 'none',\n                                                }}\n                                              >\n                                                {m.type}\n                                              </Tag>\n                                            ) : (\n                                              <Tag\n                                                style={{\n                                                  borderRadius: 999,\n                                                  border: 'none',\n                                                  background: '#f0f0f0',\n                                                }}\n                                              >\n                                                未设置类型\n                                              </Tag>\n                                            )}\n                                            {!isEnabled && (\n                                              <Tag\n                                                color=\"default\"\n                                                style={{\n                                                  borderRadius: 999,\n                                                  border: 'none',\n                                                }}\n                                              >\n                                                已禁用\n                                              </Tag>\n                                            )}\n                                          </div>\n                                        </div>\n                                      </Space>\n                                      <Space size={8}>\n                                        <Tooltip title={isEnabled ? '对话' : '模型已禁用'}>\n                                          <Button\n                                            size=\"small\"\n                                            type={isActive ? 'primary' : 'default'}\n                                            shape=\"round\"\n                                            disabled={!isEnabled}\n                                            onClick={(e) => {\n                                              e.stopPropagation();\n                                              if (isEnabled) {\n                                                openChatWithModel(m);\n                                              }\n                                            }}\n                                          >\n                                            对话\n                                          </Button>\n                                        </Tooltip>\n                                        <Tooltip title=\"编辑\">\n                                          <Button\n                                            size=\"small\"\n                                            type={isActive ? 'default' : 'text'}\n                                            icon={<EditOutlined />}\n                                            onClick={(e) => {\n                                              e.stopPropagation();\n                                              openEdit(m);\n                                            }}\n                                          />\n                                        </Tooltip>\n                                        <Tooltip title=\"删除\">\n                                          <Button\n                                            size=\"small\"\n                                            type=\"text\"\n                                            danger\n                                            icon={<DeleteOutlined />}\n                                            onClick={(e) => {\n                                              e.stopPropagation();\n                                              handleDelete(m);\n                                            }}\n                                          />\n                                        </Tooltip>\n                                      </Space>\n                                    </Space>\n\n                                    <Paragraph\n                                      style={{\n                                        marginTop: 12,\n                                        marginBottom: 8,\n                                        fontSize: 12,\n                                        color: isActive ? '#595959' : '#6e6e73',\n                                      }}\n                                      ellipsis={{ rows: 2 }}\n                                    >\n                                      {m.endpoint}\n                                    </Paragraph>\n                                    <Space size={16} style={{ fontSize: 11 }}>\n                                      <span style={{ color: isActive ? '#595959' : '#6e6e73' }}>\n                                        维度 {m.dimensions ?? '-'}\n                                      </span>\n                                      <span style={{ color: isActive ? '#595959' : '#6e6e73' }}>\n                                        超时 {m.timeout ?? '-'}s\n                                      </span>\n                                    </Space>\n                                  </Card>\n                                </Col>\n                              );\n                            })}\n                          </Row>\n                        )}\n                      </Card>\n                    </Col>\n                  </Row>\n                ),\n              },\n              {\n                key: 'sites',\n                label: '站点管理',\n                children: (\n                  <Row gutter={24} align=\"stretch\">\n                    <Col xs={24} style={{ marginBottom: 24 }}>\n                      <Card\n                        bordered={false}\n                        bodyStyle={{ padding: 24 }}\n                        style={{\n                          borderRadius: 28,\n                          background:\n                            'linear-gradient(135deg, rgba(250,250,252,0.9), rgba(245,245,247,0.9))',\n                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',\n                        }}\n                        title={\n                          <Space direction=\"vertical\" size={4}>\n                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>\n                              站点列表\n                            </Text>\n                            <Text style={{ fontSize: 13, color: '#6e6e73' }}>\n                              管理你的个人站点关联信息。\n                            </Text>\n                          </Space>\n                        }\n                        extra={\n                          <Space>\n                            <Button type=\"link\" onClick={fetchSites} style={{ paddingRight: 0 }}>\n                              刷新\n                            </Button>\n                            <Button\n                              type=\"primary\"\n                              shape=\"round\"\n                              icon={<PlusOutlined />}\n                              onClick={openCreateSite}\n                            >\n                              新建站点\n                            </Button>\n                          </Space>\n                        }\n                      >\n                        {sites.length === 0 ? (\n                          <div style={{ padding: '40px 0' }}>\n                            <Empty\n                              image={Empty.PRESENTED_IMAGE_SIMPLE}\n                              description={\n                                <span style={{ color: '#6e6e73' }}>\n                                  还没有站点。点击右上角「新建站点」开始添加。\n                                </span>\n                              }\n                            />\n                          </div>\n                        ) : (\n                          <Table\n                            rowKey=\"site_id\"\n                            loading={siteLoading}\n                            dataSource={sites}\n                            pagination={false}\n                            columns={[\n                              {\n                                title: '站点ID',\n                                dataIndex: 'site_id',\n                                key: 'site_id',\n                                width: 100,\n                              },\n                              {\n                                title: '站点名称',\n                                dataIndex: 'site_name',\n                                key: 'site_name',\n                                render: (name: string) => name || '-',\n                              },\n                              {\n                                title: '操作',\n                                key: 'action',\n                                width: 150,\n                                render: (_: any, record: SiteItem) => (\n                                  <Space size=\"small\">\n                                    <Button\n                                      size=\"small\"\n                                      type=\"text\"\n                                      icon={<EditOutlined />}\n                                      onClick={() => openEditSite(record)}\n                                    >\n                                      编辑\n                                    </Button>\n                                    <Button\n                                      size=\"small\"\n                                      type=\"text\"\n                                      danger\n                                      icon={<DeleteOutlined />}\n                                      onClick={() => handleDeleteSite(record)}\n                                    >\n                                      删除\n                                    </Button>\n                                  </Space>\n                                ),\n                              },\n                            ]}\n                          />\n                        )}\n                      </Card>\n                    </Col>\n                  </Row>\n                ),\n              },\n              {\n                key: 'resume',\n                label: '简历',\n                children: (\n                  <Row gutter={24} align=\"stretch\">\n                    <Col xs={24} style={{ marginBottom: 24 }}>\n                      <Card\n                        bordered={false}\n                        bodyStyle={{ padding: 0 }}\n                        style={{\n                          borderRadius: 28,\n                          background: '#fff',\n                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',\n                          overflow: 'hidden',\n                        }}\n                        title={\n                          <Space direction=\"vertical\" size={4} style={{ padding: '24px 24px 0' }}>\n                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>\n                              个人简历\n                            </Text>\n                            <Text style={{ fontSize: 13, color: '#6e6e73' }}>\n                              查看我的完整简历。\n                            </Text>\n                          </Space>\n                        }\n                        extra={\n                          <Space style={{ padding: '24px 24px 0' }}>\n                            <Button\n                              shape=\"round\"\n                              onClick={() => window.open('/resume.pdf', '_blank')}\n                            >\n                              新窗口打开\n                            </Button>\n                            <Button\n                              type=\"primary\"\n                              shape=\"round\"\n                              onClick={() => {\n                                const link = document.createElement('a');\n                                link.href = '/resume.pdf';\n                                link.download = 'Alex_yehui_简历.pdf';\n                                link.click();\n                              }}\n                            >\n                              下载简历\n                            </Button>\n                          </Space>\n                        }\n                      >\n                        <div style={{ height: 'calc(100vh - 280px)', minHeight: 500 }}>\n                          <object\n                            data=\"/resume.pdf\"\n                            type=\"application/pdf\"\n                            style={{ width: '100%', height: '100%', border: 'none' }}\n                          >\n                            <div\n                              style={{\n                                display: 'flex',\n                                flexDirection: 'column',\n                                alignItems: 'center',\n                                justifyContent: 'center',\n                                height: '100%',\n                                color: '#6e6e73',\n                              }}\n                            >\n                              <Text style={{ fontSize: 16, color: '#6e6e73', marginBottom: 16 }}>\n                                无法直接预览简历\n                              </Text>\n                              <Space>\n                                <Button\n                                  type=\"primary\"\n                                  shape=\"round\"\n                                  onClick={() => window.open('/resume.pdf', '_blank')}\n                                >\n                                  在新窗口查看\n                                </Button>\n                                <Button\n                                  shape=\"round\"\n                                  onClick={() => {\n                                    const link = document.createElement('a');\n                                    link.href = '/resume.pdf';\n                                    link.download = 'Alex_yehui_简历.pdf';\n                                    link.click();\n                                  }}\n                                >\n                                  下载 PDF\n                                </Button>\n                              </Space>\n                            </div>\n                          </object>\n                        </div>\n                      </Card>\n                    </Col>\n                  </Row>\n                ),\n              },\n            ]}\n          />\n        </div>\n      </Content>\n\n      {/* 全局样式覆盖 */}\n      <style>{`\n        .ant-modal-content {\n          overflow: hidden !important;\n          border-radius: 0 !important;\n        }\n        .ant-modal-wrap {\n          overflow: hidden !important;\n        }\n      `}</style>\n\n      {/* 对话弹窗：点击某个模型的\"对话\"按钮后才出现 */}\n      <Modal\n        open={chatVisible}\n        onCancel={closeChat}\n        footer={null}\n        width=\"100%\"\n        style={{ top: 0, padding: 0, maxWidth: '100%' }}\n        bodyStyle={{ padding: 0, height: '100vh', overflow: 'hidden' }}\n      >\n        <div\n          style={{\n            minHeight: '100vh',\n            background: '#f7f7f8',\n            display: 'flex',\n            justifyContent: 'center',\n            padding: '24px 16px 40px',\n          }}\n        >\n          <div\n            style={{\n              width: '100%',\n              maxWidth: 920,\n              display: 'flex',\n              flexDirection: 'column',\n              gap: 16,\n              height: 'calc(100vh - 80px)',\n            }}\n          >\n            <div\n              style={{\n                display: 'flex',\n                alignItems: 'center',\n                justifyContent: 'space-between',\n                padding: '8px 8px 0',\n              }}\n            >\n              <Space direction=\"vertical\" size={2}>\n                <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>\n                  对话\n                </Text>\n                <Text style={{ fontSize: 12, color: '#6e6e73' }}>\n                  当前模型：{activeModel?.name || '未选择'}\n                </Text>\n              </Space>\n              <Space>\n                <Button\n                  onClick={() => {\n                    setChatMessages([]);\n                    chatForm.resetFields();\n                    setLastUserPrompt('');\n                    stopStreaming();\n                  }}\n                >\n                  清空\n                </Button>\n                <Button onClick={closeChat}>关闭</Button>\n              </Space>\n            </div>\n\n            <div\n              ref={chatListRef}\n              style={{\n                flex: 1,\n                overflow: 'auto',\n                padding: '8px 8px 16px',\n                display: 'flex',\n                flexDirection: 'column',\n                gap: 16,\n              }}\n            >\n              {chatMessages.length === 0 ? (\n                <div\n                  style={{\n                    flex: 1,\n                    display: 'flex',\n                    alignItems: 'center',\n                    justifyContent: 'center',\n                    color: '#9b9ba1',\n                  }}\n                >\n                  <Text style={{ color: '#9b9ba1' }}>\n                    试着问一个问题，或者让模型帮你改写一段话。\n                  </Text>\n                </div>\n              ) : (\n                chatMessages.map((msg) => {\n                  const isUser = msg.role === 'user';\n                  return (\n                    <div\n                      key={msg.id}\n                      style={{\n                        display: 'flex',\n                        justifyContent: isUser ? 'flex-end' : 'flex-start',\n                      }}\n                    >\n                      <div\n                        style={{\n                          display: 'flex',\n                          flexDirection: isUser ? 'row-reverse' : 'row',\n                          gap: 12,\n                          maxWidth: '75%',\n                          alignItems: 'flex-start',\n                        }}\n                      >\n                        <div\n                          style={{\n                            width: 32,\n                            height: 32,\n                            borderRadius: '50%',\n                            display: 'flex',\n                            alignItems: 'center',\n                            justifyContent: 'center',\n                            background: isUser ? '#111' : '#e6e6eb',\n                            color: isUser ? '#fff' : '#111',\n                            fontSize: 12,\n                            fontWeight: 600,\n                          }}\n                        >\n                          {isUser ? '你' : <RobotOutlined />}\n                        </div>\n                        <div\n                          style={{\n                            padding: '12px 14px',\n                            borderRadius: 16,\n                            background: isUser ? '#111' : '#fff',\n                            color: isUser ? '#fff' : '#111',\n                            boxShadow: isUser\n                              ? '0 8px 18px rgba(0,0,0,0.18)'\n                              : '0 10px 24px rgba(0,0,0,0.08)',\n                            border: isUser ? '1px solid #111' : '1px solid #e5e5ea',\n                            whiteSpace: 'pre-wrap',\n                            wordBreak: 'break-word',\n                            fontSize: 14,\n                            lineHeight: 1.6,\n                          }}\n                        >\n                          {isUser ? (\n                            msg.content\n                          ) : msg.content ? (\n                            <ReactMarkdown\n                              remarkPlugins={[remarkGfm]}\n                              components={{\n                                code({ inline, className, children, ...props }) {\n                                  const match = /language-(\\w+)/.exec(className || '');\n                                  if (inline) {\n                                    return (\n                                      <code\n                                        style={{\n                                          background: '#f5f5f7',\n                                          padding: '2px 6px',\n                                          borderRadius: 6,\n                                          fontSize: 12,\n                                        }}\n                                        {...props}\n                                      >\n                                        {children}\n                                      </code>\n                                    );\n                                  }\n                                  return (\n                                    <SyntaxHighlighter\n                                      {...props}\n                                      style={oneLight}\n                                      language={match?.[1] || 'text'}\n                                      PreTag=\"div\"\n                                      customStyle={{\n                                        margin: '12px 0',\n                                        borderRadius: 12,\n                                        padding: 12,\n                                      }}\n                                    >\n                                      {String(children).replace(/\\n$/, '')}\n                                    </SyntaxHighlighter>\n                                  );\n                                },\n                              }}\n                            >\n                              {msg.content}\n                            </ReactMarkdown>\n                          ) : chatStreaming ? (\n                            '正在思考…'\n                          ) : (\n                            ''\n                          )}\n                        </div>\n                      </div>\n                    </div>\n                  );\n                })\n              )}\n            </div>\n\n            <div\n              style={{\n                borderRadius: 20,\n                background: '#fff',\n                boxShadow: '0 10px 24px rgba(0,0,0,0.08)',\n                padding: '12px 12px 16px',\n              }}\n            >\n              <Form form={chatForm} layout=\"vertical\">\n                <Form.Item\n                  name=\"prompt\"\n                  rules={[{ required: true, message: '请输入提问内容' }]}\n                  style={{ marginBottom: 12 }}\n                >\n                  <Input.TextArea\n                    autoSize={{ minRows: 2, maxRows: 6 }}\n                    placeholder=\"输入你的问题，Shift + Enter 换行\"\n                    disabled={chatStreaming}\n                    onPressEnter={(e) => {\n                      if (!e.shiftKey) {\n                        e.preventDefault();\n                        handleChat();\n                      }\n                    }}\n                  />\n                </Form.Item>\n                <Space style={{ justifyContent: 'flex-end', width: '100%' }}>\n                  <Text style={{ fontSize: 12, color: '#a1a1a6' }}>\n                    发送后会立即开始流式生成\n                  </Text>\n                  <Button\n                    onClick={handleRegenerate}\n                    disabled={!lastUserPrompt || chatStreaming}\n                  >\n                    重新生成\n                  </Button>\n                  <Button\n                    onClick={stopStreaming}\n                    disabled={!chatStreaming}\n                  >\n                    停止\n                  </Button>\n                  <Button\n                    type=\"primary\"\n                    shape=\"round\"\n                    loading={chatLoading}\n                    onClick={handleChat}\n                    disabled={chatStreaming}\n                  >\n                    发送\n                  </Button>\n                </Space>\n              </Form>\n            </div>\n          </div>\n        </div>\n      </Modal>\n\n      <Modal\n        title={editingModel ? '编辑模型' : '新建模型'}\n        open={formVisible}\n        onCancel={() => setFormVisible(false)}\n        onOk={handleSaveModel}\n        okText=\"保存\"\n        width={520}\n      >\n        <Form form={form} layout=\"vertical\">\n          <Form.Item\n            label=\"名称\"\n            name=\"name\"\n            rules={[{ required: true, message: '请输入名称' }]}\n          >\n            <Input placeholder=\"例如：gpt-4o-2024\" />\n          </Form.Item>\n          <Form.Item noStyle shouldUpdate>\n            {() => (\n              <Form.Item\n                label=\"Endpoint\"\n                name=\"endpoint\"\n                rules={[{ required: true, message: '请输入 Endpoint' }]}\n              >\n                <Space.Compact style={{ width: '100%' }}>\n                  <Form.Item name=\"protocol\" noStyle initialValue=\"https://\">\n                    <Select\n                      style={{ width: 120 }}\n                      options={[\n                        { value: 'http://', label: 'http://' },\n                        { value: 'https://', label: 'https://' },\n                      ]}\n                    />\n                  </Form.Item>\n                  <Input placeholder=\"api.openai.com/v1/chat/completions\" />\n                </Space.Compact>\n              </Form.Item>\n            )}\n          </Form.Item>\n          <Form.Item\n            label=\"API Key\"\n            name=\"api_key\"\n            rules={[{ required: true, message: '请输入 API Key' }]}\n          >\n            <Input.Password placeholder=\"用于访问下游大模型的密钥\" />\n          </Form.Item>\n          <Form.Item label=\"类型\" name=\"type\">\n            <Input placeholder=\"例如：gpt-4o / glm-4 / qwen-max\" />\n          </Form.Item>\n          <Form.Item label=\"维度\" name=\"dimensions\">\n            <InputNumber style={{ width: '100%' }} placeholder=\"向量模型时可填，例如 1536\" />\n          </Form.Item>\n          <Form.Item label=\"超时(秒)\" name=\"timeout\">\n            <InputNumber style={{ width: '100%' }} placeholder=\"请求超时时间，默认可填 30\" />\n          </Form.Item>\n        </Form>\n      </Modal>\n\n      <Modal\n        title={editingSite ? '编辑站点' : '新建站点'}\n        open={siteFormVisible}\n        onCancel={() => setSiteFormVisible(false)}\n        onOk={handleSaveSite}\n        okText=\"保存\"\n        width={400}\n      >\n        <Form form={siteForm} layout=\"vertical\">\n          <Form.Item\n            label=\"站点名称\"\n            name=\"site_name\"\n            rules={[{ required: true, message: '请输入站点名称' }]}\n          >\n            <Input placeholder=\"例如：我的博客\" />\n          </Form.Item>\n        </Form>\n      </Modal>\n    </Layout>\n  );\n};\n\nexport default IndexPage;\n",
       "__isJSFile": true,
       "__absFile": "/Users/alex_yehui/project/MyAPI/my-api-console/src/pages/index.tsx"
     }
@@ -2524,9 +2170,7 @@
     ]
   },
   "mfsuBundleStatus": {
-    "done": true,
-    "percent": 1,
-    "status": ""
+    "done": true
   },
   "react": {
     "version": "18.3.1",
@@ -3647,7 +3291,7 @@
             "format": "esm"
           },
           "src/pages/index.tsx": {
-            "bytes": 54364,
+            "bytes": 58723,
             "imports": [
               {
                 "path": "react",
@@ -5053,7 +4697,7 @@
             "entryPoint": "src/.umi/umi.ts",
             "inputs": {
               "src/pages/index.tsx": {
-                "bytesInOutput": 56762
+                "bytesInOutput": 61155
               },
               "src/.umi/core/polyfill.ts": {
                 "bytesInOutput": 24424
@@ -5083,7 +4727,7 @@
                 "bytesInOutput": 575
               }
             },
-            "bytes": 87111
+            "bytes": 91504
           }
         }
       }

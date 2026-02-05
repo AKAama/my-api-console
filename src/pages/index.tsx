@@ -1115,6 +1115,101 @@ const IndexPage: React.FC = () => {
                   </Row>
                 ),
               },
+              {
+                key: 'resume',
+                label: '简历',
+                children: (
+                  <Row gutter={24} align="stretch">
+                    <Col xs={24} style={{ marginBottom: 24 }}>
+                      <Card
+                        bordered={false}
+                        bodyStyle={{ padding: 0 }}
+                        style={{
+                          borderRadius: 28,
+                          background: '#fff',
+                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',
+                          overflow: 'hidden',
+                        }}
+                        title={
+                          <Space direction="vertical" size={4} style={{ padding: '24px 24px 0' }}>
+                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>
+                              个人简历
+                            </Text>
+                            <Text style={{ fontSize: 13, color: '#6e6e73' }}>
+                              查看我的完整简历。
+                            </Text>
+                          </Space>
+                        }
+                        extra={
+                          <Space style={{ padding: '24px 24px 0' }}>
+                            <Button
+                              shape="round"
+                              onClick={() => window.open('/resume.pdf', '_blank')}
+                            >
+                              新窗口打开
+                            </Button>
+                            <Button
+                              type="primary"
+                              shape="round"
+                              onClick={() => {
+                                const link = document.createElement('a');
+                                link.href = '/resume.pdf';
+                                link.download = '马业辉.pdf';
+                                link.click();
+                              }}
+                            >
+                              下载简历
+                            </Button>
+                          </Space>
+                        }
+                      >
+                        <div style={{ height: 'calc(100vh - 280px)', minHeight: 500 }}>
+                          <object
+                            data="/resume.pdf"
+                            type="application/pdf"
+                            style={{ width: '100%', height: '100%', border: 'none' }}
+                          >
+                            <div
+                              style={{
+                                display: 'flex',
+                                flexDirection: 'column',
+                                alignItems: 'center',
+                                justifyContent: 'center',
+                                height: '100%',
+                                color: '#6e6e73',
+                              }}
+                            >
+                              <Text style={{ fontSize: 16, color: '#6e6e73', marginBottom: 16 }}>
+                                无法直接预览简历
+                              </Text>
+                              <Space>
+                                <Button
+                                  type="primary"
+                                  shape="round"
+                                  onClick={() => window.open('/resume.pdf', '_blank')}
+                                >
+                                  在新窗口查看
+                                </Button>
+                                <Button
+                                  shape="round"
+                                  onClick={() => {
+                                    const link = document.createElement('a');
+                                    link.href = '/resume.pdf';
+                                    link.download = 'Alex_yehui_简历.pdf';
+                                    link.click();
+                                  }}
+                                >
+                                  下载 PDF
+                                </Button>
+                              </Space>
+                            </div>
+                          </object>
+                        </div>
+                      </Card>
+                    </Col>
+                  </Row>
+                ),
+              },
             ]}
           />
         </div>
