@@ -43,7 +43,6 @@ interface ModelItem {
   timeout?: number;
   type?: string;
   dimensions?: number;
-  enable?: number;
 }
 
 interface SiteItem {
@@ -78,7 +77,7 @@ const IndexPage: React.FC = () => {
   const [chatMessages, setChatMessages] = useState<ChatMessage[]>([]);
   const [chatStreaming, setChatStreaming] = useState(false);
   const [chatAbortController, setChatAbortController] = useState<AbortController | null>(null);
-  const [lastUserPrompt, setLastUserPrompt] = useState('');
+  const [lastUserMessage, setLastUserMessage] = useState('');
   const [editingModel, setEditingModel] = useState<ModelItem | null>(null);
   const [formVisible, setFormVisible] = useState(false);
   const [form] = Form.useForm();
@@ -189,9 +188,7 @@ const IndexPage: React.FC = () => {
 
   const stats = useMemo(() => {
     const total = models.length;
-    const ready = models.filter(
-      (m) => m.endpoint && m.api_key && (m.enable ?? 1) === 1,
-    ).length;
+    const ready = models.filter((m) => m.endpoint && m.api_key).length;
     return { total, ready };
   }, [models]);
 
@@ -220,11 +217,12 @@ const IndexPage: React.FC = () => {
   const handleSaveModel = async () => {
     try {
       const values = await form.validateFields();
-      // 组合 protocol 和 endpoint
       const { protocol, ...rest } = values;
+      const endpoint = String(rest.endpoint || '').trim();
+      const hasProtocol = /^https?:\/\//i.test(endpoint);
       const finalValues = {
         ...rest,
-        endpoint: `${protocol || 'https://'}${rest.endpoint || ''}`,
+        endpoint: hasProtocol ? endpoint : `${protocol || 'https://'}${endpoint}`,
       };
       if (editingModel) {
         await axios.put(`/api/v1/models/${editingModel.model_id}`, finalValues);
@@ -267,7 +265,7 @@ const IndexPage: React.FC = () => {
     setChatVisible(true);
     setChatMessages([]);
     setChatStreaming(false);
-    setLastUserPrompt('');
+    setLastUserMessage('');
     chatForm.resetFields();
   };
 
@@ -379,14 +377,10 @@ const IndexPage: React.FC = () => {
       message.warning('请先选择一个模型');
       return;
     }
-    if ((activeModel.enable ?? 1) === 0) {
-      message.warning('当前模型已禁用，无法对话');
-      return;
-    }
     try {
       const values = await chatForm.validateFields();
-      const prompt = (values.prompt || '').trim();
-      if (!prompt) return;
+      const content = (values.message || '').trim();
+      if (!content) return;
       if (chatAbortController) {
         chatAbortController.abort();
       }
@@ -395,7 +389,7 @@ const IndexPage: React.FC = () => {
       const userMessage: ChatMessage = {
         id: `${Date.now()}-user`,
         role: 'user',
-        content: prompt,
+        content,
       };
       const assistantMessage: ChatMessage = {
         id: `${Date.now()}-assistant`,
@@ -406,7 +400,7 @@ const IndexPage: React.FC = () => {
       const payloadMessages = buildMessagesPayload(nextMessages);
       setChatMessages((prev) => [...prev, userMessage, assistantMessage]);
       chatForm.resetFields();
-      setLastUserPrompt(prompt);
+      setLastUserMessage(content);
       setChatLoading(true);
       setChatStreaming(true);
 
@@ -504,7 +498,7 @@ const IndexPage: React.FC = () => {
   };
 
   const handleRegenerate = async () => {
-    if (!activeModel || !lastUserPrompt) {
+    if (!activeModel || !lastUserMessage) {
       message.warning('没有可重新生成的内容');
       return;
     }
@@ -843,7 +837,6 @@ const IndexPage: React.FC = () => {
                           <Row gutter={[16, 16]}>
                             {models.map((m) => {
                               const isActive = activeModel?.model_id === m.model_id;
-                              const isEnabled = (m.enable ?? 1) === 1;
                               return (
                                 <Col xs={24} md={12} key={m.model_id}>
                                   <Card
@@ -862,7 +855,6 @@ const IndexPage: React.FC = () => {
                                       transform: isActive ? 'translateY(-2px)' : 'translateY(0)',
                                       transition: 'all 0.25s ease',
                                       border: isActive ? '2px solid #69a6ff' : '2px solid transparent',
-                                      opacity: isEnabled ? 1 : 0.6,
                                     }}
                                     bodyStyle={{ padding: 18 }}
                                   >
@@ -923,32 +915,18 @@ const IndexPage: React.FC = () => {
                                                 未设置类型
                                               </Tag>
                                             )}
-                                            {!isEnabled && (
-                                              <Tag
-                                                color="default"
-                                                style={{
-                                                  borderRadius: 999,
-                                                  border: 'none',
-                                                }}
-                                              >
-                                                已禁用
-                                              </Tag>
-                                            )}
                                           </div>
                                         </div>
                                       </Space>
                                       <Space size={8}>
-                                        <Tooltip title={isEnabled ? '对话' : '模型已禁用'}>
+                                        <Tooltip title="对话">
                                           <Button
                                             size="small"
                                             type={isActive ? 'primary' : 'default'}
                                             shape="round"
-                                            disabled={!isEnabled}
                                             onClick={(e) => {
                                               e.stopPropagation();
-                                              if (isEnabled) {
-                                                openChatWithModel(m);
-                                              }
+                                              openChatWithModel(m);
                                             }}
                                           >
                                             对话
@@ -1275,7 +1253,7 @@ const IndexPage: React.FC = () => {
                   onClick={() => {
                     setChatMessages([]);
                     chatForm.resetFields();
-                    setLastUserPrompt('');
+                    setLastUserMessage('');
                     stopStreaming();
                   }}
                 >
@@ -1368,9 +1346,11 @@ const IndexPage: React.FC = () => {
                             <ReactMarkdown
                               remarkPlugins={[remarkGfm]}
                               components={{
-                                code({ inline, className, children, ...props }) {
+                                code({ className, children, ...props }) {
                                   const match = /language-(\w+)/.exec(className || '');
-                                  if (inline) {
+                                  const codeText = String(children).replace(/\n$/, '');
+                                  const isBlock = Boolean(match) || String(children).includes('\n');
+                                  if (!isBlock) {
                                     return (
                                       <code
                                         style={{
@@ -1387,7 +1367,6 @@ const IndexPage: React.FC = () => {
                                   }
                                   return (
                                     <SyntaxHighlighter
-                                      {...props}
                                       style={oneLight}
                                       language={match?.[1] || 'text'}
                                       PreTag="div"
@@ -1397,7 +1376,7 @@ const IndexPage: React.FC = () => {
                                         padding: 12,
                                       }}
                                     >
-                                      {String(children).replace(/\n$/, '')}
+                                      {codeText}
                                     </SyntaxHighlighter>
                                   );
                                 },
@@ -1428,7 +1407,7 @@ const IndexPage: React.FC = () => {
             >
               <Form form={chatForm} layout="vertical">
                 <Form.Item
-                  name="prompt"
+                  name="message"
                   rules={[{ required: true, message: '请输入提问内容' }]}
                   style={{ marginBottom: 12 }}
                 >
@@ -1450,7 +1429,7 @@ const IndexPage: React.FC = () => {
                   </Text>
                   <Button
                     onClick={handleRegenerate}
-                    disabled={!lastUserPrompt || chatStreaming}
+                    disabled={!lastUserMessage || chatStreaming}
                   >
                     重新生成
                   </Button>
