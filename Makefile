@@ -2,10 +2,10 @@ export SHELL := /bin/bash
 export SHELLOPTS := errexit:pipefail
 
 # 镜像基本信息
-REGISTRY    ?= testhub.sudytech.cn
-IMAGE_REPO  ?= webplus
-APP_NAME    ?= zh-corpus-console
-TAG         ?= 1.0.0
+REGISTRY    ?= crpi-3xux8vqn35fw00z9.cn-shanghai.personal.cr.aliyuncs.com
+IMAGE_REPO  ?= project_hub
+APP_NAME    ?= my-api-console
+TAG         ?= 1.0.1
 
 IMAGE       := $(REGISTRY)/$(IMAGE_REPO)/$(APP_NAME):$(TAG)
 
