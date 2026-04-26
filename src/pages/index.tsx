@@ -641,9 +641,6 @@ const IndexPage: React.FC = () => {
           <RobotOutlined style={{ fontSize: 22, color: '#111' }} />
           <Text style={{ fontSize: 18, fontWeight: 600 }}>Alex_yehui</Text>
         </Space>
-        <Space size={24}>
-          <Text style={{ color: '#6e6e73' }}>个人主页</Text>
-        </Space>
       </Header>
 
       <Content style={{ padding: '24px 56px 56px' }}>
