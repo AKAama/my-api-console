@@ -39,7 +39,7 @@ interface ModelItem {
   model_id: string;
   name: string;
   endpoint: string;
-  api_key: string;
+  api_key?: string;
   timeout?: number;
   type?: string;
   dimensions?: number;
@@ -188,7 +188,7 @@ const IndexPage: React.FC = () => {
 
   const stats = useMemo(() => {
     const total = models.length;
-    const ready = models.filter((m) => m.endpoint && m.api_key).length;
+    const ready = models.filter((m) => m.endpoint).length;
     return { total, ready };
   }, [models]);
 
@@ -200,13 +200,14 @@ const IndexPage: React.FC = () => {
 
   const openEdit = (m: ModelItem) => {
     setEditingModel(m);
+    form.resetFields();
     const protocol = m.endpoint?.match(/^https?:\/\//)?.[0] || 'https://';
     const displayEndpoint = m.endpoint?.replace(/^https?:\/\//, '') || '';
     form.setFieldsValue({
       name: m.name,
       protocol,
       endpoint: displayEndpoint,
-      api_key: m.api_key,
+      api_key: undefined,
       timeout: m.timeout,
       type: m.type,
       dimensions: m.dimensions,
@@ -224,6 +225,9 @@ const IndexPage: React.FC = () => {
         ...rest,
         endpoint: hasProtocol ? endpoint : `${protocol || 'https://'}${endpoint}`,
       };
+      if (editingModel && !String(finalValues.api_key || '').trim()) {
+        delete finalValues.api_key;
+      }
       if (editingModel) {
         await axios.put(`/api/v1/models/${editingModel.model_id}`, finalValues);
         message.success('已更新模型');
@@ -1494,11 +1498,11 @@ const IndexPage: React.FC = () => {
             )}
           </Form.Item>
           <Form.Item
-            label="API Key"
+            label={editingModel ? 'API Key（留空则不修改）' : 'API Key'}
             name="api_key"
-            rules={[{ required: true, message: '请输入 API Key' }]}
+            rules={editingModel ? [] : [{ required: true, message: '请输入 API Key' }]}
           >
-            <Input.Password placeholder="用于访问下游大模型的密钥" />
+            <Input.Password placeholder={editingModel ? '输入新的 API Key 才会覆盖原密钥' : '用于访问下游大模型的密钥'} />
           </Form.Item>
           <Form.Item label="类型" name="type">
             <Input placeholder="例如：gpt-4o / glm-4 / qwen-max" />
