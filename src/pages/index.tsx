@@ -18,6 +18,10 @@ import {
   Tabs,
   Table,
   Select,
+  Image,
+  Switch,
+  Segmented,
+  Upload,
 } from 'antd';
 import {
   PlusOutlined,
@@ -25,6 +29,11 @@ import {
   EditOutlined,
   DeleteOutlined,
   RobotOutlined,
+  PictureOutlined,
+  UploadOutlined,
+  SoundOutlined,
+  VideoCameraOutlined,
+  CustomerServiceOutlined,
 } from '@ant-design/icons';
 import axios from 'axios';
 import ReactMarkdown from 'react-markdown';
@@ -68,6 +77,106 @@ interface ChatMessage {
   content: string;
 }
 
+interface ImageGenerationResult {
+  id?: string;
+  data?: {
+    image_urls?: string[];
+    image_base64?: string[];
+  };
+  metadata?: {
+    failed_count?: string;
+    success_count?: string;
+  };
+  base_resp?: {
+    status_code?: number;
+    status_msg?: string;
+  };
+}
+
+interface VoiceItem {
+  voice_id: string;
+  voice_name?: string;
+  created_time?: string;
+  description?: string[];
+  source: 'system_voice' | 'voice_cloning' | 'voice_generation' | 'music_generation';
+}
+
+interface SpeechSynthesisResult {
+  data?: {
+    audio_data_url?: string;
+    audio_base64?: string;
+    status?: number;
+  };
+  extra_info?: {
+    audio_length?: number;
+    audio_size?: number;
+    audio_format?: string;
+    usage_characters?: number;
+  };
+  trace_id?: string;
+  base_resp?: {
+    status_code?: number;
+    status_msg?: string;
+  };
+}
+
+interface VideoTaskResult {
+  task_id?: string;
+  status?: 'Preparing' | 'Queueing' | 'Processing' | 'Success' | 'Fail';
+  file_id?: string;
+  video_width?: number;
+  video_height?: number;
+  error_message?: string;
+  base_resp?: {
+    status_code?: number;
+    status_msg?: string;
+  };
+}
+
+interface VideoFileResult {
+  file?: {
+    file_id?: string;
+    bytes?: number;
+    filename?: string;
+    purpose?: string;
+    download_url?: string;
+  };
+  base_resp?: {
+    status_code?: number;
+    status_msg?: string;
+  };
+}
+
+interface LyricsGenerationResult {
+  song_title?: string;
+  style_tags?: string;
+  lyrics?: string;
+  base_resp?: {
+    status_code?: number;
+    status_msg?: string;
+  };
+}
+
+interface MusicGenerationResult {
+  data?: {
+    audio_data_url?: string;
+    audio_url?: string;
+    status?: number;
+  };
+  trace_id?: string;
+  extra_info?: {
+    music_duration?: number;
+    music_sample_rate?: number;
+    music_channel?: number;
+    bitrate?: number;
+    music_size?: number;
+  };
+  base_resp?: {
+    status_code?: number;
+    status_msg?: string;
+  };
+}
+
 const IndexPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [models, setModels] = useState<ModelItem[]>([]);
@@ -93,6 +202,56 @@ const IndexPage: React.FC = () => {
   const [editingSite, setEditingSite] = useState<SiteItem | null>(null);
   const [siteFormVisible, setSiteFormVisible] = useState(false);
   const [siteForm] = Form.useForm();
+
+  // 图片生成相关状态
+  const [imageForm] = Form.useForm();
+  const [imageGenerating, setImageGenerating] = useState(false);
+  const [imageResult, setImageResult] = useState<ImageGenerationResult | null>(null);
+  const [imageError, setImageError] = useState('');
+  const [referenceImageUrl, setReferenceImageUrl] = useState('');
+  const [imageMode, setImageMode] = useState<'t2i' | 'i2i'>('t2i');
+
+  const imageModels = useMemo(
+    () => models.filter((m) => ['image-01', 'image-01-live'].includes(String(m.type || '').trim())),
+    [models],
+  );
+
+  // 语音合成相关状态
+  const [speechForm] = Form.useForm();
+  const [voiceLoading, setVoiceLoading] = useState(false);
+  const [speechLoading, setSpeechLoading] = useState(false);
+  const [voices, setVoices] = useState<VoiceItem[]>([]);
+  const [speechResult, setSpeechResult] = useState<SpeechSynthesisResult | null>(null);
+  const [speechError, setSpeechError] = useState('');
+
+  // 视频生成相关状态
+  const [videoForm] = Form.useForm();
+  const [videoMode, setVideoMode] = useState<'t2v' | 'i2v'>('t2v');
+  const [videoLoading, setVideoLoading] = useState(false);
+  const [videoPolling, setVideoPolling] = useState(false);
+  const [videoTask, setVideoTask] = useState<VideoTaskResult | null>(null);
+  const [videoFile, setVideoFile] = useState<VideoFileResult | null>(null);
+  const [videoError, setVideoError] = useState('');
+  const [firstFramePreview, setFirstFramePreview] = useState('');
+
+  // 音乐生成相关状态
+  const [musicForm] = Form.useForm();
+  const [lyricsMode, setLyricsMode] = useState<'write_full_song' | 'edit'>('write_full_song');
+  const [lyricsLoading, setLyricsLoading] = useState(false);
+  const [musicLoading, setMusicLoading] = useState(false);
+  const [lyricsResult, setLyricsResult] = useState<LyricsGenerationResult | null>(null);
+  const [musicResult, setMusicResult] = useState<MusicGenerationResult | null>(null);
+  const [musicError, setMusicError] = useState('');
+
+  const minimaxModels = useMemo(
+    () =>
+      models.filter((m) =>
+        [m.name, m.endpoint, m.type].some((value) =>
+          String(value || '').toLowerCase().includes('minimax'),
+        ),
+      ),
+    [models],
+  );
 
   const fetchSites = async () => {
     setSiteLoading(true);
@@ -175,9 +334,34 @@ const IndexPage: React.FC = () => {
   };
 
   useEffect(() => {
+    document.title = 'Alex_yehui 控制台';
     fetchModels();
     fetchSites();
   }, []);
+
+  useEffect(() => {
+    if (imageModels.length > 0 && !imageForm.getFieldValue('model_id')) {
+      imageForm.setFieldValue('model_id', imageModels[0].model_id);
+    }
+  }, [imageModels, imageForm]);
+
+  useEffect(() => {
+    if (minimaxModels.length > 0 && !speechForm.getFieldValue('model_id')) {
+      speechForm.setFieldValue('model_id', minimaxModels[0].model_id);
+    }
+  }, [minimaxModels, speechForm]);
+
+  useEffect(() => {
+    if (minimaxModels.length > 0 && !videoForm.getFieldValue('model_id')) {
+      videoForm.setFieldValue('model_id', minimaxModels[0].model_id);
+    }
+  }, [minimaxModels, videoForm]);
+
+  useEffect(() => {
+    if (minimaxModels.length > 0 && !musicForm.getFieldValue('model_id')) {
+      musicForm.setFieldValue('model_id', minimaxModels[0].model_id);
+    }
+  }, [minimaxModels, musicForm]);
 
   useEffect(() => {
     if (!chatVisible) return;
@@ -376,6 +560,65 @@ const IndexPage: React.FC = () => {
         content: m.content,
       }));
 
+  const stripThinkingText = (text: string) =>
+    text
+      .replace(/<think>[\s\S]*?<\/think>/gi, '')
+      .replace(/^\s*<\/?think>\s*$/gim, '')
+      .trimStart();
+
+  const extractDisplayContent = (parsed: any) => {
+    const choice = parsed?.choices?.[0];
+    const content =
+      choice?.delta?.content ??
+      choice?.message?.content ??
+      parsed?.text ??
+      parsed?.content ??
+      '';
+    if (typeof content === 'string' && content) {
+      return stripThinkingText(content);
+    }
+    if (parsed?.type === 'content_block_delta' && parsed?.delta?.type === 'text_delta') {
+      return stripThinkingText(String(parsed.delta.text || ''));
+    }
+    if (Array.isArray(parsed?.content)) {
+      return stripThinkingText(
+        parsed.content
+          .filter((item: any) => item?.type === 'text' && typeof item?.text === 'string')
+          .map((item: any) => item.text)
+          .join(''),
+      );
+    }
+    return '';
+  };
+
+  const extractDisplayContentFromRaw = (rawText: string) => {
+    const dataLines = rawText
+      .split('\n')
+      .map((line) => line.trim())
+      .filter((line) => line.startsWith('data:'))
+      .map((line) => line.replace(/^data:\s*/, '').trim())
+      .filter((line) => line && line !== '[DONE]');
+
+    const pieces: string[] = [];
+    for (const line of dataLines) {
+      try {
+        const content = extractDisplayContent(JSON.parse(line));
+        if (content) pieces.push(content);
+      } catch {
+        // Ignore malformed stream fragments instead of showing raw JSON.
+      }
+    }
+    if (pieces.length > 0) {
+      return pieces.join('');
+    }
+
+    try {
+      return extractDisplayContent(JSON.parse(rawText));
+    } catch {
+      return stripThinkingText(rawText);
+    }
+  };
+
   const handleChat = async () => {
     if (!activeModel) {
       message.warning('请先选择一个模型');
@@ -455,21 +698,16 @@ const IndexPage: React.FC = () => {
               break;
             }
             try {
-              const parsed = JSON.parse(data);
-              const delta =
-                parsed?.choices?.[0]?.delta?.content ??
-                parsed?.choices?.[0]?.message?.content ??
-                parsed?.text ??
-                parsed?.content ??
-                '';
+              const delta = extractDisplayContent(JSON.parse(data));
               if (delta) {
                 receivedTokens = true;
                 appendAssistantText(assistantMessage.id, delta);
               }
             } catch {
-              if (data) {
+              const text = stripThinkingText(data);
+              if (text && !/^\{[\s\S]*\}$/.test(text)) {
                 receivedTokens = true;
-                appendAssistantText(assistantMessage.id, data);
+                appendAssistantText(assistantMessage.id, text);
               }
             }
           }
@@ -478,17 +716,7 @@ const IndexPage: React.FC = () => {
         if (doneFromServer) break;
       }
       if (!receivedTokens && rawText) {
-        try {
-          const parsed = JSON.parse(rawText);
-          const content =
-            parsed?.choices?.[0]?.message?.content ??
-            parsed?.choices?.[0]?.text ??
-            parsed?.content ??
-            rawText;
-          startTypewriter(assistantMessage.id, content);
-        } catch {
-          startTypewriter(assistantMessage.id, rawText);
-        }
+        startTypewriter(assistantMessage.id, extractDisplayContentFromRaw(rawText));
       }
       setChatStreaming(false);
     } catch (e: any) {
@@ -570,21 +798,16 @@ const IndexPage: React.FC = () => {
               break;
             }
             try {
-              const parsed = JSON.parse(data);
-              const delta =
-                parsed?.choices?.[0]?.delta?.content ??
-                parsed?.choices?.[0]?.message?.content ??
-                parsed?.text ??
-                parsed?.content ??
-                '';
+              const delta = extractDisplayContent(JSON.parse(data));
               if (delta) {
                 receivedTokens = true;
                 appendAssistantText(assistantMessage.id, delta);
               }
             } catch {
-              if (data) {
+              const text = stripThinkingText(data);
+              if (text && !/^\{[\s\S]*\}$/.test(text)) {
                 receivedTokens = true;
-                appendAssistantText(assistantMessage.id, data);
+                appendAssistantText(assistantMessage.id, text);
               }
             }
           }
@@ -593,17 +816,7 @@ const IndexPage: React.FC = () => {
         if (doneFromServer) break;
       }
       if (!receivedTokens && rawText) {
-        try {
-          const parsed = JSON.parse(rawText);
-          const content =
-            parsed?.choices?.[0]?.message?.content ??
-            parsed?.choices?.[0]?.text ??
-            parsed?.content ??
-            rawText;
-          startTypewriter(assistantMessage.id, content);
-        } catch {
-          startTypewriter(assistantMessage.id, rawText);
-        }
+        startTypewriter(assistantMessage.id, extractDisplayContentFromRaw(rawText));
       }
       setChatStreaming(false);
     } catch (e: any) {
@@ -614,6 +827,437 @@ const IndexPage: React.FC = () => {
       setChatLoading(false);
       setChatAbortController(null);
     }
+  };
+
+  const handleGenerateImage = async () => {
+    try {
+      const values = await imageForm.validateFields();
+      const modelId = values.model_id;
+      if (!modelId) {
+        message.warning('请先选择 MiniMax 图片模型');
+        return;
+      }
+      setImageGenerating(true);
+      setImageError('');
+      setImageResult(null);
+      const payload: any = {
+        mode: imageMode,
+        prompt: String(values.prompt || '').trim(),
+        aspect_ratio: values.aspect_ratio || '1:1',
+        n: values.n || 1,
+        response_format: values.response_format || 'url',
+        prompt_optimizer: Boolean(values.prompt_optimizer),
+        aigc_watermark: Boolean(values.aigc_watermark),
+      };
+      if (imageMode === 'i2i') {
+        payload.image_file = String(values.image_file || '').trim();
+      }
+      if (values.seed !== undefined && values.seed !== null && values.seed !== '') {
+        payload.seed = Number(values.seed);
+      }
+      const res = await axios.post(`/api/v1/models/image-generation/${modelId}`, payload);
+      const result = res.data?.data as ImageGenerationResult;
+      const statusCode = result?.base_resp?.status_code;
+      if (typeof statusCode === 'number' && statusCode !== 0) {
+        throw new Error(result?.base_resp?.status_msg || '图片生成失败');
+      }
+      setImageResult(result);
+      message.success('图片生成完成');
+    } catch (e: any) {
+      const msg =
+        e?.response?.data?.msg ||
+        e?.response?.data?.detail ||
+        e?.message ||
+        '图片生成失败';
+      setImageError(typeof msg === 'string' ? msg : JSON.stringify(msg));
+      message.error('图片生成失败');
+    } finally {
+      setImageGenerating(false);
+    }
+  };
+
+  const generatedImages = useMemo(() => {
+    const urls = imageResult?.data?.image_urls || [];
+    const base64Items = imageResult?.data?.image_base64 || [];
+    return [
+      ...urls.map((url) => ({ type: 'url' as const, src: url })),
+      ...base64Items.map((item) => ({
+        type: 'base64' as const,
+        src: item.startsWith('data:') ? item : `data:image/png;base64,${item}`,
+      })),
+    ];
+  }, [imageResult]);
+
+  const downloadImage = async (src: string, index: number) => {
+    const filename = `minimax-image-${Date.now()}-${index + 1}.png`;
+    try {
+      if (src.startsWith('data:')) {
+        const link = document.createElement('a');
+        link.href = src;
+        link.download = filename;
+        link.click();
+        return;
+      }
+
+      const resp = await fetch(src);
+      if (!resp.ok) {
+        throw new Error('图片下载失败');
+      }
+      const blob = await resp.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = objectUrl;
+      link.download = filename;
+      link.click();
+      URL.revokeObjectURL(objectUrl);
+    } catch (e: any) {
+      message.error(e?.message || '图片下载失败');
+    }
+  };
+
+  const readFileAsDataUrl = (file: File) =>
+    new Promise<string>((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(String(reader.result || ''));
+      reader.onerror = () => reject(new Error('图片读取失败'));
+      reader.readAsDataURL(file);
+    });
+
+  const handleReferenceImageUpload = async (file: File) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      message.error('仅支持 JPG、PNG、WebP 图片');
+      return Upload.LIST_IGNORE;
+    }
+    if (file.size > 10 * 1024 * 1024) {
+      message.error('参考图片不能超过 10MB');
+      return Upload.LIST_IGNORE;
+    }
+
+    try {
+      const dataUrl = await readFileAsDataUrl(file);
+      imageForm.setFieldValue('image_file', dataUrl);
+      setReferenceImageUrl(dataUrl);
+      setImageError('');
+      message.success('本地图片已载入');
+    } catch (e: any) {
+      message.error(e?.message || '图片读取失败');
+    }
+    return Upload.LIST_IGNORE;
+  };
+
+  const flattenVoices = (data: any): VoiceItem[] =>
+    (['voice_cloning', 'voice_generation', 'system_voice', 'music_generation'] as const).flatMap(
+      (source) =>
+        (data?.[source] || []).map((item: any) => ({
+          ...item,
+          source,
+        })),
+    );
+
+  const fetchVoices = async (modelId?: string) => {
+    const targetModelId = modelId || speechForm.getFieldValue('model_id');
+    if (!targetModelId) {
+      message.warning('请先选择 MiniMax API 配置');
+      return;
+    }
+    setVoiceLoading(true);
+    setSpeechError('');
+    try {
+      const res = await axios.post(`/api/v1/models/voices/${targetModelId}`, {
+        voice_type: 'all',
+      });
+      const list = flattenVoices(res.data?.data);
+      setVoices(list);
+      if (list.length > 0 && !speechForm.getFieldValue('voice_id')) {
+        const clonedVoice = list.find((item) => item.source === 'voice_cloning');
+        speechForm.setFieldValue('voice_id', (clonedVoice || list[0]).voice_id);
+      }
+      message.success('音色列表已更新');
+    } catch (e: any) {
+      const msg = e?.response?.data?.msg || e?.message || '获取音色列表失败';
+      setSpeechError(typeof msg === 'string' ? msg : JSON.stringify(msg));
+      message.error('获取音色列表失败');
+    } finally {
+      setVoiceLoading(false);
+    }
+  };
+
+  const handleSynthesizeSpeech = async () => {
+    try {
+      const values = await speechForm.validateFields();
+      setSpeechLoading(true);
+      setSpeechError('');
+      setSpeechResult(null);
+      const payload = {
+        text: String(values.text || '').trim(),
+        voice_id: values.voice_id,
+        model: values.speech_model || 'speech-2.8-hd',
+        speed: values.speed ?? 1,
+        vol: values.vol ?? 1,
+        pitch: values.pitch ?? 0,
+        emotion: values.emotion || undefined,
+        sample_rate: values.sample_rate || 32000,
+        bitrate: values.bitrate || 128000,
+        audio_format: values.audio_format || 'mp3',
+        channel: values.channel || 1,
+        language_boost: values.language_boost || undefined,
+      };
+      const res = await axios.post(`/api/v1/models/speech/${values.model_id}`, payload);
+      const result = res.data?.data as SpeechSynthesisResult;
+      const statusCode = result?.base_resp?.status_code;
+      if (typeof statusCode === 'number' && statusCode !== 0) {
+        throw new Error(result?.base_resp?.status_msg || '语音合成失败');
+      }
+      setSpeechResult(result);
+      message.success('语音合成完成');
+    } catch (e: any) {
+      const msg = e?.response?.data?.msg || e?.message || '语音合成失败';
+      setSpeechError(typeof msg === 'string' ? msg : JSON.stringify(msg));
+      message.error('语音合成失败');
+    } finally {
+      setSpeechLoading(false);
+    }
+  };
+
+  const downloadSpeechAudio = () => {
+    const src = speechResult?.data?.audio_data_url;
+    if (!src) return;
+    const format = speechResult.extra_info?.audio_format || speechForm.getFieldValue('audio_format') || 'mp3';
+    const link = document.createElement('a');
+    link.href = src;
+    link.download = `minimax-speech-${Date.now()}.${format}`;
+    link.click();
+  };
+
+  const handleFirstFrameUpload = async (file: File) => {
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    if (!allowedTypes.includes(file.type)) {
+      message.error('仅支持 JPG、PNG、WebP 图片');
+      return Upload.LIST_IGNORE;
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      message.error('首帧图片不能超过 20MB');
+      return Upload.LIST_IGNORE;
+    }
+
+    try {
+      const dataUrl = await readFileAsDataUrl(file);
+      videoForm.setFieldValue('first_frame_image', dataUrl);
+      setFirstFramePreview(dataUrl);
+      setVideoError('');
+      message.success('首帧图片已载入');
+    } catch (e: any) {
+      message.error(e?.message || '图片读取失败');
+    }
+    return Upload.LIST_IGNORE;
+  };
+
+  const retrieveVideoFile = async (modelId: string, fileId: string) => {
+    const res = await axios.get(`/api/v1/models/video/${modelId}/files/${fileId}`);
+    if (res.data?.status !== 200) {
+      throw new Error(res.data?.msg || '查询视频文件失败');
+    }
+    const result = res.data?.data as VideoFileResult | null;
+    if (!result?.file?.download_url) {
+      throw new Error('未返回视频下载地址');
+    }
+    setVideoFile(result);
+    return result;
+  };
+
+  const pollVideoTask = async (modelId: string, taskId: string) => {
+    setVideoPolling(true);
+    setVideoError('');
+    try {
+      for (let i = 0; i < 90; i += 1) {
+        const res = await axios.get(`/api/v1/models/video/${modelId}/tasks/${taskId}`);
+        if (res.data?.status !== 200) {
+          throw new Error(res.data?.msg || '视频任务状态查询失败');
+        }
+        const task = res.data?.data as VideoTaskResult | null;
+        if (!task) {
+          throw new Error('视频任务状态为空');
+        }
+        setVideoTask(task);
+        if (task.status === 'Success' && task.file_id) {
+          await retrieveVideoFile(modelId, task.file_id);
+          message.success('视频生成完成');
+          return;
+        }
+        if (task.status === 'Fail') {
+          throw new Error(task.error_message || '视频生成失败');
+        }
+        await new Promise((resolve) => window.setTimeout(resolve, 10000));
+      }
+      throw new Error('视频仍在生成中，请稍后用 task_id 查询');
+    } catch (e: any) {
+      const msg = e?.response?.data?.msg || e?.message || '视频任务查询失败';
+      setVideoError(typeof msg === 'string' ? msg : JSON.stringify(msg));
+      message.error('视频任务查询失败');
+    } finally {
+      setVideoPolling(false);
+    }
+  };
+
+  const handleCreateVideo = async () => {
+    try {
+      const values = await videoForm.validateFields();
+      setVideoLoading(true);
+      setVideoError('');
+      setVideoTask(null);
+      setVideoFile(null);
+      const payload: any = {
+        mode: videoMode,
+        prompt: String(values.prompt || '').trim(),
+        model: values.video_model || 'MiniMax-Hailuo-2.3',
+        duration: values.duration || 6,
+        resolution: values.resolution || '768P',
+      };
+      if (values.prompt_optimizer) {
+        payload.prompt_optimizer = true;
+      }
+      if (values.fast_pretreatment) {
+        payload.fast_pretreatment = true;
+      }
+      if (values.aigc_watermark) {
+        payload.aigc_watermark = true;
+      }
+      if (videoMode === 'i2v') {
+        payload.first_frame_image = String(values.first_frame_image || '').trim();
+      }
+      const res = await axios.post(`/api/v1/models/video/${values.model_id}`, payload);
+      if (res.data?.status !== 200) {
+        throw new Error(res.data?.msg || '视频任务创建失败');
+      }
+      const task = res.data?.data as VideoTaskResult | null;
+      if (!task?.task_id) {
+        throw new Error('未返回 task_id');
+      }
+      setVideoTask(task);
+      videoForm.setFieldValue('task_id', task.task_id);
+      message.success('视频任务已创建');
+      pollVideoTask(values.model_id, task.task_id);
+    } catch (e: any) {
+      const msg = e?.response?.data?.msg || e?.message || '视频任务创建失败';
+      setVideoError(typeof msg === 'string' ? msg : JSON.stringify(msg));
+      message.error('视频任务创建失败');
+    } finally {
+      setVideoLoading(false);
+    }
+  };
+
+  const handleQueryVideoTask = async () => {
+    try {
+      const values = await videoForm.validateFields(['model_id', 'task_id']);
+      if (!values.task_id) {
+        message.warning('请输入 task_id');
+        return;
+      }
+      setVideoFile(null);
+      await pollVideoTask(values.model_id, values.task_id);
+    } catch {
+      // Form validation already shows the reason.
+    }
+  };
+
+  const downloadVideo = async () => {
+    const url = videoFile?.file?.download_url;
+    if (!url) return;
+    try {
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        throw new Error('视频下载失败');
+      }
+      const blob = await resp.blob();
+      const objectUrl = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = objectUrl;
+      link.download = videoFile.file?.filename || `minimax-video-${Date.now()}.mp4`;
+      link.click();
+      URL.revokeObjectURL(objectUrl);
+    } catch (e: any) {
+      message.error(e?.message || '视频下载失败');
+    }
+  };
+
+  const handleGenerateLyrics = async () => {
+    try {
+      const values = await musicForm.validateFields(['model_id', 'lyrics_prompt']);
+      if (lyricsMode === 'edit') {
+        await musicForm.validateFields(['lyrics']);
+      }
+      setLyricsLoading(true);
+      setMusicError('');
+      const payload = {
+        mode: lyricsMode,
+        prompt: values.lyrics_prompt || '',
+        lyrics: lyricsMode === 'edit' ? musicForm.getFieldValue('lyrics') : undefined,
+        title: musicForm.getFieldValue('song_title') || undefined,
+      };
+      const res = await axios.post(`/api/v1/models/lyrics/${values.model_id}`, payload);
+      const result = res.data?.data as LyricsGenerationResult;
+      setLyricsResult(result);
+      musicForm.setFieldsValue({
+        song_title: result.song_title,
+        style_tags: result.style_tags,
+        lyrics: result.lyrics,
+        music_prompt: result.style_tags || musicForm.getFieldValue('music_prompt'),
+      });
+      message.success('歌词生成完成');
+    } catch (e: any) {
+      const msg = e?.response?.data?.msg || e?.message || '歌词生成失败';
+      setMusicError(typeof msg === 'string' ? msg : JSON.stringify(msg));
+      message.error('歌词生成失败');
+    } finally {
+      setLyricsLoading(false);
+    }
+  };
+
+  const handleGenerateMusic = async () => {
+    try {
+      const values = await musicForm.validateFields(['model_id', 'music_model', 'music_prompt']);
+      const isInstrumental = Boolean(musicForm.getFieldValue('is_instrumental'));
+      if (!isInstrumental && !musicForm.getFieldValue('lyrics_optimizer')) {
+        await musicForm.validateFields(['lyrics']);
+      }
+      setMusicLoading(true);
+      setMusicError('');
+      setMusicResult(null);
+      const payload = {
+        model: values.music_model || 'music-2.6',
+        prompt: values.music_prompt || '',
+        lyrics: musicForm.getFieldValue('lyrics') || undefined,
+        lyrics_optimizer: Boolean(musicForm.getFieldValue('lyrics_optimizer')),
+        is_instrumental: isInstrumental,
+        sample_rate: musicForm.getFieldValue('sample_rate') || 44100,
+        bitrate: musicForm.getFieldValue('bitrate') || 256000,
+        audio_format: musicForm.getFieldValue('audio_format') || 'mp3',
+        output_format: 'hex',
+        aigc_watermark: Boolean(musicForm.getFieldValue('aigc_watermark')),
+      };
+      const res = await axios.post(`/api/v1/models/music/${values.model_id}`, payload);
+      const result = res.data?.data as MusicGenerationResult;
+      setMusicResult(result);
+      message.success('歌曲生成完成');
+    } catch (e: any) {
+      const msg = e?.response?.data?.msg || e?.message || '歌曲生成失败';
+      setMusicError(typeof msg === 'string' ? msg : JSON.stringify(msg));
+      message.error('歌曲生成失败');
+    } finally {
+      setMusicLoading(false);
+    }
+  };
+
+  const downloadMusicAudio = () => {
+    const src = musicResult?.data?.audio_data_url || musicResult?.data?.audio_url;
+    if (!src) return;
+    const format = musicForm.getFieldValue('audio_format') || 'mp3';
+    const title = musicForm.getFieldValue('song_title') || 'minimax-music';
+    const link = document.createElement('a');
+    link.href = src;
+    link.download = `${title}-${Date.now()}.${format}`;
+    link.click();
   };
 
   return (
@@ -984,6 +1628,1186 @@ const IndexPage: React.FC = () => {
                             })}
                           </Row>
                         )}
+                      </Card>
+                    </Col>
+                  </Row>
+                ),
+              },
+              {
+                key: 'image-generation',
+                label: '图片生成',
+                children: (
+                  <Row gutter={24} align="stretch">
+                    <Col xs={24} lg={10} style={{ marginBottom: 24 }}>
+                      <Card
+                        bordered={false}
+                        bodyStyle={{ padding: 24 }}
+                        style={{
+                          borderRadius: 28,
+                          background: '#fff',
+                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',
+                        }}
+                        title={
+                          <Space align="center">
+                            <PictureOutlined style={{ fontSize: 18 }} />
+                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>
+                              MiniMax 图片生成
+                            </Text>
+                          </Space>
+                        }
+                      >
+                        <Form
+                          form={imageForm}
+                          layout="vertical"
+                          initialValues={{
+                            model_id: imageModels[0]?.model_id,
+                            aspect_ratio: '1:1',
+                            n: 1,
+                            response_format: 'url',
+                            prompt_optimizer: false,
+                            aigc_watermark: false,
+                          }}
+                        >
+                          <Form.Item label="生成模式">
+                            <Segmented
+                              block
+                              value={imageMode}
+                              options={[
+                                { label: '文生图', value: 't2i' },
+                                { label: '图生图', value: 'i2i' },
+                              ]}
+                              onChange={(value) => {
+                                const nextMode = value as 't2i' | 'i2i';
+                                setImageMode(nextMode);
+                                setImageError('');
+                                setImageResult(null);
+                                if (nextMode === 't2i') {
+                                  imageForm.setFieldValue('image_file', undefined);
+                                  setReferenceImageUrl('');
+                                }
+                              }}
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label="图片模型"
+                            name="model_id"
+                            rules={[{ required: true, message: '请选择图片模型' }]}
+                          >
+                            <Select
+                              placeholder="先在模型管理中添加 image-01 / image-01-live"
+                              options={imageModels.map((m) => ({
+                                value: m.model_id,
+                                label: `${m.name} (${m.type})`,
+                              }))}
+                              notFoundContent="暂无 MiniMax 图片模型"
+                            />
+                          </Form.Item>
+                          {imageMode === 'i2i' ? (
+                            <Form.Item
+                              label="参考图片"
+                              required
+                            >
+                              <Space.Compact style={{ width: '100%' }}>
+                                <Upload
+                                  accept="image/jpeg,image/png,image/webp"
+                                  showUploadList={false}
+                                  beforeUpload={handleReferenceImageUpload}
+                                >
+                                  <Button icon={<UploadOutlined />}>上传</Button>
+                                </Upload>
+                                <Form.Item
+                                  name="image_file"
+                                  noStyle
+                                  rules={[{ required: true, message: '请上传或输入参考图片' }]}
+                                >
+                                  <Input
+                                    placeholder="https://example.com/reference.jpg 或 data:image/...;base64,..."
+                                    onChange={(e) => setReferenceImageUrl(e.target.value.trim())}
+                                  />
+                                </Form.Item>
+                              </Space.Compact>
+                            </Form.Item>
+                          ) : null}
+                          <Form.Item
+                            label="Prompt"
+                            name="prompt"
+                            rules={[{ required: true, message: '请输入图片描述' }]}
+                          >
+                            <Input.TextArea
+                              autoSize={{ minRows: 4, maxRows: 8 }}
+                              maxLength={1500}
+                              showCount
+                              placeholder="描述你想生成的画面、风格、构图和细节"
+                            />
+                          </Form.Item>
+                          <Row gutter={12}>
+                            <Col xs={24} md={12}>
+                              <Form.Item label="比例" name="aspect_ratio">
+                                <Select
+                                  options={[
+                                    '1:1',
+                                    '16:9',
+                                    '4:3',
+                                    '3:2',
+                                    '2:3',
+                                    '3:4',
+                                    '9:16',
+                                    '21:9',
+                                  ].map((value) => ({ value, label: value }))}
+                                />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={12}>
+                              <Form.Item label="数量" name="n">
+                                <InputNumber min={1} max={9} style={{ width: '100%' }} />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                          <Row gutter={12}>
+                            <Col xs={24} md={12}>
+                              <Form.Item label="返回格式" name="response_format">
+                                <Select
+                                  options={[
+                                    { value: 'url', label: 'URL' },
+                                    { value: 'base64', label: 'Base64' },
+                                  ]}
+                                />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={12}>
+                              <Form.Item label="Seed" name="seed">
+                                <InputNumber style={{ width: '100%' }} placeholder="可选" />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                          <Space size={24} style={{ marginBottom: 20 }}>
+                            <Form.Item
+                              name="prompt_optimizer"
+                              valuePropName="checked"
+                              style={{ marginBottom: 0 }}
+                            >
+                              <Switch checkedChildren="优化" unCheckedChildren="优化" />
+                            </Form.Item>
+                            <Form.Item
+                              name="aigc_watermark"
+                              valuePropName="checked"
+                              style={{ marginBottom: 0 }}
+                            >
+                              <Switch checkedChildren="水印" unCheckedChildren="水印" />
+                            </Form.Item>
+                          </Space>
+                          <Button
+                            type="primary"
+                            shape="round"
+                            block
+                            loading={imageGenerating}
+                            onClick={handleGenerateImage}
+                          >
+                            生成图片
+                          </Button>
+                        </Form>
+                      </Card>
+                    </Col>
+                    <Col xs={24} lg={14} style={{ marginBottom: 24 }}>
+                      <Card
+                        bordered={false}
+                        bodyStyle={{ padding: 24 }}
+                        style={{
+                          minHeight: 520,
+                          borderRadius: 28,
+                          background: '#fff',
+                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',
+                        }}
+                        title={
+                          <Space direction="vertical" size={4}>
+                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>
+                              生成结果
+                            </Text>
+                            <Text style={{ fontSize: 13, color: '#6e6e73' }}>
+                              URL 结果由 MiniMax 托管，有效期通常为 24 小时。
+                            </Text>
+                          </Space>
+                        }
+                      >
+                        {imageMode === 'i2i' && referenceImageUrl ? (
+                          <div style={{ marginBottom: 20 }}>
+                            <Text style={{ display: 'block', marginBottom: 8, color: '#6e6e73' }}>
+                              参考图
+                            </Text>
+                            <Image
+                              src={referenceImageUrl}
+                              width={160}
+                              height={120}
+                              style={{ objectFit: 'cover', borderRadius: 12 }}
+                              fallback="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTYwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDE2MCAxMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjE2MCIgaGVpZ2h0PSIxMjAiIGZpbGw9IiNmNWY1ZjciLz48dGV4dCB4PSI4MCIgeT0iNjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5YjliYTEiIGZvbnQtc2l6ZT0iMTIiPuWbvueJh+WKoOi9veWksei0pTwvdGV4dD48L3N2Zz4="
+                            />
+                          </div>
+                        ) : null}
+
+                        {imageError ? (
+                          <div
+                            style={{
+                              marginBottom: 20,
+                              padding: 12,
+                              borderRadius: 12,
+                              color: '#a8071a',
+                              background: '#fff1f0',
+                              border: '1px solid #ffccc7',
+                              wordBreak: 'break-word',
+                            }}
+                          >
+                            {imageError}
+                          </div>
+                        ) : null}
+
+                        {generatedImages.length === 0 ? (
+                          <Empty
+                            image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            description={
+                              <span style={{ color: '#6e6e73' }}>
+                                填写 Prompt 后，生成结果会显示在这里。
+                              </span>
+                            }
+                          />
+                        ) : (
+                          <Image.PreviewGroup>
+                            <Row gutter={[16, 16]}>
+                              {generatedImages.map((item, index) => (
+                                <Col xs={24} md={12} key={`${item.type}-${index}`}>
+                                  <div
+                                    style={{
+                                      overflow: 'hidden',
+                                      borderRadius: 16,
+                                      border: '1px solid #e5e5ea',
+                                      background: '#f7f7f8',
+                                    }}
+                                  >
+                                    <Image
+                                      src={item.src}
+                                      width="100%"
+                                      height={280}
+                                      style={{ objectFit: 'cover', display: 'block' }}
+                                    />
+                                  </div>
+                                  <Space style={{ marginTop: 6 }}>
+                                    {item.type === 'url' ? (
+                                      <Button
+                                        type="link"
+                                        style={{ paddingLeft: 0 }}
+                                        onClick={() => window.open(item.src, '_blank')}
+                                      >
+                                        打开原图
+                                      </Button>
+                                    ) : null}
+                                    <Button
+                                      type="link"
+                                      style={{ paddingLeft: item.type === 'url' ? undefined : 0 }}
+                                      onClick={() => downloadImage(item.src, index)}
+                                    >
+                                      下载
+                                    </Button>
+                                  </Space>
+                                </Col>
+                              ))}
+                            </Row>
+                          </Image.PreviewGroup>
+                        )}
+
+                        {imageResult?.metadata ? (
+                          <Space size={16} style={{ marginTop: 18, color: '#6e6e73' }}>
+                            <Text type="secondary">
+                              成功 {imageResult.metadata.success_count ?? '-'}
+                            </Text>
+                            <Text type="secondary">
+                              失败 {imageResult.metadata.failed_count ?? '-'}
+                            </Text>
+                            {imageResult.id ? (
+                              <Text type="secondary">任务 {imageResult.id}</Text>
+                            ) : null}
+                          </Space>
+                        ) : null}
+                      </Card>
+                    </Col>
+                  </Row>
+                ),
+              },
+              {
+                key: 'speech',
+                label: '语音合成',
+                children: (
+                  <Row gutter={24} align="stretch">
+                    <Col xs={24} lg={10} style={{ marginBottom: 24 }}>
+                      <Card
+                        bordered={false}
+                        bodyStyle={{ padding: 24 }}
+                        style={{
+                          borderRadius: 28,
+                          background: '#fff',
+                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',
+                        }}
+                        title={
+                          <Space align="center">
+                            <SoundOutlined style={{ fontSize: 18 }} />
+                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>
+                              MiniMax 语音合成
+                            </Text>
+                          </Space>
+                        }
+                      >
+                        <Form
+                          form={speechForm}
+                          layout="vertical"
+                          initialValues={{
+                            model_id: minimaxModels[0]?.model_id,
+                            speech_model: 'speech-2.8-hd',
+                            speed: 1,
+                            vol: 1,
+                            pitch: 0,
+                            sample_rate: 32000,
+                            bitrate: 128000,
+                            audio_format: 'mp3',
+                            channel: 1,
+                          }}
+                        >
+                          <Form.Item
+                            label="MiniMax API 配置"
+                            name="model_id"
+                            rules={[{ required: true, message: '请选择 MiniMax API 配置' }]}
+                          >
+                            <Select
+                              placeholder="选择一个带 MiniMax API Key 的模型配置"
+                              options={minimaxModels.map((m) => ({
+                                value: m.model_id,
+                                label: `${m.name} (${m.type || '未设置类型'})`,
+                              }))}
+                              onChange={(value) => {
+                                speechForm.setFieldValue('voice_id', undefined);
+                                setVoices([]);
+                                setSpeechResult(null);
+                                fetchVoices(value);
+                              }}
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label="文本"
+                            name="text"
+                            rules={[{ required: true, message: '请输入要合成的文本' }]}
+                          >
+                            <Input.TextArea
+                              autoSize={{ minRows: 4, maxRows: 8 }}
+                              maxLength={5000}
+                              showCount
+                              placeholder="输入要合成的语音文本"
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label="音色"
+                            name="voice_id"
+                            rules={[{ required: true, message: '请选择音色' }]}
+                          >
+                            <Select
+                              showSearch
+                              placeholder="先加载音色列表"
+                              loading={voiceLoading}
+                              optionFilterProp="label"
+                              options={voices.map((voice) => ({
+                                value: voice.voice_id,
+                                label: `${voice.voice_name || voice.voice_id} · ${
+                                  voice.source === 'voice_cloning' ? '克隆音色' : '系统音色'
+                                }`,
+                              }))}
+                              dropdownRender={(menu) => (
+                                <>
+                                  <div style={{ padding: '8px 8px 4px' }}>
+                                    <Button
+                                      block
+                                      size="small"
+                                      loading={voiceLoading}
+                                      onClick={() => fetchVoices()}
+                                    >
+                                      刷新音色列表
+                                    </Button>
+                                  </div>
+                                  {menu}
+                                </>
+                              )}
+                            />
+                          </Form.Item>
+                          <Row gutter={12}>
+                            <Col xs={24} md={12}>
+                              <Form.Item label="模型" name="speech_model">
+                                <Select
+                                  options={[
+                                    'speech-2.8-hd',
+                                    'speech-2.8-turbo',
+                                    'speech-2.6-hd',
+                                    'speech-2.6-turbo',
+                                    'speech-02-hd',
+                                    'speech-02-turbo',
+                                  ].map((value) => ({ value, label: value }))}
+                                />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={12}>
+                              <Form.Item label="情绪" name="emotion">
+                                <Select
+                                  allowClear
+                                  placeholder="可选"
+                                  options={['happy', 'sad', 'angry', 'fearful', 'disgusted', 'surprised', 'neutral'].map(
+                                    (value) => ({ value, label: value }),
+                                  )}
+                                />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                          <Row gutter={12}>
+                            <Col xs={24} md={8}>
+                              <Form.Item label="语速" name="speed">
+                                <InputNumber min={0.5} max={2} step={0.1} style={{ width: '100%' }} />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={8}>
+                              <Form.Item label="音量" name="vol">
+                                <InputNumber min={0} max={10} step={0.1} style={{ width: '100%' }} />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={8}>
+                              <Form.Item label="音调" name="pitch">
+                                <InputNumber min={-12} max={12} step={1} style={{ width: '100%' }} />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                          <Row gutter={12}>
+                            <Col xs={24} md={8}>
+                              <Form.Item label="格式" name="audio_format">
+                                <Select
+                                  options={[
+                                    { value: 'mp3', label: 'mp3' },
+                                    { value: 'wav', label: 'wav' },
+                                    { value: 'flac', label: 'flac' },
+                                  ]}
+                                />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={8}>
+                              <Form.Item label="采样率" name="sample_rate">
+                                <Select
+                                  options={[16000, 24000, 32000, 44100].map((value) => ({
+                                    value,
+                                    label: `${value}`,
+                                  }))}
+                                />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={8}>
+                              <Form.Item label="声道" name="channel">
+                                <Select
+                                  options={[
+                                    { value: 1, label: '单声道' },
+                                    { value: 2, label: '双声道' },
+                                  ]}
+                                />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                          <Space style={{ width: '100%', justifyContent: 'space-between' }}>
+                            <Button loading={voiceLoading} onClick={() => fetchVoices()}>
+                              加载音色
+                            </Button>
+                            <Button
+                              type="primary"
+                              shape="round"
+                              loading={speechLoading}
+                              onClick={handleSynthesizeSpeech}
+                            >
+                              生成语音
+                            </Button>
+                          </Space>
+                        </Form>
+                      </Card>
+                    </Col>
+                    <Col xs={24} lg={14} style={{ marginBottom: 24 }}>
+                      <Card
+                        bordered={false}
+                        bodyStyle={{ padding: 24 }}
+                        style={{
+                          minHeight: 420,
+                          borderRadius: 28,
+                          background: '#fff',
+                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',
+                        }}
+                        title={
+                          <Space direction="vertical" size={4}>
+                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>
+                              音频结果
+                            </Text>
+                            <Text style={{ fontSize: 13, color: '#6e6e73' }}>
+                              同步 HTTP 合成，结果可直接播放和下载。
+                            </Text>
+                          </Space>
+                        }
+                      >
+                        {speechError ? (
+                          <div
+                            style={{
+                              marginBottom: 20,
+                              padding: 12,
+                              borderRadius: 12,
+                              color: '#a8071a',
+                              background: '#fff1f0',
+                              border: '1px solid #ffccc7',
+                              wordBreak: 'break-word',
+                            }}
+                          >
+                            {speechError}
+                          </div>
+                        ) : null}
+
+                        {speechResult?.data?.audio_data_url ? (
+                          <Space direction="vertical" size={16} style={{ width: '100%' }}>
+                            <audio
+                              controls
+                              src={speechResult.data.audio_data_url}
+                              style={{ width: '100%' }}
+                            />
+                            <Space>
+                              <Button type="primary" shape="round" onClick={downloadSpeechAudio}>
+                                下载音频
+                              </Button>
+                              {speechResult.extra_info ? (
+                                <Text type="secondary">
+                                  {speechResult.extra_info.audio_format || 'audio'} ·{' '}
+                                  {speechResult.extra_info.audio_length ?? '-'} ms ·{' '}
+                                  {speechResult.extra_info.usage_characters ?? '-'} 字符
+                                </Text>
+                              ) : null}
+                            </Space>
+                            {speechResult.trace_id ? (
+                              <Text type="secondary">Trace ID: {speechResult.trace_id}</Text>
+                            ) : null}
+                          </Space>
+                        ) : (
+                          <Empty
+                            image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            description={
+                              <span style={{ color: '#6e6e73' }}>
+                                输入文本并选择音色后，生成的音频会显示在这里。
+                              </span>
+                            }
+                          />
+                        )}
+                      </Card>
+                    </Col>
+                  </Row>
+                ),
+              },
+              {
+                key: 'video',
+                label: '视频生成',
+                children: (
+                  <Row gutter={24} align="stretch">
+                    <Col xs={24} lg={10} style={{ marginBottom: 24 }}>
+                      <Card
+                        bordered={false}
+                        bodyStyle={{ padding: 24 }}
+                        style={{
+                          borderRadius: 28,
+                          background: '#fff',
+                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',
+                        }}
+                        title={
+                          <Space align="center">
+                            <VideoCameraOutlined style={{ fontSize: 18 }} />
+                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>
+                              MiniMax 视频生成
+                            </Text>
+                          </Space>
+                        }
+                      >
+                        <Form
+                          form={videoForm}
+                          layout="vertical"
+                          initialValues={{
+                            model_id: minimaxModels[0]?.model_id,
+                            video_model: 'MiniMax-Hailuo-2.3',
+                            duration: 6,
+                            resolution: '768P',
+                            fast_pretreatment: false,
+                            aigc_watermark: false,
+                          }}
+                        >
+                          <Form.Item label="生成模式">
+                            <Segmented
+                              block
+                              value={videoMode}
+                              options={[
+                                { label: '文生视频', value: 't2v' },
+                                { label: '图生视频', value: 'i2v' },
+                              ]}
+                              onChange={(value) => {
+                                const nextMode = value as 't2v' | 'i2v';
+                                setVideoMode(nextMode);
+                                setVideoError('');
+                                setVideoTask(null);
+                                setVideoFile(null);
+                                if (nextMode === 't2v') {
+                                  videoForm.setFieldValue('first_frame_image', undefined);
+                                  setFirstFramePreview('');
+                                }
+                              }}
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label="MiniMax API 配置"
+                            name="model_id"
+                            rules={[{ required: true, message: '请选择 MiniMax API 配置' }]}
+                          >
+                            <Select
+                              placeholder="选择一个带 MiniMax API Key 的模型配置"
+                              options={minimaxModels.map((m) => ({
+                                value: m.model_id,
+                                label: `${m.name} (${m.type || '未设置类型'})`,
+                              }))}
+                            />
+                          </Form.Item>
+                          {videoMode === 'i2v' ? (
+                            <Form.Item label="首帧图片" required>
+                              <Space.Compact style={{ width: '100%' }}>
+                                <Upload
+                                  accept="image/jpeg,image/png,image/webp"
+                                  showUploadList={false}
+                                  beforeUpload={handleFirstFrameUpload}
+                                >
+                                  <Button icon={<UploadOutlined />}>上传</Button>
+                                </Upload>
+                                <Form.Item
+                                  name="first_frame_image"
+                                  noStyle
+                                  rules={[{ required: true, message: '请上传或输入首帧图片' }]}
+                                >
+                                  <Input
+                                    placeholder="https://example.com/first-frame.jpg 或 data:image/...;base64,..."
+                                    onChange={(e) => setFirstFramePreview(e.target.value.trim())}
+                                  />
+                                </Form.Item>
+                              </Space.Compact>
+                            </Form.Item>
+                          ) : null}
+                          <Form.Item
+                            label="Prompt"
+                            name="prompt"
+                            rules={[{ required: true, message: '请输入视频描述' }]}
+                          >
+                            <Input.TextArea
+                              autoSize={{ minRows: 4, maxRows: 8 }}
+                              maxLength={2000}
+                              showCount
+                              placeholder="描述视频内容、动作、镜头运动，例如：女孩在雨夜街道奔跑，[推进]，霓虹灯反射在地面"
+                            />
+                          </Form.Item>
+                          <Row gutter={12}>
+                            <Col xs={24} md={12}>
+                              <Form.Item label="模型" name="video_model">
+                                <Select
+                                  options={[
+                                    'MiniMax-Hailuo-2.3',
+                                    'MiniMax-Hailuo-2.3-Fast',
+                                    'MiniMax-Hailuo-02',
+                                  ].map((value) => ({ value, label: value }))}
+                                />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={12} md={6}>
+                              <Form.Item label="时长" name="duration">
+                                <Select
+                                  options={[
+                                    { value: 6, label: '6 秒' },
+                                    { value: 10, label: '10 秒' },
+                                  ]}
+                                />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={12} md={6}>
+                              <Form.Item label="分辨率" name="resolution">
+                                <Select
+                                  options={['512P', '720P', '768P', '1080P'].map((value) => ({
+                                    value,
+                                    label: value,
+                                  }))}
+                                />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                          <Space size={24} style={{ marginBottom: 20 }}>
+                            <Form.Item
+                              name="prompt_optimizer"
+                              valuePropName="checked"
+                              style={{ marginBottom: 0 }}
+                            >
+                              <Switch checkedChildren="优化" unCheckedChildren="优化" />
+                            </Form.Item>
+                            <Form.Item
+                              name="fast_pretreatment"
+                              valuePropName="checked"
+                              style={{ marginBottom: 0 }}
+                            >
+                              <Switch checkedChildren="加速" unCheckedChildren="加速" />
+                            </Form.Item>
+                            <Form.Item
+                              name="aigc_watermark"
+                              valuePropName="checked"
+                              style={{ marginBottom: 0 }}
+                            >
+                              <Switch checkedChildren="水印" unCheckedChildren="水印" />
+                            </Form.Item>
+                          </Space>
+                          <Space direction="vertical" size={12} style={{ width: '100%' }}>
+                            <Button
+                              type="primary"
+                              shape="round"
+                              block
+                              loading={videoLoading || videoPolling}
+                              onClick={handleCreateVideo}
+                            >
+                              创建并轮询任务
+                            </Button>
+                            <Space.Compact style={{ width: '100%' }}>
+                              <Form.Item name="task_id" noStyle>
+                                <Input placeholder="已有 task_id，可手动查询" />
+                              </Form.Item>
+                              <Button loading={videoPolling} onClick={handleQueryVideoTask}>
+                                查询
+                              </Button>
+                            </Space.Compact>
+                          </Space>
+                        </Form>
+                      </Card>
+                    </Col>
+                    <Col xs={24} lg={14} style={{ marginBottom: 24 }}>
+                      <Card
+                        bordered={false}
+                        bodyStyle={{ padding: 24 }}
+                        style={{
+                          minHeight: 520,
+                          borderRadius: 28,
+                          background: '#fff',
+                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',
+                        }}
+                        title={
+                          <Space direction="vertical" size={4}>
+                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>
+                              视频结果
+                            </Text>
+                            <Text style={{ fontSize: 13, color: '#6e6e73' }}>
+                              视频生成是异步任务，创建后会自动轮询状态。
+                            </Text>
+                          </Space>
+                        }
+                      >
+                        {videoMode === 'i2v' && firstFramePreview ? (
+                          <div style={{ marginBottom: 20 }}>
+                            <Text style={{ display: 'block', marginBottom: 8, color: '#6e6e73' }}>
+                              首帧预览
+                            </Text>
+                            <Image
+                              src={firstFramePreview}
+                              width={180}
+                              height={120}
+                              style={{ objectFit: 'cover', borderRadius: 12 }}
+                              fallback="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTgwIiBoZWlnaHQ9IjEyMCIgdmlld0JveD0iMCAwIDE4MCAxMjAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZyI+PHJlY3Qgd2lkdGg9IjE4MCIgaGVpZ2h0PSIxMjAiIGZpbGw9IiNmNWY1ZjciLz48dGV4dCB4PSI5MCIgeT0iNjQiIHRleHQtYW5jaG9yPSJtaWRkbGUiIGZpbGw9IiM5YjliYTEiIGZvbnQtc2l6ZT0iMTIiPuWbvueJh+WKoOi9veWksei0pTwvdGV4dD48L3N2Zz4="
+                            />
+                          </div>
+                        ) : null}
+
+                        {videoError ? (
+                          <div
+                            style={{
+                              marginBottom: 20,
+                              padding: 12,
+                              borderRadius: 12,
+                              color: '#a8071a',
+                              background: '#fff1f0',
+                              border: '1px solid #ffccc7',
+                              wordBreak: 'break-word',
+                            }}
+                          >
+                            {videoError}
+                          </div>
+                        ) : null}
+
+                        {videoTask ? (
+                          <Space direction="vertical" size={10} style={{ width: '100%', marginBottom: 20 }}>
+                            {videoTask.task_id ? (
+                              <Space wrap>
+                                <Text>
+                                  任务 ID：<Text code>{videoTask.task_id}</Text>
+                                </Text>
+                                <Button
+                                  size="small"
+                                  onClick={() => navigator.clipboard?.writeText(videoTask.task_id || '')}
+                                >
+                                  复制
+                                </Button>
+                              </Space>
+                            ) : null}
+                            <Text>
+                              状态：<Tag color={videoTask.status === 'Success' ? 'green' : 'processing'}>
+                                {videoTask.status || '已提交'}
+                              </Tag>
+                              {videoPolling ? <Text type="secondary"> 正在轮询...</Text> : null}
+                            </Text>
+                            {videoTask.file_id ? (
+                              <Text>
+                                文件 ID：<Text code>{videoTask.file_id}</Text>
+                              </Text>
+                            ) : null}
+                            {videoTask.video_width && videoTask.video_height ? (
+                              <Text type="secondary">
+                                尺寸：{videoTask.video_width} × {videoTask.video_height}
+                              </Text>
+                            ) : null}
+                          </Space>
+                        ) : null}
+
+                        {videoFile?.file?.download_url ? (
+                          <Space direction="vertical" size={16} style={{ width: '100%' }}>
+                            <video
+                              controls
+                              src={videoFile.file.download_url}
+                              style={{
+                                width: '100%',
+                                maxHeight: 520,
+                                borderRadius: 16,
+                                background: '#000',
+                              }}
+                            />
+                            <Space>
+                              <Button
+                                type="primary"
+                                shape="round"
+                                onClick={() => window.open(videoFile.file?.download_url, '_blank')}
+                              >
+                                打开视频
+                              </Button>
+                              <Button onClick={downloadVideo}>下载视频</Button>
+                              <Text type="secondary">
+                                {videoFile.file.filename || 'output.mp4'} ·{' '}
+                                {videoFile.file.bytes ? `${Math.round(videoFile.file.bytes / 1024 / 1024)} MB` : '-'}
+                              </Text>
+                            </Space>
+                          </Space>
+                        ) : !videoTask ? (
+                          <Empty
+                            image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            description={
+                              <span style={{ color: '#6e6e73' }}>
+                                创建视频任务后，状态和生成结果会显示在这里。
+                              </span>
+                            }
+                          />
+                        ) : null}
+                      </Card>
+                    </Col>
+                  </Row>
+                ),
+              },
+              {
+                key: 'music',
+                label: '音乐生成',
+                children: (
+                  <Row gutter={24} align="stretch">
+                    <Col xs={24} lg={11} style={{ marginBottom: 24 }}>
+                      <Card
+                        bordered={false}
+                        bodyStyle={{ padding: 24 }}
+                        style={{
+                          borderRadius: 28,
+                          background: '#fff',
+                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',
+                        }}
+                        title={
+                          <Space align="center">
+                            <CustomerServiceOutlined style={{ fontSize: 18 }} />
+                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>
+                              歌词与歌曲
+                            </Text>
+                          </Space>
+                        }
+                      >
+                        <Form
+                          form={musicForm}
+                          layout="vertical"
+                          initialValues={{
+                            model_id: minimaxModels[0]?.model_id,
+                            music_model: 'music-2.6',
+                            sample_rate: 44100,
+                            bitrate: 256000,
+                            audio_format: 'mp3',
+                            lyrics_optimizer: false,
+                            is_instrumental: false,
+                            aigc_watermark: false,
+                          }}
+                        >
+                          <Form.Item
+                            label="MiniMax API 配置"
+                            name="model_id"
+                            rules={[{ required: true, message: '请选择 MiniMax API 配置' }]}
+                          >
+                            <Select
+                              placeholder="选择一个带 MiniMax API Key 的模型配置"
+                              options={minimaxModels.map((m) => ({
+                                value: m.model_id,
+                                label: `${m.name} (${m.type || '未设置类型'})`,
+                              }))}
+                            />
+                          </Form.Item>
+
+                          <Form.Item label="歌词模式">
+                            <Segmented
+                              block
+                              value={lyricsMode}
+                              options={[
+                                { label: '生成完整歌曲', value: 'write_full_song' },
+                                { label: '编辑/续写歌词', value: 'edit' },
+                              ]}
+                              onChange={(value) => setLyricsMode(value as 'write_full_song' | 'edit')}
+                            />
+                          </Form.Item>
+                          <Form.Item label="歌曲标题" name="song_title">
+                            <Input placeholder="可选，留空则由模型生成" />
+                          </Form.Item>
+                          <Form.Item
+                            label="歌词提示"
+                            name="lyrics_prompt"
+                            rules={[{ required: true, message: '请输入歌词生成提示' }]}
+                          >
+                            <Input.TextArea
+                              autoSize={{ minRows: 3, maxRows: 6 }}
+                              maxLength={2000}
+                              showCount
+                              placeholder="例如：一首关于夏日海边的轻快情歌，中文流行，女声"
+                            />
+                          </Form.Item>
+                          <Form.Item label="风格标签" name="style_tags">
+                            <Input placeholder="歌词生成后会自动填入，也可手动修改" />
+                          </Form.Item>
+                          <Form.Item
+                            label="歌词"
+                            name="lyrics"
+                            rules={
+                              lyricsMode === 'edit'
+                                ? [{ required: true, message: '编辑模式下请输入现有歌词' }]
+                                : []
+                            }
+                          >
+                            <Input.TextArea
+                              autoSize={{ minRows: 8, maxRows: 16 }}
+                              maxLength={3500}
+                              showCount
+                              placeholder="[Verse]\n...\n[Chorus]\n..."
+                            />
+                          </Form.Item>
+                          <Button
+                            block
+                            loading={lyricsLoading}
+                            onClick={handleGenerateLyrics}
+                          >
+                            生成/编辑歌词
+                          </Button>
+
+                          <div style={{ height: 24 }} />
+                          <Form.Item
+                            label="音乐模型"
+                            name="music_model"
+                            rules={[{ required: true, message: '请选择音乐模型' }]}
+                          >
+                            <Select
+                              options={[
+                                'music-2.6',
+                                'music-2.6-free',
+                                'music-cover',
+                                'music-cover-free',
+                              ].map((value) => ({ value, label: value }))}
+                            />
+                          </Form.Item>
+                          <Form.Item
+                            label="音乐描述"
+                            name="music_prompt"
+                            rules={[{ required: true, message: '请输入音乐描述' }]}
+                          >
+                            <Input.TextArea
+                              autoSize={{ minRows: 2, maxRows: 5 }}
+                              maxLength={2000}
+                              showCount
+                              placeholder="例如：独立民谣,忧郁,内省,咖啡馆"
+                            />
+                          </Form.Item>
+                          <Row gutter={12}>
+                            <Col xs={24} md={8}>
+                              <Form.Item label="格式" name="audio_format">
+                                <Select
+                                  options={[
+                                    { value: 'mp3', label: 'mp3' },
+                                    { value: 'wav', label: 'wav' },
+                                    { value: 'flac', label: 'flac' },
+                                  ]}
+                                />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={8}>
+                              <Form.Item label="采样率" name="sample_rate">
+                                <Select
+                                  options={[44100, 32000, 24000].map((value) => ({
+                                    value,
+                                    label: `${value}`,
+                                  }))}
+                                />
+                              </Form.Item>
+                            </Col>
+                            <Col xs={24} md={8}>
+                              <Form.Item label="码率" name="bitrate">
+                                <Select
+                                  options={[128000, 192000, 256000, 320000].map((value) => ({
+                                    value,
+                                    label: `${value / 1000} kbps`,
+                                  }))}
+                                />
+                              </Form.Item>
+                            </Col>
+                          </Row>
+                          <Space size={24} style={{ marginBottom: 20 }}>
+                            <Form.Item
+                              name="lyrics_optimizer"
+                              valuePropName="checked"
+                              style={{ marginBottom: 0 }}
+                            >
+                              <Switch checkedChildren="自动歌词" unCheckedChildren="自动歌词" />
+                            </Form.Item>
+                            <Form.Item
+                              name="is_instrumental"
+                              valuePropName="checked"
+                              style={{ marginBottom: 0 }}
+                            >
+                              <Switch checkedChildren="纯音乐" unCheckedChildren="纯音乐" />
+                            </Form.Item>
+                            <Form.Item
+                              name="aigc_watermark"
+                              valuePropName="checked"
+                              style={{ marginBottom: 0 }}
+                            >
+                              <Switch checkedChildren="水印" unCheckedChildren="水印" />
+                            </Form.Item>
+                          </Space>
+                          <Button
+                            type="primary"
+                            shape="round"
+                            block
+                            loading={musicLoading}
+                            onClick={handleGenerateMusic}
+                          >
+                            生成歌曲
+                          </Button>
+                        </Form>
+                      </Card>
+                    </Col>
+                    <Col xs={24} lg={13} style={{ marginBottom: 24 }}>
+                      <Card
+                        bordered={false}
+                        bodyStyle={{ padding: 24 }}
+                        style={{
+                          minHeight: 520,
+                          borderRadius: 28,
+                          background: '#fff',
+                          boxShadow: '0 18px 40px rgba(0,0,0,0.06)',
+                        }}
+                        title={
+                          <Space direction="vertical" size={4}>
+                            <Text style={{ fontSize: 18, fontWeight: 600, color: '#111' }}>
+                              音乐结果
+                            </Text>
+                            <Text style={{ fontSize: 13, color: '#6e6e73' }}>
+                              音乐生成返回 hex 音频，后端会转换成可播放音频。
+                            </Text>
+                          </Space>
+                        }
+                      >
+                        {musicError ? (
+                          <div
+                            style={{
+                              marginBottom: 20,
+                              padding: 12,
+                              borderRadius: 12,
+                              color: '#a8071a',
+                              background: '#fff1f0',
+                              border: '1px solid #ffccc7',
+                              wordBreak: 'break-word',
+                            }}
+                          >
+                            {musicError}
+                          </div>
+                        ) : null}
+
+                        {lyricsResult ? (
+                          <div style={{ marginBottom: 24 }}>
+                            <Title level={4} style={{ marginBottom: 8 }}>
+                              {lyricsResult.song_title || '未命名歌曲'}
+                            </Title>
+                            {lyricsResult.style_tags ? (
+                              <Paragraph style={{ color: '#6e6e73', marginBottom: 12 }}>
+                                {lyricsResult.style_tags}
+                              </Paragraph>
+                            ) : null}
+                            <pre
+                              style={{
+                                whiteSpace: 'pre-wrap',
+                                wordBreak: 'break-word',
+                                padding: 16,
+                                borderRadius: 16,
+                                background: '#f7f7f8',
+                                maxHeight: 360,
+                                overflow: 'auto',
+                              }}
+                            >
+                              {lyricsResult.lyrics}
+                            </pre>
+                          </div>
+                        ) : null}
+
+                        {musicResult?.data?.audio_data_url || musicResult?.data?.audio_url ? (
+                          <Space direction="vertical" size={16} style={{ width: '100%' }}>
+                            <audio
+                              controls
+                              src={musicResult.data.audio_data_url || musicResult.data.audio_url}
+                              style={{ width: '100%' }}
+                            />
+                            <Space>
+                              <Button type="primary" shape="round" onClick={downloadMusicAudio}>
+                                下载歌曲
+                              </Button>
+                              {musicResult.extra_info ? (
+                                <Text type="secondary">
+                                  {Math.round((musicResult.extra_info.music_duration || 0) / 1000)} 秒 ·{' '}
+                                  {musicResult.extra_info.music_sample_rate || '-'} Hz ·{' '}
+                                  {musicResult.extra_info.bitrate
+                                    ? `${musicResult.extra_info.bitrate / 1000} kbps`
+                                    : '-'}
+                                </Text>
+                              ) : null}
+                            </Space>
+                            {musicResult.trace_id ? (
+                              <Text type="secondary">Trace ID: {musicResult.trace_id}</Text>
+                            ) : null}
+                          </Space>
+                        ) : !lyricsResult ? (
+                          <Empty
+                            image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            description={
+                              <span style={{ color: '#6e6e73' }}>
+                                先生成歌词，或直接填写歌词和音乐描述后生成歌曲。
+                              </span>
+                            }
+                          />
+                        ) : null}
                       </Card>
                     </Col>
                   </Row>
