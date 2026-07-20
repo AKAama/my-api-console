@@ -3018,6 +3018,25 @@ const IndexPage: React.FC = () => {
         </div>
       </Content>
 
+      {/* 备案信息 */}
+      <div
+        style={{
+          textAlign: 'center',
+          padding: '16px 0 32px',
+          fontSize: 13,
+          color: '#6e6e73',
+        }}
+      >
+        <a
+          href="https://beian.miit.gov.cn/"
+          target="_blank"
+          rel="noreferrer"
+          style={{ color: '#6e6e73' }}
+        >
+          苏ICP备2025196439号
+        </a>
+      </div>
+
       {/* 全局样式覆盖 */}
       <style>{`
         .ant-modal-content {
