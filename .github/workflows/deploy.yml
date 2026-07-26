@@ -76,7 +76,12 @@ jobs:
             fi
             mv "$STAGING_DIR" "$DEPLOY_DIR"
 
-            if ! curl --fail --silent --show-error "http://127.0.0.1/" >/dev/null; then
+            if ! curl \
+              --fail \
+              --silent \
+              --show-error \
+              --header "Host: ismyh.cn" \
+              "http://127.0.0.1/" >/dev/null; then
               rm -rf "$DEPLOY_DIR"
               if [ -d "$PREVIOUS_DIR" ]; then
                 mv "$PREVIOUS_DIR" "$DEPLOY_DIR"
