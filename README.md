@@ -1,29 +1,26 @@
-# umi-plugin-demo
+# Ma Yehui — Personal Portfolio
 
-A umi plugin
+A bilingual personal portfolio built with Umi, React, TypeScript, and Motion.
+English is shown by default, with a persistent Chinese language option.
 
-## Install
+The homepage is a static frontend. It does not require or call the API server in
+the adjacent project.
+
+## Development
 
 ```bash
-pnpm i umi-plugin-demo
+npm install
+npm run dev
 ```
 
-## Usage
+## Tests
 
-Configure in `.umirc.ts`,
-
-```js
-export default {
-  plugins: [
-    ['umi-plugin-demo'],
-  ],
-}
+```bash
+npm test
 ```
 
-## Options
+## Production build
 
-TODO
-
-## LICENSE
-
-MIT
+```bash
+npm run build
+```

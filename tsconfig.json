@@ -13,9 +13,8 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "isolatedModules": false,
-    "noEmit": false,
-    "declaration": true
+    "isolatedModules": true,
+    "noEmit": true
   },
   "include": ["src"]
 }

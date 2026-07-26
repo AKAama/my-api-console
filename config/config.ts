@@ -14,10 +14,4 @@ export default defineConfig({
       component: '@/pages/index',
     },
   ],
-  proxy: {
-    '/api': {
-      target: 'http://localhost:3000',
-      changeOrigin: true,
-    },
-  },
 });

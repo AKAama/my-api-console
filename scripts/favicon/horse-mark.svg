@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" role="img" aria-labelledby="title">
+  <title id="title">A simple teal horse head on a deep navy rounded square</title>
+  <rect width="1024" height="1024" rx="224" fill="#071827"/>
+
+  <!-- Mane: one bright, readable sweep that remains visible at favicon scale. -->
+  <path
+    fill="#5EEAD4"
+    d="M217 721c-37-137-2-285 105-393l84-85 60 77c-58 105-72 245-43 420-58 52-157 45-206-19Z"
+  />
+
+  <!-- Horse head: ear, forehead, cheek and muzzle form one calm silhouette. -->
+  <path
+    fill="#55B5A8"
+    d="M329 757c-47-102-35-226 30-329l61-97 15-160c2-25 32-36 50-19l91 90c100 14 189 54 263 120 46 41 55 108 21 159-35 53-99 79-162 66l-68-14c-18 83-61 155-124 205-51 40-125 31-157-21Z"
+  />
+
+  <!-- A small cut-out keeps the ear readable without adding another color. -->
+  <path fill="#071827" d="m466 232 51 52-62 17 11-69Z"/>
+
+  <!-- Warm eye and restrained nostril provide recognition at small sizes. -->
+  <circle cx="637" cy="383" r="31" fill="#FFF7E8"/>
+  <ellipse cx="797" cy="477" rx="23" ry="17" fill="#071827"/>
+</svg>

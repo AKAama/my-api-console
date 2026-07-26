@@ -70,17 +70,23 @@ The mobile layout becomes a natural single column with no fixed sidebar.
      - AI content security platform and full-stack system design
      - MCP, RAG, vector search, and agent services
      - Website platform, digital assets, corpus, and model services
-   - Education appears as a concise final entry:
-     B.Sc. in Computer Science and Technology, Sanjiang University,
-     September 2022–June 2024
+   - Do not include an Education entry.
 
 3. **Projects**
    - 摸鱼日历 / Slacking Calendar — https://calendar.ismyh.cn/
    - Evenly — https://app.ismyh.cn/
    - 分手冷静室 / Relationship Cool-down Room — https://calm.ismyh.cn/
    - 歌词状态栏 / Lyrics Menu Bar — https://lyrics.ismyh.cn/
-   - Each card includes a bilingual description, a small set of truthful
-     technology or product tags, and a clear external-link affordance.
+   - Each project uses an editorial media row inspired by Brittany Chiang's
+     current project presentation: a real screenshot on the left and bilingual
+     title, description, tags, and external-link affordance on the right.
+   - Rows have no visible card shell, large rounded background, project number,
+     or decorative color block.
+   - Desktop rows use an approximately 42/58 image-to-copy split. Mobile rows
+     stack the screenshot above the copy.
+   - Screenshots must be captured from the four live project homepages and
+     stored locally so the portfolio does not hotlink or depend on those pages
+     during rendering.
    - If a technology used by a project cannot be verified from local project
      material, omit the technology tag instead of guessing.
 
@@ -126,7 +132,8 @@ Do not publish:
 - Warm off-white primary text
 - Muted blue-gray secondary text
 - Low-saturation teal as the main accent
-- Individual restrained accent colors for project cards
+- Restrained screenshot treatment for project rows, with no decorative
+  per-project card colors
 - Strong typography and whitespace instead of decorative illustration
 - A very subtle radial glow and fine-grain surface treatment to add depth
 - No profile photo, hero illustration, model-authored SVG artwork, or generic
@@ -143,6 +150,7 @@ Use Motion for React for:
 - Restrained initial fade and translate
 - Section reveal when content enters the viewport
 - Project and experience card hover feedback
+- Subtle project screenshot scale and external-link arrow movement
 - External-link arrow movement
 - Smooth language-content transitions
 - A softly interpolated desktop pointer glow
@@ -170,6 +178,7 @@ Retain:
 Add:
 
 - Motion for React
+- React Icons for GitHub, Weibo, Instagram, LinkedIn, and email icons
 
 Remove from the frontend when no longer used:
 
@@ -184,7 +193,7 @@ The implementation should use:
 
 - A bilingual content module as the single source of user-facing copy
 - A small page shell
-- Focused components for sections, experience entries, project cards, social
+- Focused components for sections, experience entries, project rows, social
   links, navigation, and language switching
 - Semantic HTML with CSS Modules or a focused site stylesheet
 - Browser local storage only for the language preference
@@ -215,6 +224,9 @@ The implementation is acceptable when:
 - Active-section highlighting follows scrolling without blocking navigation.
 - All five public contact links and all five content links open the intended
   destinations.
+- Social links use recognizable brand icons instead of letter abbreviations.
+- Each of the four project rows uses a locally stored screenshot from its live
+  homepage.
 - No console management, model management, chat, media generation, or API
   request UI remains.
 - No frontend request is made to the existing API server.
@@ -231,6 +243,6 @@ The implementation is acceptable when:
 - Contact form
 - Analytics
 - Blog post ingestion or RSS parsing
-- New project screenshots or generated artwork
+- Generated artwork
 - Deleting the existing backend repository
 - Rewriting the project in Astro, Next.js, or another framework
