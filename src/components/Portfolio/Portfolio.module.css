@@ -472,6 +472,23 @@
   font-size: 12px;
 }
 
+.footer p {
+  margin: 0;
+}
+
+.beian {
+  display: inline-block;
+  margin-top: 8px;
+  color: #587083;
+  text-decoration: none;
+}
+
+.beian:hover {
+  color: #94a3b8;
+  text-decoration: underline;
+}
+
+
 .skipLink {
   position: fixed;
   z-index: 10;

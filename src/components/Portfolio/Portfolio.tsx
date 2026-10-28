@@ -232,7 +232,17 @@ const Portfolio: React.FC = () => {
             </a>
           </motion.section>
 
-          <footer className={styles.footer}>{copy.footer}</footer>
+          <footer className={styles.footer}>
+            <p>{copy.footer}</p>
+            <a
+              className={styles.beian}
+              href="https://beian.miit.gov.cn/"
+              target="_blank"
+              rel="noreferrer"
+            >
+              苏ICP备2025196439号-1
+            </a>
+          </footer>
         </main>
       </div>
     </div>
